@@ -24,10 +24,10 @@ if __name__ == '__main__':
     Rechna_Doab.agregar_forma(os.path.join(base_dir_shp, 'road.shp'), tipo='calle')
 
     # 1. Simple runs
-    runs_simple = {#'CWU': {'Capacity per tubewell': 100.8, 'Fw': 0.8, 'Policy Canal lining': 0,
-                     #      'Policy RH': 0, 'Policy Irrigation improvement': 0}
-                    'VD': {'Capacity per tubewell': 153.0, 'Fw': 0.8, 'Policy Canal lining': 0,
-                           'Policy RH': 0, 'Policy Irrigation improvement': 0},
+    runs_simple = {'CWU': {'Capacity per tubewell': 100.8, 'Fw': 0.8, 'Policy Canal lining': 0,
+                           'Policy RH': 0, 'Policy Irrigation improvement': 0}
+                    #'VD': {'Capacity per tubewell': 153.0, 'Fw': 0.8, 'Policy Canal lining': 0,
+                    #      'Policy RH': 0, 'Policy Irrigation improvement': 0},
                     #'CL': {'Capacity per tubewell': 100.8, 'Fw': 0.8, 'Policy Canal lining': 1,
                     #       'Policy RH': 0, 'Policy Irrigation improvement': 0},
                     #'RWH': {'Capacity per tubewell': 100.8, 'Fw': 0.8, 'Policy Canal lining': 0,
@@ -71,6 +71,7 @@ if __name__ == '__main__':
 
     # Establish SDM and Biofisical model paths. The Biofisical model path must point to the Python wrapper for the model
     modelo.estab_mds(os.path.join(os.path.split(__file__)[0], 'Vensim', 'Tinamit_Rechna.vpm'))
+    #modelo.estab_mds(os.path.join('C:\Users\Azhar Inam\PycharmProjects\Tinamit\tinamit\Ejemplos\en\Ejemplo_SAHYSMOD\Vensim', 'Vensim_Jordan', 'Tinamit_Rechna.vpm'))
     modelo.estab_bf(Envoltura)
     modelo.estab_conv_unid_tiempo(unid='season', unid_ref='mes', factor=6)
 
@@ -109,8 +110,8 @@ if __name__ == '__main__':
                            nombre_corrida=name)  # time step and final time are in months
 
             # Draw maps
-            modelo.dibujar_mapa(geog=Rechna_Doab, corrida=name, var='Watertable depth Tinamit', directorio='Maps')
-            modelo.dibujar_mapa(geog=Rechna_Doab, corrida=name, var='Soil salinity Tinamit CropA', directorio='Maps')
+            # modelo.dibujar_mapa(geog=Rechna_Doab, corrida=name, var='Watertable depth Tinamit', directorio='Maps')
+            # modelo.dibujar_mapa(geog=Rechna_Doab, corrida=name, var='Soil salinity Tinamit CropA', directorio='Maps')
     else:
         # Climate change runs
         location = Lugar(lat=32.178207, long=73.217391, elev=217)

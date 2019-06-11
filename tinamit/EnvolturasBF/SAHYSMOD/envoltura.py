@@ -296,7 +296,7 @@ def leer_arch_egr(archivo, n_est, n_p, n_años):
 
     with open(archivo, 'r') as d:
         l = ''
-        while 'YEAR:      %i' % n_años not in l:
+        while 'YEAR:     %i' % n_años not in l:
             l = d.readline()
         for est in range(n_est):
             for estación_polí in range(n_p):  # Leer el egreso de las estaciones del último año
