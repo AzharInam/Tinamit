@@ -1,0 +1,17 @@
+{
+  "bf": "C:/Users/Azhar Inam/PycharmProjects/Tinamit/tinamit/Ejemplos/es/Ejemplo básico/Prueba bf.py",
+  "conexiones": [
+    {
+      "conv": 1,
+      "modelo_fuente": "mds",
+      "modelo_recip": "bf",
+      "var_fuente": "Area",
+      "var_recip": "Bosques"
+    }
+  ],
+  "conv_tiempo": {
+    "bf": 1,
+    "mds": 1
+  },
+  "mds": "C:/Users/Azhar Inam/PycharmProjects/Tinamit/tinamit/Ejemplos/en/Ejemplo_SAHYSMOD/Vensim/Tinamit_Rechna.vpm"
+}
