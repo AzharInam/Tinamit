@@ -1,0 +1,4127 @@
+{UTF-8}
+TIME STEP  = 1
+	~	season
+	~		|
+
+اصل کم سے کم درجہ حرارت[Polygon]=
+	IF THEN ELSE(کم سے کم درجہ حرارت ٹینامٹ[Polygon] = 12, کم سے کم درجہ حرارت\
+		[Polygon], کم سے کم درجہ حرارت ٹینامٹ[Polygon])
+	~	degree C
+	~		|
+
+آبی بخارات حوالہ[Polygon]=
+	(0.023*(0.408)*(اوسط درجہ حرارت[Polygon]+17.8)*SQRT(اصل زیادہ سے زیادہ درجہ حرارت\
+		[Polygon]-اصل کم سے کم درجہ حرارت[Polygon])*آر اے[Polygon])*30\
+		/1000
+	~	m/season
+	~		|
+
+کار آمد بارش[Polygon]=
+	کار آمد بارش ایف اے او[Polygon]
+	~	m/season
+	~		|
+
+کار آمد بارش ایف اے او[Polygon]=
+	کار آمد بارش جدول(حتمی بارش[Polygon])
+	~	m/season
+	~		|
+
+کم سے کم درجہ حرارت[Polygon]:INTERPOLATE::=
+	GET XLS DATA( '?test' , 'Tmin', 'b', 'C2' )
+	~	degree C
+	~		|
+
+زیادہ سے زیادہ درجہ حرارت[Polygon]:INTERPOLATE::=
+	GET XLS DATA( '?test' , 'Tmax', 'b', 'C2' )
+	~	degree C
+	~		|
+
+حتمی بارش[Polygon]=
+	IF THEN ELSE(بارش ٹینامٹ[Polygon] = 0.127, بارش[Polygon], بارش ٹینامٹ\
+		[Polygon])
+	~	m/season
+	~		|
+
+زیادہ سے زیادہ درجہ حرارت ٹینامٹ[Polygon]= GAME (
+	26.9)
+	~	degree C
+	~		|
+
+بارش ٹینامٹ[Polygon]= GAME (
+	0.127)
+	~	m/season
+	~		|
+
+کم سے کم درجہ حرارت ٹینامٹ[Polygon]= GAME (
+	12)
+	~	degree C
+	~		|
+
+بارش حجمم[Polygon]=
+	IF THEN ELSE(بارش ٹینامٹ[Polygon]=0.127, بارش[Polygon]*رقبہ , بارش ٹینامٹ\
+		[Polygon]*رقبہ )
+	~	m*m*m/season
+	~		|
+
+اصل زیادہ سے زیادہ درجہ حرارت[Polygon]=
+	IF THEN ELSE(زیادہ سے زیادہ درجہ حرارت ٹینامٹ[Polygon] = \
+		26.9, زیادہ سے زیادہ درجہ حرارت[Polygon], زیادہ سے زیادہ درجہ حرارت ٹینامٹ\
+		[Polygon])
+	~	degree C
+	~		|
+
+چلانے کے موجودہ گھنٹے[Polygon]=
+	IF THEN ELSE(MODULO(Time, 2 )=0, پی او ایچ ٹینامٹ ربی[Polygon] , پی او ایچ ٹینامٹ خریف\
+		[Polygon] )
+	~	hrs/season/Nos
+	~	235 rabi, 355 Kharif 
+		Operating hours per day = 5 Average days per year Rabi = 47 and Kharif = 71 
+		therefore potential operating hours per day Rabi = 47 * 5 = 235 and Kharif = 71 * 5 \
+		= 355
+		Reference = Groundwater economy of Pakistan
+	|
+
+ذیادہ سے ذیادہ حجم[Polygon]=
+	کنواں کے شمار[Polygon]*ایک کنواں کا حجم[Polygon]*چلانے کے موجودہ گھنٹے\
+		[Polygon]
+	~	m*m*m/season
+	~		|
+
+پی او ایچ ٹینامٹ خریف[Polygon]=
+	355
+	~	hrs/season/Nos
+	~		|
+
+کنواں کا اصل حجم[Polygon]=
+	کنواں کے شمار[Polygon]*ایک کنواں کا حجم[Polygon]*چلانے کے اصلی گھنٹے\
+		[Polygon]
+	~	m*m*m/season
+	~		|
+
+پی او ایچ ٹینامٹ ربی[Polygon]=
+	235
+	~	hrs/season/Nos
+	~		|
+
+اوسط درجہ حرارت[Polygon]=
+	(اصل زیادہ سے زیادہ درجہ حرارت[Polygon]+اصل کم سے کم درجہ حرارت\
+		[Polygon])/2
+	~	degree C
+	~		|
+
+ممکنہ آبی بخارات براۓ فصل الف[Polygon]=
+	آبی بخارات حوالہ[Polygon]*کے سی فصل الف
+	~	m/season
+	~		~	:SUPPLEMENTARY 
+	|
+
+آر اے[Polygon]=
+	IF THEN ELSE(MODULO(Time, 2 )=0, 25.72 , 36.64 )
+	~	MJ/m*m
+	~		|
+
+ممکنہ آبی بخارات براۓ فصل ب[Polygon]=
+	کے سی فصل ب*آبی بخارات حوالہ[Polygon]
+	~	m/season
+	~		~	:SUPPLEMENTARY 
+	|
+
+بارش کا سطحی بہاو فصل الف[Polygon]=
+	(بارش کا حصہ[Polygon]/رقبہ)*فصل الف رقبہ[Polygon]
+	~	m*m*m/season
+	~		|
+
+فراہمی[Polygon]=
+	نہر کا حصہ[Polygon]+بارش کا حصہ[Polygon]+کنواں کا بہاو[Polygon\
+		]
+	~	m*m*m/season
+	~		|
+
+نہر کا حصہ[Polygon]=
+	IF THEN ELSE(پانی کی ضرورت[Polygon]>بارش کا حصہ[Polygon], MIN(پانی کی ضرورت\
+		[Polygon]-بارش کا حصہ[Polygon],نہری بہاو فی چوکور[Polygon])\
+		 , 0 )
+	~	m*m*m/season
+	~		|
+
+سطحی پانی[Polygon]=
+	نہر کا حصہ[Polygon]+بارش کا حصہ[Polygon]
+	~	m*m*m/season
+	~		|
+
+سطحی تالاب بہاو[Polygon]=
+	IF THEN ELSE(پانی کی ضرورت[Polygon]>(کل نہری فراہمی براۓ فصلات\
+		[Polygon]+بارش کا حصہ[Polygon]), MIN((پانی کی ضرورت[Polygon
+	]-بارش کا حصہ[Polygon]-کل نہری فراہمی براۓ فصلات[Polygon\
+		]) , (پانی تالابی جمع[Polygon]/وقت کا قدم-سطحی بخارات 1\
+		[Polygon]-رساو1[Polygon])),0 )
+	~	m*m*m/season
+	~		|
+
+استعمال[Polygon]=
+	MIN(نہر کا حصہ[Polygon]+بارش کا حصہ[Polygon]+سطحی تالاب بہاو\
+		[Polygon]+کنواں کا بہاو[Polygon],پانی کی ضرورت[Polygon])
+	~	m*m*m/season
+	~		|
+
+بارش کا سطحی بہاو فصل ب[Polygon]=
+	(بارش کا حصہ[Polygon]/رقبہ)*فصل ب رقبہ[Polygon]
+	~	m*m*m/season
+	~		|
+
+غیر کار آمد بارش[Polygon]=
+	بارش حجمم[Polygon]-بارش کا حصہ[Polygon]
+	~	m*m*m/season
+	~		|
+
+بارش کا حصہ[Polygon]=
+	کار آمد بارش[Polygon]*رقبہ
+	~	m*m*m/season
+	~	Effective rainfall is calculated by using standard table given in FAO \
+		(Irrigation water management)
+	|
+
+کار آمد بارش جدول(
+	[(0,0)-(0.45,0.4)],(0,0),(0.01,0),(0.02,0.002),(0.03,0.008),(0.04,0.014),(0.05,0.02)\
+		,(0.06,0.026),(0.07,0.032),(0.08,0.039),(0.09,0.047),(0.1,0.055),(0.11,0.063),(0.12\
+		,0.071),(0.13,0.079),(0.14,0.087),(0.15,0.095),(0.16,0.103),(0.17,0.111),(0.18,0.119\
+		),(0.19,0.127),(0.2,0.135),(0.21,0.143),(0.22,0.151),(0.23,0.159),(0.24,0.167),(0.25\
+		,0.175),(0.26,0.183),(0.27,0.191),(0.28,0.2),(0.29,0.209),(0.3,0.218),(0.31,0.227),\
+		(0.32,0.236),(0.33,0.247),(0.34,0.257),(0.35,0.268),(0.36,0.28),(0.37,0.293),(0.38,\
+		0.307),(0.39,0.323),(0.4,0.34))
+	~	m/season
+	~		|
+
+ایف ایس یو کارکردگی بہتری فصل یو[Polygon]=
+	آبپاشی کارکردگی[Polygon]
+	~	Dmnl
+	~		~	:SUPPLEMENTARY 
+	|
+
+ایف ایس اےکارکردگی بہتری فصل الف[Polygon]=
+	آبپاشی کارکردگی[Polygon]
+	~	Dmnl
+	~		~	:SUPPLEMENTARY 
+	|
+
+ایف ایس بی کارکردگی بہتری فصل ب[Polygon]=
+	آبپاشی کارکردگی[Polygon]
+	~	Dmnl
+	~		~	:SUPPLEMENTARY 
+	|
+
+ایف ڈبلو[Polygon]= GAME (
+	0.8)
+	~	Dmnl
+	~		~	:SUPPLEMENTARY 
+	|
+
+Negative behavior test crop2[Polygon,canal,kc2,c2]:THE CONDITION:
+	سر پر نہر کی فراہمی[canal]=0:AND:پانی کی ضرورت[Polygon]>0:AND:\
+		حکمت عملی تالاب=0:IMPLIES:کنواں کے شمار[Polygon]>=0:AND:فصل ب رقبہ\
+		[Polygon]>=0:AND:سطحی تالاب بہاو[Polygon]=0:AND:پانی کمی اثر فصل ب\
+		[Polygon]>=0:AND:نمکینی دباو فصل الف[Polygon]>=0:AND:کھیت آمدن\
+		[Polygon]>=0
+	~	
+	~		|
+
+پیداوار فصل الف[Polygon]=
+	زیادہ سے زیادہ پیداوار فصل الف*نمکینی دباو فصل الف\
+		[Polygon]*پانی کمی اثر فصل الف[Polygon]
+	~	Kg/(m*m)/season
+	~	soil salinity stress = 1 means no stress similarly water stress = 1 means \
+		no stress and 0 means full stress no yield
+	|
+
+پیداوار فصل ب[Polygon]=
+	زیادہ سے زیادہ پیداوار فصل ب*نمکینی دباو فصل ب[\
+		Polygon]*پانی کمی اثر فصل ب[Polygon]
+	~	Kg/(m*m)/season
+	~	soil salinity stress = 1 means no stress similarly water stress = 1 means \
+		no stress and 0 means full stress no yield
+	|
+
+کے سی فصل الف=
+	IF THEN ELSE(MODULO(Time, 2 )=0, 0.65 , 0.72 )
+	~	Dmnl
+	~		|
+
+کے سی فصل ب=
+	IF THEN ELSE(MODULO(Time, 2 )=0, 0.7 , 0.85 )
+	~	Dmnl
+	~		|
+
+زیادہ سے زیادہ پیداوار فصل ب:INTERPOLATE::=
+	GET XLS DATA('?test', 'Crop_Yield' , 'b' , 'H2' )
+	~	Kg/(m*m)/season
+	~		|
+
+فصل الف کےواے=
+	IF THEN ELSE(MODULO(Time, 2 )=0, 1.05 , 0.85 )
+	~	Dmnl
+	~		|
+
+زمین نمکینی ٹینامٹ براے فصل الف[Polygon]= GAME (
+	زمین نمکینی براے فصل الف[Polygon])
+	~	dS/m
+	~		|
+
+لیچیگ حصہ[Polygon]=
+	فصل ب بخارات شرح[Polygon]/(1-لیچیگ ضرورت فصل ب[Polygon])+\
+		فصل الف بخارات شرح[Polygon]/(1-لیچیگ ضرورت فصل الف[Polygon\
+		])
+	~	m*m*m/season
+	~		|
+
+نمکینی دباو فصل الف[Polygon]=
+	Max(1-((IF THEN ELSE(زمین نمکینی ٹینامٹ براے فصل الف[Polygon\
+		]<برقی موصل حد مقدار فصل الف, برقی موصل حد مقدار فصل الف\
+		 , زمین نمکینی ٹینامٹ براے فصل الف[Polygon] )-برقی موصل حد مقدار فصل الف\
+		)*بی فصل الف/100),0)
+	~	fraction
+	~	if soil salinity is 1 it means no stress and zero means full stress
+		1-(ECe-ECethreshold)*b/100
+	|
+
+نمکینی دباو فصل ب[Polygon]=
+	Max(1-((IF THEN ELSE(زمین نمکینی ٹینامٹ براے فصل ب[Polygon]<\
+		برقی موصل حد مقدار فصل ب, برقی موصل حد مقدار فصل ب\
+		 , زمین نمکینی ٹینامٹ براے فصل ب
+	[Polygon] )-برقی موصل حد مقدار فصل ب)*بی فصل ب/100),0)
+	~	fraction
+	~	if soil salinity is 1 it means no stress and zero means full stress
+		1-(ECe-ECethreshold)*b/100
+	|
+
+علاقائی حصہ فصل الف[Polygon]:INTERPOLATE::=
+	GET XLS DATA('?test', 'AF' , 'A' , 'B2' )
+	~	Dmnl
+	~	Area fraction is the fraction (0-1) of the polygon covered by a specific \
+		crop. The area fraction is read from an excel file, where C1 (wheat) and \
+		C2 (grass) represent first-season crops and C3 (cotton) and C4 (rice) \
+		represent second-season crops.
+	|
+
+کل بہاو براے فصل ب[Polygon]=
+	کنواں بہاو براے فصل ب[Polygon]+سطحی بہاو براے فصل ب\
+		[Polygon]
+	~	m*m*m/season
+	~		|
+
+علاقائی حصہ فصل الف ٹینامٹ[Polygon]= GAME (
+	علاقائی حصہ فصل الف[Polygon])
+	~	Dmnl
+	~		|
+
+علاقائی حصہ فصل ب ٹینامٹ[Polygon]= GAME (
+	علاقائی حصہ فصل ب[Polygon])
+	~	Dmnl
+	~		|
+
+فصل ب بخارات شرح[Polygon]=
+	کے سی فصل ب*آبی بخارات حوالہ[Polygon]*فصل ب رقبہ[Polygon\
+		]
+	~	m*m*m/season
+	~	The (IF THEN ELSE(MODULO(Time, 2 )=0, 1 , 0 )) function is removed inorder \
+		to remove the floating error in water stress.
+	|
+
+Negative behavior test crop1[Polygon,canal,kc1,c1]:THE CONDITION:
+	سر پر نہر کی فراہمی[canal]=0:AND:پانی کی ضرورت[Polygon]>0:AND:\
+		حکمت عملی تالاب=0:IMPLIES:کنواں کے شمار[Polygon]>=0:AND:فصل ب رقبہ\
+		[Polygon]>=0:AND:سطحی تالاب بہاو[Polygon]=0:AND:پانی کمی اثر فصل ب\
+		[Polygon]>=0:AND:نمکینی دباو فصل الف[Polygon]>=0:AND:کھیت آمدن\
+		[Polygon]>=0
+	~	
+	~		|
+
+پیداوار آمدن فصل ب[Polygon]=
+	فصل ب رقبہ[Polygon]*پیداوار فصل ب[Polygon]*بازاری قیمت فصل ب
+	~	Rs/season
+	~		|
+
+Negative behavior test crop3[Polygon,canal,kc3,c3]:THE CONDITION:
+	سر پر نہر کی فراہمی[canal]=0:AND:پانی کی ضرورت[Polygon]>0:AND:\
+		حکمت عملی تالاب=0:IMPLIES:کنواں کے شمار[Polygon]>=0:AND:فصل ب رقبہ\
+		[Polygon]>=0:AND:سطحی تالاب بہاو[Polygon]=0:AND:پانی کمی اثر فصل ب\
+		[Polygon]>=0:AND:نمکینی دباو فصل الف[Polygon]>=0:AND:کھیت آمدن\
+		[Polygon]>=0
+	~	
+	~		|
+
+لیچیگ ضرورت فصل الف[Polygon]=
+	برقی موصل نتیجہ[Polygon]/(5*برقی موصل ای فصل ب-برقی موصل نتیجہ\
+		[Polygon])
+	~	Dmnl
+	~		|
+
+لیچیگ ضرورت فصل ب[Polygon]=
+	برقی موصل نتیجہ[Polygon]/(5*برقی موصل ای فصل الف-برقی موصل نتیجہ\
+		[Polygon])
+	~	Dmnl
+	~		|
+
+کنواں بہاو براے فصل ب[Polygon]=
+	(کنواں کا بہاو[Polygon])*((پانی کی موسمی ضرروت براے فصل ب\
+		*فصل ب رقبہ[Polygon])/((پانی کی موسمی ضرروت براے فصل الف
+	*فصل الف رقبہ[Polygon])+(پانی کی موسمی ضرروت براے فصل ب\
+		*فصل ب رقبہ[Polygon])))
+	~	m*m*m/season
+	~		|
+
+بی فصل الف=
+	IF THEN ELSE(MODULO(Time, 2 )=0, 7.1 , 4.3 )
+	~	fraction*m/dS
+	~		|
+
+بی فصل ب=
+	IF THEN ELSE(MODULO(Time, 2 )=0, 5.2 , 5.7 )
+	~	fraction*m/dS
+	~		|
+
+برقی موصل حد مقدار فصل ب=
+	IF THEN ELSE(MODULO(Time, 2 )=0, 2.8 , 1.5 )
+	~	dS/m
+	~		|
+
+برقی موصل حد مقدار فصل الف=
+	IF THEN ELSE(MODULO(Time, 2 )=0, 6 , 7.7 )
+	~	dS/m
+	~		|
+
+زمین نمکینی ٹینامٹ براے فصل ب[Polygon]= GAME (
+	زمین نمکینی براے فصل ب[Polygon])
+	~	dS/m
+	~		|
+
+کل نہری فراہمی براۓ فصلات[Polygon]=
+	نہری بہاو براے فصل ب[Polygon]+نہری بہاو براے فصل الف\
+		[Polygon]
+	~	m*m*m/season
+	~		|
+
+بازاری قیمت فصل الف:INTERPOLATE::=
+	GET XLS DATA('?test', 'Market_Rate' , 'h' , 'M2' )
+	~	Rs/Kg
+	~		|
+
+سطحی تالاب بہاو براے فصل ب[Polygon]=
+	(سطحی تالاب بہاو[Polygon])*((پانی کی موسمی ضرروت براے فصل ب\
+		*فصل ب رقبہ[Polygon])/((پانی کی موسمی ضرروت براے فصل ب
+	*فصل ب رقبہ[Polygon])+(پانی کی موسمی ضرروت براے فصل الف\
+		*فصل الف رقبہ[Polygon])))
+	~	m*m*m/season
+	~		|
+
+فصل ب رقبہ[Polygon]=
+	علاقائی حصہ فصل ب ٹینامٹ[Polygon]*رقبہ
+	~	m*m
+	~		|
+
+پانی کی موسمی ضرروت براے فصل الف=
+	IF THEN ELSE(MODULO(Time, 2 )=0, 271 , 786 )
+	~	mm/season
+	~		|
+
+فصل الف بخارات شرح[Polygon]=
+	کے سی فصل الف*آبی بخارات حوالہ[Polygon]*فصل الف رقبہ\
+		[Polygon]
+	~	m*m*m/season
+	~	The (IF THEN ELSE(MODULO(Time, 2 )=0, 1 , 0 )) function is removed inorder \
+		to remove the floating error in water stress.
+	|
+
+پانی کی موسمی ضرروت براے فصل ب=
+	IF THEN ELSE(MODULO(Time, 2 )=0, 300 , 439 )
+	~	mm/season
+	~		|
+
+پیداوار آمدن[Polygon]=
+	پیداوار آمدن فصل الف[Polygon]+پیداوار آمدن فصل ب[Polygon\
+		]
+	~	Rs/season
+	~		|
+
+پیداوار آمدن فصل الف[Polygon]=
+	فصل الف رقبہ[Polygon]*پیداوار فصل الف[Polygon]*بازاری قیمت فصل الف
+	~	Rs/season
+	~		|
+
+زمین نمکینی براے فصل ب[Polygon]:INTERPOLATE::=
+	GET XLS DATA('?test', 'SS' , 'A' , 'HI2' )
+	~	dS/m
+	~		|
+
+نہری بہاو براے فصل الف[Polygon]=
+	نہر کا حصہ[Polygon]*((پانی کی موسمی ضرروت براے فصل الف\
+		*فصل الف رقبہ[Polygon])/((پانی کی موسمی ضرروت براے فصل الف\
+		*فصل الف رقبہ[Polygon])+(پانی کی موسمی ضرروت براے فصل ب\
+		*فصل ب رقبہ[Polygon])))
+	~	m*m*m/season
+	~	(Canal contributions[Polygon])*(crop seasonal water requirement[c1]*Crop \
+		area[Polygon,c1])/((crop seasonal water requirement[c1]*
+		Crop area[Polygon,c1])+(crop seasonal water requirement[c2]*(Crop \
+		area[Polygon,c2]))
+	|
+
+نہری بہاو براے فصل ب[Polygon]=
+	نہر کا حصہ[Polygon]*((پانی کی موسمی ضرروت براے فصل ب\
+		*فصل ب رقبہ[Polygon])/((پانی کی موسمی ضرروت براے فصل الف\
+		*فصل الف رقبہ[Polygon])+(پانی کی موسمی ضرروت براے فصل ب\
+		*فصل ب رقبہ[Polygon])))
+	~	m*m*m/season
+	~	(Canal contributions[Polygon])*(crop seasonal water requirement[c1]*Crop \
+		area[Polygon,c1])/((crop seasonal water requirement[c1]*
+		Crop area[Polygon,c1])+(crop seasonal water requirement[c2]*(Crop \
+		area[Polygon,c2]))
+	|
+
+سطحی بہاو براے فصل ب[Polygon]=
+	سطحی تالاب بہاو براے فصل ب[Polygon]+بارش کا سطحی بہاو فصل ب\
+		[Polygon]+نہری بہاو براے فصل ب[Polygon]
+	~	m*m*m/season
+	~		|
+
+Negative behavior test crop4[Polygon,canal,kc4,c4]:THE CONDITION:
+	سر پر نہر کی فراہمی[canal]=0:AND:پانی کی ضرورت[Polygon]>0:AND:\
+		حکمت عملی تالاب=0:IMPLIES:کنواں کے شمار[Polygon]>=0:AND:فصل ب رقبہ\
+		[Polygon]>=0:AND:سطحی تالاب بہاو[Polygon]=0:AND:پانی کمی اثر فصل ب\
+		[Polygon]>=0:AND:نمکینی دباو فصل الف[Polygon]>=0:AND:کھیت آمدن\
+		[Polygon]>=0
+	~	
+	~		|
+
+کنواں بہاو براے فصل الف[Polygon]=
+	(کنواں کا بہاو[Polygon])*((پانی کی موسمی ضرروت براے فصل الف\
+		*فصل الف رقبہ[Polygon])/((پانی کی موسمی ضرروت براے فصل الف
+	*فصل الف رقبہ[Polygon])+(پانی کی موسمی ضرروت براے فصل ب\
+		*فصل ب رقبہ[Polygon])))
+	~	m*m*m/season
+	~		|
+
+پانی کی ضرورت[Polygon]=
+	(فصل الف بخارات شرح[Polygon]+فصل ب بخارات شرح[Polygon])/\
+		آبپاشی کارکردگی[Polygon]
+	~	m*m*m/season
+	~		|
+
+پانی کمی اثر فصل الف[Polygon]=
+	Max( IF THEN ELSE(فصل الف بخارات شرح[Polygon]=0, 0 , 1-((فصل الف کےواے\
+		)*(1-(IF THEN ELSE(کل بہاو براے فصل الف[Polygon]>
+	فصل الف بخارات شرح[Polygon], فصل الف بخارات شرح[Polygon\
+		] , کل بہاو براے فصل الف[Polygon])/فصل الف بخارات شرح\
+		[Polygon]))) 
+	) , 0)
+	~	Dmnl
+	~	need to checked for its consistency and working after the linkage of AW stock. Check \
+		why it is giving nagitive values.it give nagative value when actual ET is \
+		very very less than the demand ET. then factor (1-ETactual/ET demand) give \
+		high value and if Ky is greater than one as in case of wheat it is 1.05 it \
+		become grater than 1 and on subtracting with one it give nagative value.
+		=1-Ky(1-ETcadj/ETc)
+		negative means that ETcadj<<<<ETc hence water stress can be taken as zero \
+		means no water to fullfill crop water requirements thats why I used max \
+		function.
+	|
+
+پانی کمی اثر فصل ب[Polygon]=
+	Max( IF THEN ELSE(فصل ب بخارات شرح[Polygon]=0, 0 , 1-((فصل ب کےواے\
+		)*(1-(IF THEN ELSE(کل بہاو براے فصل ب[Polygon]>
+	فصل ب بخارات شرح[Polygon], فصل ب بخارات شرح[Polygon] , کل بہاو براے فصل ب\
+		[Polygon])/فصل ب بخارات شرح[Polygon]))) 
+	) , 0)
+	~	Dmnl
+	~	need to checked for its consistency and working after the linkage of AW stock. Check \
+		why it is giving nagitive values.it give nagative value when actual ET is \
+		very very less than the demand ET. then factor (1-ETactual/ET demand) give \
+		high value and if Ky is greater than one as in case of wheat it is 1.05 it \
+		become grater than 1 and on subtracting with one it give nagative value.
+		=1-Ky(1-ETcadj/ETc)
+		negative means that ETcadj<<<<ETc hence water stress can be taken as zero \
+		means no water to fullfill crop water requirements thats why I used max \
+		function.
+	|
+
+سطحی تالاب بہاو براے فصل الف[Polygon]=
+	(سطحی تالاب بہاو[Polygon])*((پانی کی موسمی ضرروت براے فصل الف\
+		*فصل الف رقبہ[Polygon])/((پانی کی موسمی ضرروت براے فصل ب
+	*فصل ب رقبہ[Polygon])+(پانی کی موسمی ضرروت براے فصل الف\
+		*فصل الف رقبہ[Polygon])))
+	~	m*m*m/season
+	~		|
+
+سطحی بہاو براے فصل الف[Polygon]=
+	سطحی تالاب بہاو براے فصل الف[Polygon]+بارش کا سطحی بہاو فصل الف\
+		[Polygon]+نہری بہاو براے فصل الف[Polygon]
+	~	m*m*m/season
+	~		|
+
+آبپاشی فصل الف[Polygon]=
+	سطحی بہاو براے فصل الف[Polygon]/رقبہ
+	~	m/season
+	~		~	:SUPPLEMENTARY 
+	|
+
+کل بہاو براے فصل الف[Polygon]=
+	کنواں بہاو براے فصل الف[Polygon]+سطحی بہاو براے فصل الف\
+		[Polygon]
+	~	m*m*m/season
+	~		|
+
+آبپاشی فصل ب[Polygon]=
+	سطحی بہاو براے فصل ب[Polygon]/رقبہ
+	~	m/season
+	~		~	:SUPPLEMENTARY 
+	|
+
+فصل الف رقبہ[Polygon]=
+	علاقائی حصہ فصل الف ٹینامٹ[Polygon]*رقبہ
+	~	m*m
+	~		|
+
+برقی موصل ای فصل ب=
+	IF THEN ELSE(MODULO(Time, 2 )=0, 7.4 , 8.5 )
+	~	dS/m
+	~		|
+
+برقی موصل ڈی ڈبلوٹینامٹ[Polygon]= GAME (
+	برقی موصل ڈی ڈبلو[Polygon])
+	~	dS/m
+	~		|
+
+برقی موصل نتیجہ[Polygon]=
+	IF THEN ELSE(نہری پانی حجم[Polygon]=0:AND:زیرزمین پانی حجم[\
+		Polygon]=0, 1 , (نہری پانی حجم[Polygon]*برقی موصل نہری پانی\
+		[Polygon]+زیرزمین پانی حجم[Polygon]*برقی موصل ڈی ڈبلوٹینامٹ\
+		[Polygon])/(نہری پانی حجم[Polygon
+	]+زیرزمین پانی حجم[Polygon]) )
+	~	dS/m
+	~		|
+
+لگانے کی قیمت[Polygon]=
+	قیمت کا پیمانہ * قیمت باہم سطح دیکھنا(ٹینامیٹ زیر زمین پانی کی سطح\
+		[Polygon] / سطح کا پیمانہ)
+	~	Rs/Nos
+	~		|
+
+ٹینامیٹ زیر زمین پانی کی سطح[Polygon]= GAME (
+	زیر زمين پانی کی سطح[Polygon])
+	~	m
+	~		|
+
+کنواں کی بڑہوتی[Polygon]=
+	IF THEN ELSE(کنواں کے شمار[Polygon]<زیادہ سے زیادہ اجازت کردہ کنواں\
+		 :AND: برقی موصل ڈی ڈبلوٹینامٹ[Polygon]<برقی موصل روک
+	, IF THEN ELSE(تمام کنواں لگانے کی قیمت
+	[Polygon]<=آمدن براے خرچ[Polygon]
+	, 
+	اضافی کنواں خواہش کے مطابق لگوائی[Polygon], 0 ) , 0 )
+	~	Nos/season
+	~	Total no of tube wells
+	|
+
+کنواں کے شمار[Polygon]= INTEG (
+	کنواں کی بڑہوتی[Polygon]-کنواں کا انحتات[Polygon],
+		23)
+	~	Nos
+	~	According to report on groundwater economy of pakistan there were 23 \
+		private tube/1000 hectare (1 tubewell to serve 44 hectare) in 1990. \
+		according to grid size the initial density of tube well /polygon come out \
+		to be 4410000/1000 = 441 hectares No of tubewells = 441/44 = 10 \
+		tubewells/polygon
+	|
+
+کل نہری رساو[canal]=
+	نہری رساو فی میڑ[canal]*(کل لمبائی[canal]-(فیصد پختہ[canal\
+		]*کل لمبائی[canal]*(1-فیصد نہری پانی نقصان))
+	)
+	~	m*m*m/season
+	~	Shold include effect of lining and need to see percentage of water seep from the \
+		canal before and after lining application (from literature)
+		(percentage losses unlined-(percentage losses unlined-percentage losses lined)*lined \
+		percentage[canal])*Canal supply at head
+		[canal]
+	|
+
+نہری رساو فی میڑ[canal]=
+	2e-006*(سر پر نہر کی فراہمی[canal])
+	~	m*m*m/season/m
+	~		|
+
+کنواں کا انحتات[Polygon]=
+	کنواں کے شمار[Polygon]/اوسط زندگی کنواں
+	~	Nos/season
+	~	Also need to include the option that if farmer is unable to supply funds for \
+		maintenance the decay rate increases.
+		Tubewell Nos[Polygon]/Average TW life
+	|
+
+Tubewell number at zero time[Polygon]=
+	GET XLS CONSTANTS('?test', 'TWN' , 'b2*' )
+	~	Nos
+	~		~	:SUPPLEMENTARY 
+	|
+
+خرابی فیصد[Polygon]= DELAY FIXED (
+	کنواں کی بڑہوتی[Polygon],اوسط زندگی کنواں,0)
+	~	Nos/season
+	~		~	:SUPPLEMENTARY 
+	|
+
+Constrained behavior limit test[canal,Polygon]:THE CONDITION:
+	کھیت آمدن[Polygon]=0:IMPLIES:نہر پختگی[canal]=0:AND:کنواں کا بہاو\
+		[Polygon]=0:AND:بنی ہوئی صلاحیت[Polygon]=0:AND:آبپاشی کارکردگی\
+		[Polygon]=0.6
+	~	
+	~		|
+
+نہری رساو فی چوکور[Polygon]=
+	SUM(تقسیمی رساو[Polygon,canal!])
+	~	m*m*m/season
+	~		|
+
+Conservation of mass check[Ca4,N41,N49,N50]:THE CONDITION:
+	سر پر نہر کی فراہمی[Ca4]>=0:IMPLIES:سر پر نہر کی فراہمی\
+		[Ca4]-نہری بخارات[Ca4]=نہری رساو فی چوکور[N41]+نہری رساو فی چوکور
+		[N49]+نہری رساو فی چوکور[N50]+نہری بہاو فی چوکور[N41]\
+		+نہری بہاو فی چوکور[N49]+نہری بہاو فی چوکور[N50]
+	~	
+	~		|
+
+کل آب اندوخت بھرائی[Polygon]=
+	نہری رساو فی چوکور[Polygon]*سی پی+آب اندوخت بھرائی براے بارش\
+		[Polygon]
+	~	m*m*m/season
+	~	Will be use as Lc in SahysMod
+	|
+
+ممکنہ سرمایہ کاری فی نہر[canal]=
+	SUM(ممکنہ سرمایہ کاری فی چوکور نہر پر[canal,Polygon!])
+	~	Rs/season
+	~		|
+
+پختگی شرح[canal]=
+	IF THEN ELSE( پختگی قیمت فی موسم[canal]<=ممکنہ سرمایہ کاری فی نہر\
+		[canal],MIN(دھیان نہری حالت[canal]*پختگی لمبائی اضافہ[\
+		canal]/وقت کا قدم*حکمت عملی نہر پختگی[canal],(کل لمبائی
+	[canal]-نہر پختگی[canal])/وقت کا قدم),0)
+	~	m/season
+	~		|
+
+تالاب قیمت فی موسم[Polygon]=
+	(قدم صلاحیت بڑھوتی[Polygon]/وقت کا قدم)*تالاب کی قیمت\
+		*0.25
+	~	Rs/season
+	~		|
+
+قیمت لگوائی فی موسم[Polygon]=
+	عدد فی موسم[Polygon]/وقت کا قدم*قیمت لگوائی*0.25
+	~	Rs/season
+	~		|
+
+بہتری شرح[Polygon]=
+	IF THEN ELSE(قیمت لگوائی فی موسم[Polygon]<=آمدن براے خرچ[\
+		Polygon],
+	MIN((دھیان براۓ آبپاشی کارکردگی[Polygon]*(+آبپاشی کارکردگی بہتری\
+		[Polygon]/وقت کا قدم-آبپاشی کارکردگی[Polygon])*حکمت عملی براے آبپاشی کارکردگی\
+		), 
+	(-آبپاشی کارکردگی[Polygon]+کارکردگی منزل)/وقت کا قدم\
+		),
+	0)
+	~	1/season
+	~		|
+
+ممکنہ سرمایہ کاری فی چوکور نہر پر[canal,Polygon]=
+	آمدن براے خرچ[Polygon]*چوکور جز[Polygon,canal]
+	~	Rs/season
+	~		|
+
+عدد فی موسم[Polygon]=
+	آبپاشی کارکردگی بہتری[Polygon]/کارکردگی بہتری فی عدد
+	~	unit
+	~		|
+
+بنانے کی شرح[Polygon]=
+	IF THEN ELSE(تالاب قیمت فی موسم[Polygon]<=آمدن براے خرچ[Polygon\
+		],IF THEN ELSE(بنی ہوئی صلاحیت[Polygon]<کل پانی بچاو صلاحیت\
+		, قدم صلاحیت بڑھوتی[Polygon]/وقت کا قدم
+	*حکمت عملی تالاب
+	 , 0
+	 ),0)
+	~	m*m*m/season
+	~		|
+
+پختگی قیمت فی موسم[canal]=
+	(پختگی لمبائی اضافہ[canal]/وقت کا قدم)*پختگی کی قیمت\
+		*0.25
+	~	Rs/season
+	~		|
+
+Farm income is zero[Polygon]:THE CONDITION:
+	کھیت آمدن[Polygon]=0:IMPLIES:کنواں کا بہاو[Polygon]=0
+	~	
+	~		|
+
+Checking canal lining when policy is zero[canal]:THE CONDITION:
+	حکمت عملی نہر پختگی[canal]=0:IMPLIES:اصل پختگی قیمت[canal\
+		]=0:AND:پختگی خرابی شرح[canal]=0:AND:نہر پختگی[canal]=0:AND:فیصد پختہ\
+		[canal]=0:AND:پختگی شرح[canal]=0
+	~	
+	~		|
+
+Checking canal lining when policy is not zero[canal]:THE CONDITION:
+	حکمت عملی نہر پختگی[canal]=1:IMPLIES:اصل پختگی قیمت[canal\
+		]>=0:AND:پختگی خرابی شرح[canal]>=0:AND:نہر پختگی[canal]>=0:AND:\
+		فیصد پختہ[canal]>=0:AND:پختگی شرح[canal]>=0
+	~	
+	~		|
+
+Check when RWH is not zero[Polygon]:THE CONDITION:
+	حکمت عملی تالاب=1:IMPLIES:بنی ہوئی صلاحیت[Polygon]>=0:AND:\
+		ریت سے بھری صلا حیت[Polygon]>=0:AND:اصل پانی بچاو قیمت\
+		[Polygon]>=0:AND:
+		بنانے کی فیصد[Polygon]>=0:AND:اصل مرمت قیمت پانی بچاو\
+		[Polygon]>=0:AND:اندارج[Polygon]>=0:AND:پانی تالابی جمع
+		[Polygon]>=0:AND:سطحی بخارات 1[Polygon]>=0:AND:رساو1[Polygon]>=0:AND:\
+		سطحی تالاب بہاو[Polygon]>=0:AND:ریت کی شرح[Polygon
+		]>=0:AND:مرمتی شرح[Polygon]>=0:AND:بنانے کی شرح[Polygon]>=0:AND:دستیاب صلاحیت\
+		[Polygon]>=0:AND:پانی بچاو نہری پانی کا حصہ[Polygon]>=0:AND:دستیاب بارش بہاو براۓ سطحی تالاب\
+		[Polygon]>=0
+	~	
+	~		|
+
+Check when RWH is zero[Polygon]:THE CONDITION:
+	حکمت عملی تالاب=0:IMPLIES:بنی ہوئی صلاحیت[Polygon]=0:AND:ریت سے بھری صلا حیت\
+		[Polygon]=0:AND:اصل پانی بچاو قیمت[Polygon]=0:AND:
+		بنانے کی فیصد[Polygon]=0:AND:اصل مرمت قیمت پانی بچاو[\
+		Polygon]=0:AND:اندارج[Polygon]=0:AND:پانی تالابی جمع
+		[Polygon]=0:AND:سطحی بخارات 1[Polygon]=0:AND:رساو1[Polygon]=0:AND:سطحی تالاب بہاو\
+		[Polygon]=0:AND:ریت کی شرح[Polygon]=0
+		:AND:مرمتی شرح[Polygon]=0:AND:بنانے کی شرح[Polygon]=0:AND:دستیاب صلاحیت\
+		[Polygon]=0:AND:پانی بچاو نہری پانی کا حصہ[Polygon]=0:AND:دستیاب بارش بہاو براۓ سطحی تالاب\
+		[Polygon]=0
+	~	
+	~		|
+
+خرابی شرح نہر پختگی[canal]= DELAY FIXED (
+	پختگی شرح[canal], اوسط نہر خرابی وقت , 0)
+	~	m/season
+	~		|
+
+پختگی لمبائی اضافہ[canal]=
+	نہر پختگی جدول[canal](سال)*کل لمبائی[canal]
+	~	m
+	~		|
+
+پختگی خرابی شرح[canal]=
+	IF THEN ELSE(Time<اوسط نہر خرابی وقت , نہر پختگی ابتدائی وقت پر\
+		[canal]/اوسط نہر خرابی وقت , خرابی شرح نہر پختگی[canal\
+		] )
+	~	m/season
+	~		|
+
+AW zero time stock[Polygon]=
+	GET XLS CONSTANTS('?test', 'AWS' , 'b2*' )
+	~	m*m*m
+	~		|
+
+Debt zero time stock[Polygon]=
+	GET XLS CONSTANTS('?test', 'DEB' , 'b2*' )
+	~	Rs
+	~		|
+
+نہر ی کارکردگی ابتدائی وقت پر[Polygon]=
+	GET XLS CONSTANTS('?test', 'IEE' , 'b2*' )
+	~	Dmnl
+	~		|
+
+Water in storage zero time stock[Polygon]=
+	GET XLS CONSTANTS('?test', 'WIS' , 'b2*' )
+	~	m*m*m
+	~		|
+
+silted capacity zero time stock[Polygon]=
+	GET XLS CONSTANTS('?test', 'SC' , 'b2*' )
+	~	m*m*m
+	~		|
+
+constructed capacity zero time stock[Polygon]=
+	GET XLS CONSTANTS('?test', 'CC' , 'b2*' )
+	~	m*m*m
+	~		|
+
+نہر پختگی ابتدائی وقت پر[canal]=
+	GET XLS CONSTANTS('?test', 'CLS' , 'b2*' )
+	~	m
+	~		|
+
+Farm income zero time stock[Polygon]=
+	GET XLS CONSTANTS('?test', 'FIC' , 'b2*' )
+	~	Rs
+	~		|
+
+جی ڈبلو[Polygon]=
+	کنواں کا بہاو[Polygon]/رقبہ
+	~	m/season
+	~		~	:SUPPLEMENTARY 
+	|
+
+ایل سی[Polygon]=
+	کل آب اندوخت بھرائی[Polygon]/رقبہ
+	~	m/season
+	~		~	:SUPPLEMENTARY 
+	|
+
+جز=
+	0.6
+	~	Dmnl
+	~		|
+
+اضافی کنواں خواہش کے مطابق لگوائی[Polygon]=
+	IF THEN ELSE(مطلوبہ حجم[Polygon]<=0, 0 , کنواں لگائی پر موسم\
+		[Polygon])
+	~	Nos/season
+	~	goal seek by using max capacity and desire capacity
+	|
+
+کنواں لگائی پر موسم[Polygon]=
+	0.75+کنواں کا انحتات[Polygon]*جز
+	~	Nos/season
+	~		|
+
+خرچہ[Polygon]=
+	چلانے کی اصلی قیمت[Polygon]+تمام کنواں لگانے کی قیمت\
+		[Polygon]+کسان آبپاشی کی بہتری کا حصہ[Polygon]+اصل مرمت قیمت پانی بچاو\
+		[Polygon]+کسان پانی بچاو حصہ[Polygon]+نہر پختگی خرچہ[Polygon\
+		]+قیمت برائے مرمت[Polygon]+ادائیگی[Polygon]
+	~	Rs/season
+	~		|
+
+کھیت آمدن[Polygon]= INTEG (
+	آمدن[Polygon]-خرچہ[Polygon],
+		Farm income zero time stock[Polygon])
+	~	Rs
+	~		|
+
+بازاری قیمت فصل ب:INTERPOLATE::=
+	GET XLS DATA('?test', 'Market_Rate' , 'h' , 'N2' )
+	~	Rs/Kg
+	~		|
+
+زیرزمین پانی حجم[Polygon]=
+	کنواں کا بہاو[Polygon]
+	~	m*m*m/season
+	~		|
+
+مطلوبہ بہاو[Polygon]=
+	پانی کی ضرورت[Polygon]-سطحی پانی[Polygon]-سطحی تالاب بہاو\
+		[Polygon]
+	~	m*m*m/season
+	~	Average tubewell pumping rate in pakistan
+	|
+
+زیادہ سے زیادہ پیداوار فصل الف:INTERPOLATE::=
+	GET XLS DATA('?test', 'Crop_Yield' , 'b' , 'G2' )
+	~	Kg/(m*m)/season
+	~		|
+
+زیادہ سے زیادہ اجازت کردہ کنواں=
+	25
+	~	Nos
+	~		|
+
+قرض[Polygon]= INTEG (
+	قرضہ[Polygon]-ادائیگی[Polygon],
+		Debt zero time stock[Polygon])
+	~	Rs
+	~		|
+
+اصلی مرمت فیصد[Polygon]=
+	IF THEN ELSE(قیمت برائے مرمت[Polygon]=0, 1 , IF THEN ELSE( آمدن براے خرچ\
+		[Polygon]>قیمت برائے مرمت[Polygon], 1 , آمدن براے خرچ[Polygon\
+		]/قیمت برائے مرمت[Polygon] ) )
+	~	Dmnl
+	~		~	:SUPPLEMENTARY 
+	|
+
+چلانے کی اصلی قیمت[Polygon]=
+	کنواں کے شمار[Polygon]*چلانے کی قیمت فی گھنٹہ*چلانے کے اصلی گھنٹے\
+		[Polygon]
+	~	Rs/season
+	~		|
+
+چلانے کے اصلی گھنٹے[Polygon]=
+	Max(MIN(آمدن براے خرچ[Polygon]/(چلانے کی قیمت فی گھنٹہ*\
+		کنواں کے شمار[Polygon]),چلانے کے موجودہ گھنٹے[Polygon]\
+		),0)
+	~	hrs/season/Nos
+	~		|
+
+فصل ب کےواے=
+	1
+	~	Dmnl
+	~		|
+
+ادائیگی[Polygon]=
+	کل آمدن کا فیصد/100*آمدن[Polygon]
+	~	Rs/season
+	~		|
+
+کل آمدن کا فیصد=
+	20
+	~	Dmnl
+	~		|
+
+اصلی مرمت قیمت=
+	مرمت قیمت سال دوھزار تین کے مطابق*مرمت سال کے مطابق\
+		*(IF THEN ELSE(MODULO(Time, 2 )=0, 1 , 0 ))
+	~	Rs/season/Nos
+	~		|
+
+برقی موصل ڈی ڈبلو[Polygon]:INTERPOLATE::=
+	GET XLS DATA( '?test', 'ECdw' , 'A' , 'B2' )
+	~	dS/m
+	~		|
+
+برقی موصل ای فصل الف=
+	IF THEN ELSE(MODULO(Time, 2 )=0, 3.8 , 5.1 )
+	~	dS/m
+	~		|
+
+قرضہ[Polygon]=
+	(سود شرح*قرض[Polygon]+حکومتی قرضہ)*(IF THEN ELSE(MODULO(Time, 2 )\
+		=0, 1 , 0 ))
+	~	Rs/season
+	~		|
+
+برقی موصل نہری پانی[Polygon]=
+	1.5
+	~	dS/m
+	~		|
+
+قیمت عددی برقی کنواں[Polygon]=
+	قیمت سال کے مطابق*لگانے کی قیمت[Polygon]
+	~	Rs/Nos
+	~	Use lookup function for including the dynamics of increase in cost with \
+		depth
+	|
+
+اوسط زندگی کنواں=
+	20
+	~	season
+	~		|
+
+تیل قیمت سال دوھزار تین کے مطابق=
+	22.3
+	~	Rs/liters
+	~		|
+
+زمین نمکینی براے فصل الف[Polygon]:INTERPOLATE::=
+	GET XLS DATA('?test', 'SS' , 'A' , 'B2' )
+	~	dS/m
+	~		|
+
+آمدن براے خرچ[Polygon]=
+	کھیت آمدن[Polygon]/وقت کا قدم*0.2
+	~	Rs/season
+	~		|
+
+مرمت قیمت سال دوھزار تین کے مطابق=
+	7080
+	~	Rs/season/Nos
+	~	Reference Groundwater economy of Pakistan
+	|
+
+سطح کا پیمانہ=
+	6
+	~	m
+	~		|
+
+قیمت باہم سطح دیکھنا(
+	[(0,0)-(5,6)],(0,1),(1,1),(1.01,1.47),(2,1.47),(2.01,2.8),(3,2.8),(3.01,4.9),(4,4.9)\
+		,(4.01,5.97),(5,5.97))
+	~	Dmnl
+	~		|
+
+تمام کنواں لگانے کی قیمت[Polygon]=
+	اضافی کنواں خواہش کے مطابق لگوائی[Polygon]*قیمت عددی برقی کنواں\
+		[Polygon]
+	~	Rs/season
+	~		|
+
+ایک کنواں کا حجم[Polygon]=
+	100.8
+	~	m*m*m/hrs
+	~	capacity is one cusec when converted to m3/hr it come equal to 100.8
+	|
+
+نہری پانی حجم[Polygon]=
+	نہری بہاو فی چوکور[Polygon]
+	~	m*m*m/season
+	~		|
+
+قیمت برائے مرمت[Polygon]=
+	اصلی مرمت قیمت*کنواں کے شمار[Polygon]
+	~	Rs/season
+	~		|
+
+حکومتی قرضہ:INTERPOLATE::=
+	GET XLS DATA('?test', 'Loan' , 'e' , 'F2' )
+	~	Rs/season
+	~	for now I am taking it constant but we need to link it with agriculture \
+		input
+	|
+
+چلانے کی موجودہ قیمت[Polygon]=
+	کنواں کے شمار[Polygon]*چلانے کے موجودہ گھنٹے[Polygon]*تیل کی قیمت\
+		*ڈیزل کی کھپت
+	~	Rs/season
+	~		~	:SUPPLEMENTARY 
+	|
+
+پانی کی تمام ضرورت[Polygon]= INTEG (
+	لیچیگ حصہ[Polygon],
+		0)
+	~	m*m*m
+	~		~	:SUPPLEMENTARY 
+	|
+
+قیمت سال کے مطابق=
+	گرافی جدول(سال)
+	~	Dmnl
+	~		|
+
+ڈیزل کی کھپت=
+	2.5
+	~	liters/hrs
+	~		|
+
+آمدن[Polygon]=
+	پیداوار آمدن[Polygon]+حکومتی قرضہ
+	~	Rs/season
+	~		|
+
+غیر استعمال شدہ[Polygon]=
+	Max(کنواں کا بہاو[Polygon]+فراہمی[Polygon]+سطحی تالاب بہاو\
+		[Polygon]-استعمال[Polygon],0)
+	~	m*m*m/season
+	~		|
+
+افراط زر کا جز=
+	ڈیزل کی قیمت کا جدول(سال)
+	~	Dmnl
+	~		|
+
+کنواں کا بہاو[Polygon]=
+	Max(MIN(مطلوبہ بہاو[Polygon],کنواں کا اصل حجم[Polygon]),0)
+	~	m*m*m/season
+	~		|
+
+ڈیزل کی قیمت کا جدول=
+	GET XLS LOOKUPS('?test', 'Diesel_cost' , 'a', 'b2' )
+	~	Dmnl
+	~		|
+
+تیل کی قیمت=
+	تیل قیمت سال دوھزار تین کے مطابق*افراط زر کا جز
+	~	Rs/liters
+	~		|
+
+مطلوبہ حجم[Polygon]=
+	IF THEN ELSE(ذیادہ سے ذیادہ حجم[Polygon]>مطلوبہ بہاو[Polygon\
+		], 0 , -ذیادہ سے ذیادہ حجم[Polygon]+مطلوبہ بہاو[Polygon])
+	~	m*m*m/season
+	~		|
+
+قیمت کا پیمانہ=
+	56796
+	~	Rs/Nos
+	~		|
+
+زیر زمين پانی کی سطح[Polygon]:INTERPOLATE::=
+	GET XLS DATA('?test', 'WTD' , 'A' , 'B2' )
+	~	m
+	~		|
+
+مرمت سال کے مطابق=
+	گرافی جدول(سال)
+	~	Dmnl
+	~		|
+
+سود شرح:INTERPOLATE::=
+	GET XLS DATA('?test', 'Loan' , 'e' , 'G2' )
+	~	fraction/season
+	~		|
+
+برقی موصل روک=
+	4
+	~	dS/m
+	~		|
+
+چلانے کی قیمت فی گھنٹہ=
+	ڈیزل کی کھپت*تیل کی قیمت
+	~	Rs/hrs
+	~		|
+
+سال شروع=
+	1990
+	~	Dmnl
+	~		|
+
+دستیاب پانی[Polygon]= INTEG (
+	سطحی تالاب بہاو[Polygon]+فراہمی[Polygon]-استعمال[Polygon]-\
+		غیر استعمال شدہ[Polygon],
+		AW zero time stock[Polygon])
+	~	m*m*m
+	~		~	:SUPPLEMENTARY 
+	|
+
+پانی تالابی جمع[Polygon]= INTEG (
+	اندارج[Polygon]-سطحی بخارات 1[Polygon]-رساو1[Polygon]-سطحی تالاب بہاو\
+		[Polygon],
+		Water in storage zero time stock[Polygon])
+	~	m*m*m
+	~		|
+
+عدد فی یونٹ[Polygon]=
+	بہتری شرح[Polygon]/کارکردگی بہتری فی عدد
+	~	unit/season
+	~		|
+
+آبپاشی کارکردگی[Polygon]= INTEG (
+	بہتری شرح[Polygon]-ڈھانچہ خرابی شرح[Polygon],
+		نہر ی کارکردگی ابتدائی وقت پر[Polygon])
+	~	Dmnl
+	~		|
+
+آبپاشی کارکردگی بہتری[Polygon]=
+	کارکردگی بہتری جدول[Polygon](سال)
+	~	Dmnl
+	~		|
+
+جدول آبپاشی کارکردگی دھیان(
+	[(0,0)-(1,1)],(0.6,1),(0.65,1),(0.7,1),(0.75,1),(0.85,0.6),(0.9,0.5),(1,0.01))
+	~	Dmnl
+	~		|
+
+اصل بہتری قیمت[Polygon]=
+	عدد فی یونٹ[Polygon]*قیمت لگوائی
+	~	Rs/season
+	~		|
+
+کارکردگی بہتری جدول[Polygon]=
+	GET XLS LOOKUPS('?test', 'Irreff lookup' , 'a', 'b2' )
+	~	Dmnl
+	~		|
+
+ڈھانچے کی زندگی=
+	30
+	~	season
+	~		|
+
+حکومت آبپاشی کی بہتری کا حصہ[Polygon]=
+	سرمایہ کاری براۓ آبپاشی کارکردگی[Polygon]*0.75
+	~	Rs/season
+	~		~	:SUPPLEMENTARY 
+	|
+
+قیمت لگوائی=
+	لگوائی قیمت جز*قیمت لگوائی 2003
+	~	Rs/unit
+	~		|
+
+سوئچ[Polygon]=
+	IF THEN ELSE(آبپاشی کارکردگی[Polygon]<=کم سے کم کارکردگی\
+		, 0 , 1 )
+	~	Dmnl
+	~		|
+
+سرمایہ کاری براۓ آبپاشی کارکردگی[Polygon]=
+	اصل بہتری قیمت[Polygon]
+	~	Rs/season
+	~		|
+
+کارکردگی بہتری فی عدد=
+	0.05
+	~	1/unit
+	~		|
+
+کارکردگی منزل=
+	0.85
+	~	Dmnl
+	~		|
+
+ڈھانچہ خرابی شرح[Polygon]= DELAY FIXED (
+	بہتری شرح[Polygon]*سوئچ[Polygon],ڈھانچے کی زندگی,0)
+	~	1/season
+	~		|
+
+حکمت عملی براے آبپاشی کارکردگی=
+	0
+	~	Dmnl [0,1,1]
+	~		|
+
+کم سے کم کارکردگی=
+	0.62
+	~	Dmnl
+	~		|
+
+لگوائی قیمت جز=
+	گرافی جدول(سال)
+	~	Dmnl
+	~		|
+
+کسان آبپاشی کی بہتری کا حصہ[Polygon]=
+	سرمایہ کاری براۓ آبپاشی کارکردگی[Polygon]*0.25
+	~	Rs/season
+	~		|
+
+دھیان براۓ آبپاشی کارکردگی[Polygon]=
+	جدول آبپاشی کارکردگی دھیان(آبپاشی کارکردگی[Polygon\
+		]/کارکردگی منزل)
+	~	Dmnl
+	~		|
+
+قیمت لگوائی 2003=
+	5900
+	~	Rs/unit
+	~		|
+
+سرمایہ کاری پانی بچاو[Polygon]=
+	اصل پانی بچاو قیمت[Polygon]
+	~	Rs/season
+	~		|
+
+کسان ریت بہاو دھیان[Polygon]=
+	IF THEN ELSE(بنی ہوئی صلاحیت[Polygon]=0, 0 , دھیان ریت بہاو جدول\
+		(ریت سے بھری صلا حیت[Polygon]/بنی ہوئی صلاحیت[Polygon])\
+		 )
+	~	Dmnl
+	~		|
+
+اصل مرمت قیمت پانی بچاو[Polygon]=
+	مرمتی قیمت*مرمتی شرح[Polygon]
+	~	Rs/season
+	~		|
+
+تالاب کی قیمت=
+	تالاب قیمت جز*تالاب قیمت براے سال 2003
+	~	Rs/(m*m*m)
+	~		|
+
+اصل پانی بچاو قیمت[Polygon]=
+	تالاب کی قیمت*بنانے کی شرح[Polygon]
+	~	Rs/season
+	~		|
+
+لمبائی=
+	14
+	~	m
+	~		|
+
+کسان پانی بچاو حصہ[Polygon]=
+	سرمایہ کاری پانی بچاو[Polygon]*0.25
+	~	Rs/season
+	~		|
+
+مرمتی شرح[Polygon]=
+	ریت سے بھری صلا حیت[Polygon]/وقت کا قدم*کسان ریت بہاو دھیان\
+		[Polygon]
+	~	m*m*m/season
+	~		|
+
+تالاب چوڑائی=
+	14
+	~	m
+	~		|
+
+تالاب فی چوکور=
+	1000
+	~	Dmnl
+	~		|
+
+حکمت عملی تالاب=
+	0
+	~	Dmnl
+	~		|
+
+دھیان ریت بہاو جدول(
+	[(0,0)-(1,1)],(0,0),(0.2,0),(0.5,0),(0.63,0.2),(0.688,0.3),(0.792,0.5),(0.89,0.9),(0.9\
+		,0.9),(0.94,1),(0.96,1),(1,1))
+	~	Dmnl
+	~		|
+
+پانی بچاو نہری پانی کا حصہ[Polygon]=
+	IF THEN ELSE(پانی تالابی جمع[Polygon]<دستیاب صلاحیت[Polygon\
+		], MIN(نہری بہاو فی چوکور[Polygon]-نہر کا حصہ
+	[Polygon],(دستیاب صلاحیت[Polygon]-پانی تالابی جمع[Polygon])\
+		/وقت کا قدم) , 0)
+	~	m*m*m/season
+	~		|
+
+دستیاب صلاحیت[Polygon]=
+	Max(بنی ہوئی صلاحیت[Polygon]-ریت سے بھری صلا حیت[Polygon\
+		],0)
+	~	m*m*m
+	~		|
+
+دستیاب بارش بہاو براۓ سطحی تالاب[Polygon]=
+	IF THEN ELSE(پانی تالابی جمع[Polygon]<دستیاب صلاحیت[Polygon\
+		], MIN(بارش کا بہاو[Polygon],
+	(دستیاب صلاحیت[Polygon]-پانی تالابی جمع[Polygon])/وقت کا قدم\
+		) , 0)
+	~	m*m*m/season
+	~		|
+
+مرمتی قیمت جز=
+	گرافی جدول(سال)
+	~	Dmnl
+	~		|
+
+بنی ہوئی صلاحیت[Polygon]= INTEG (
+	بنانے کی شرح[Polygon],
+		constructed capacity zero time stock[Polygon])
+	~	m*m*m
+	~		|
+
+مرمتی قیمت براۓ سال 2003=
+	590
+	~	Rs/(m*m*m)
+	~		|
+
+ریت سے بھری صلا حیت[Polygon]= INTEG (
+	ریت کی شرح[Polygon]-مرمتی شرح[Polygon],
+		silted capacity zero time stock[Polygon])
+	~	m*m*m
+	~		|
+
+حکومت پانی بچاو حصہ[Polygon]=
+	سرمایہ کاری پانی بچاو[Polygon]*0.75
+	~	Rs/season
+	~		~	:SUPPLEMENTARY 
+	|
+
+مرمتی قیمت=
+	مرمتی قیمت جز*مرمتی قیمت براۓ سال 2003
+	~	Rs/(m*m*m)
+	~		|
+
+ریت کی شرح[Polygon]=
+	IF THEN ELSE(دستیاب صلاحیت[Polygon]>0, ریت جمع ہونے کی شرح\
+		*تالاب فی چوکور , 0 )
+	~	m*m*m/season
+	~		|
+
+بنانے کی فیصد[Polygon]=
+	بنی ہوئی صلاحیت[Polygon]/کل پانی بچاو صلاحیت
+	~	Dmnl
+	~		|
+
+صلاحیت جدول=
+	GET XLS LOOKUPS('?test', 'Capacity increase' , 'a' , 'b2' )
+	~	Dmnl
+	~		|
+
+تالاب قیمت جز=
+	گرافی جدول(سال)
+	~	Dmnl
+	~		|
+
+قدم صلاحیت بڑھوتی[Polygon]=
+	Max(صلاحیت بڑھوتی[Polygon]-بنی ہوئی صلاحیت[Polygon],0)
+	~	m*m*m
+	~		|
+
+صلاحیت بڑھوتی[Polygon]=
+	صلاحیت جدول(سال)*کل پانی بچاو صلاحیت
+	~	m*m*m
+	~		|
+
+تالاب قیمت براے سال 2003=
+	2950
+	~	Rs/(m*m*m)
+	~		|
+
+ریت جمع ہونے کی شرح=
+	0.021
+	~	m*m*m/season
+	~		|
+
+کل پانی بچاو صلاحیت=
+	اونچای*لمبائی*تالاب چوڑائی*تالاب فی چوکور
+	~	m*m*m
+	~		|
+
+اونچای=
+	2
+	~	m
+	~		|
+
+سرمایہ کاری[canal]=
+	اصل پختگی قیمت[canal]
+	~	Rs/season
+	~		|
+
+نہر پختگی حصہ[canal]=
+	کسان حصہ[canal]/عددی چوکورفی نہر[canal]
+	~	Rs/season
+	~		|
+
+پختگی کی قیمت=
+	پختگی قیمت جز*پختگی قیمت براۓ سال 2003
+	~	Rs/m
+	~		|
+
+اصل پختگی قیمت[canal]=
+	پختگی کی قیمت*پختگی شرح[canal]
+	~	Rs/season
+	~		|
+
+نہر پختگی جدول[canal]=
+	GET XLS LOOKUPS('?test', 'Canalining policy' , 'a', 'b2' )
+	~	Dmnl
+	~		|
+
+فیصد پختہ[canal]=
+	نہر پختگی[canal]/کل لمبائی[canal]
+	~	Dmnl
+	~		|
+
+پختگی قیمت جز=
+	گرافی جدول(سال)
+	~	Dmnl
+	~		|
+
+پختگی قیمت براۓ سال 2003=
+	59000
+	~	Rs/m
+	~		|
+
+نہر پختگی خرچہ[Polygon]=
+	SUM(نہر پختگی حصہ فی چوکور[Polygon,canal!])
+	~	Rs/season
+	~		|
+
+حکومتی حصہ[canal]=
+	سرمایہ کاری[canal]*0.75
+	~	Rs/season
+	~		~	:SUPPLEMENTARY 
+	|
+
+حکمت عملی نہر پختگی[canal]=
+	0
+	~	Dmnl
+	~		|
+
+گرافی جدول=
+	GET XLS LOOKUPS('?test', 'Inflation' , 'a', 'b2' )
+	~	Dmnl
+	~		|
+
+اوسط نہر خرابی وقت=
+	30
+	~	season
+	~		|
+
+سال=
+	RAMP( 1 , 0 , 96 )/2+سال شروع
+	~	Dmnl
+	~	Ramp (1,0,24)/2+1990 mean 1/2+1990 = 1990.5 and if it is Ramp \
+		(2,0,24)/2+1990 then it will be 1990+2/2 = 1991 and in case of Ramp \
+		(3,0,24)/2+1990 it will be 3/2+1990 = 1991.5 in that case 3 will be slope \
+		and increasing 3 will increase stepness of slope.
+	|
+
+نہر پختگی[canal]= INTEG (
+	پختگی شرح[canal]-پختگی خرابی شرح[canal],
+		نہر پختگی ابتدائی وقت پر[canal])
+	~	m
+	~		|
+
+دھیان نہری حالت[canal]=
+	خیال جدول(نہر پختگی[canal]/کل لمبائی[canal])
+	~	Dmnl
+	~		|
+
+خیال جدول(
+	[(0,0)-(1,1)],(0,1),(0.2,1),(0.5,1),(0.63,1),(0.688,0.98),(0.792,0.93),(0.89,0.82),(\
+		0.9,0.72),(0.94,0.64),(0.96,0.53),(1,0))
+	~	Dmnl
+	~		|
+
+کسان حصہ[canal]=
+	سرمایہ کاری[canal]*0.25
+	~	Rs/season
+	~		|
+
+نہر پختگی حصہ فی چوکور[Polygon,canal]=
+	نہر پختگی حصہ[canal]*چوکور جز[Polygon,canal]
+	~	Rs/season
+	~		|
+
+چوکور جز[Polygon,canal]=
+	GET XLS CONSTANTS( '?test' , 'Active' , 'b2' )
+	~	Dmnl
+	~		|
+
+کل لمبائی[canal]=
+	GET XLS CONSTANTS('?test', 'CL' , 'b2*' )
+	~	m
+	~		|
+
+آب اندوخت بھرائی براے بارش[Polygon]=
+	گہرائی اخراج[Polygon]
+	~	m*m*m/season
+	~	Will be use as Lc in SahysMod
+	|
+
+اندارج[Polygon]=
+	پانی بچاو نہری پانی کا حصہ[Polygon]+دستیاب بارش بہاو براۓ سطحی تالاب\
+		[Polygon]
+	~	m*m*m/season
+	~		|
+
+سی پی بارش=
+	0.2
+	~	Dmnl
+	~		|
+
+بارش کا بہاو[Polygon]=
+	غیر کار آمد بارش[Polygon]-گہرائی اخراج[Polygon]
+	~	m*m*m/season
+	~		|
+
+گہرائی اخراج[Polygon]=
+	غیر کار آمد بارش[Polygon]*سی پی بارش
+	~	m*m*m/season
+	~		|
+
+P HassuDyCa16:
+	GET XLS SUBSCRIPT( '?test' , 'Canalsvspolygon', 'Q5', 'Q22' , 'N' )
+	~	
+	~		|
+
+T ModiMrCa20:
+	GET XLS SUBSCRIPT( '?test' , 'Canalsvspolygon', 'U5', 'U7' , 'N' )
+	~	
+	~		|
+
+S JaralaMrCa19:
+	GET XLS SUBSCRIPT( '?test' , 'Canalsvspolygon', 'T5', 'T9' , 'N' )
+	~	
+	~		|
+
+M KakiLMrCa13:
+	GET XLS SUBSCRIPT( '?test' , 'Canalsvspolygon', 'N5', 'N7' , 'N' )
+	~	
+	~		|
+
+O ArroutiMrCa15:
+	GET XLS SUBSCRIPT( '?test' , 'Canalsvspolygon', 'P5', 'P7' , 'N' )
+	~	
+	~		|
+
+R DarkhanaDyCa18:
+	GET XLS SUBSCRIPT( '?test' , 'Canalsvspolygon', 'S5', 'S13' , 'N' )
+	~	
+	~		|
+
+H DauranpurMrCa8:
+	GET XLS SUBSCRIPT( '?test' , 'Canalsvspolygon', 'I5', 'I10' , 'N' )
+	~	
+	~		|
+
+J FaridMrCa10:
+	GET XLS SUBSCRIPT( '?test' , 'Canalsvspolygon', 'K5', 'K11' , 'N' )
+	~	
+	~		|
+
+N BachrianwalaMrCa14:
+	GET XLS SUBSCRIPT( '?test' , 'Canalsvspolygon', 'O5', 'O11' , 'N' )
+	~	
+	~		|
+
+Q BasiraDyCa17:
+	GET XLS SUBSCRIPT( '?test' , 'Canalsvspolygon', 'R5', 'R9' , 'N' )
+	~	
+	~		|
+
+L KakiRMrCa12:
+	GET XLS SUBSCRIPT( '?test' , 'Canalsvspolygon', 'M5', 'M7' , 'N' )
+	~	
+	~		|
+
+I PipliMrCa9:
+	GET XLS SUBSCRIPT( '?test' , 'Canalsvspolygon', 'J5', 'J10' , 'N' )
+	~	
+	~		|
+
+U DangraMrCa21:
+	GET XLS SUBSCRIPT( '?test' , 'Canalsvspolygon', 'V5', 'V7' , 'N' )
+	~	
+	~		|
+
+K RakhBhaMrCa11:
+	GET XLS SUBSCRIPT( '?test' , 'Canalsvspolygon', 'L5', 'L14' , 'N' )
+	~	
+	~		|
+
+G KoraMrCa7:
+	GET XLS SUBSCRIPT( '?test' , 'Canalsvspolygon', 'H5', 'H9' , 'N' )
+	~	
+	~		|
+
+D RajbanaMinorC4:
+	GET XLS SUBSCRIPT( '?test' , 'Canalsvspolygon', 'E5', 'E7' , 'N' )
+	~	
+	~		|
+
+C JalalpurminorC3:
+	GET XLS SUBSCRIPT( '?test' , 'Canalsvspolygon', 'D5', 'D23' , 'N' )
+	~	
+	~		|
+
+B MariminorC2:
+	GET XLS SUBSCRIPT( '?test' , 'Canalsvspolygon', 'C5', 'C23' , 'N' )
+	~	
+	~		|
+
+A ShorkotdistryC1:
+	GET XLS SUBSCRIPT( '?test' , 'Canalsvspolygon', 'b5', 'b18' , 'N' )
+	~	
+	~		|
+
+E LakiMrCa5:
+	GET XLS SUBSCRIPT( '?test' , 'Canalsvspolygon', 'f5', 'f19' , 'N' )
+	~	
+	~		|
+
+تقسیمی فراھمی[Polygon,canal]=
+	IF THEN ELSE(تقسیم کار تبدیل[canal]=1, IF THEN ELSE(کھیت کا مقام\
+		[Polygon,canal]<0.33, فراھی بعد نقصان[canal]*
+	تقسیمی جز[Polygon,canal
+	]/نہری تقسیم[canal,Head], IF THEN ELSE(کھیت کا مقام[Polygon,canal\
+		]<0.66:AND:کھیت کا مقام[Polygon,canal]>0.33, فراھی بعد نقصان\
+		[canal
+	]*تقسیمی جز[Polygon
+	,canal]/نہری تقسیم[canal,Middle] , فراھی بعد نقصان[canal]*تقسیمی جز\
+		[Polygon,canal]/نہری تقسیم[canal,Tail] ) )
+	 , برابر تقسیم[canal]*عددی چوکورفی نہر[canal]*(1/عددی چوکورفی نہر\
+		[canal]) )
+	~	m*m*m/season
+	~		|
+
+نہری بہاو فی چوکور[Polygon]=
+	SUM(تقسیمی فراھمی[Polygon,canal!])
+	~	m*m*m/season
+	~		|
+
+F GaghDyCa6:
+	GET XLS SUBSCRIPT( '?test' , 'Canalsvspolygon', 'G5', 'G27' , 'N' )
+	~	
+	~		|
+
+تقسیمی رساو[Polygon,canal]=
+	IF THEN ELSE(تقسیم کار تبدیل[canal]=1, IF THEN ELSE(رساو کھیت مقام\
+		[Polygon,canal]<0.33, کل نہری رساو[canal
+	]*
+	رساوتقسیم کار جز[Polygon,canal]/نہری تقسیم[canal,Head], IF THEN ELSE\
+		(رساو کھیت مقام[Polygon,canal
+	]<0.66:AND:رساو کھیت مقام[Polygon,canal]>0.33, کل نہری رساو[canal\
+		]*رساوتقسیم کار جز[Polygon,canal]/نہری تقسیم
+	[canal,Middle] , کل نہری رساو[canal]*رساوتقسیم کار جز[Polygon\
+		,canal]/نہری تقسیم[canal,Tail] ) )
+	 , رساو برابر تقسیم[canal] )
+	~	m*m*m/season
+	~		|
+
+رساو کھیت مقام[Polygon,canal]=
+	IF THEN ELSE ( فعال رساو[Polygon,canal]=1 , چوکور آر ڈی[Polygon]/نہر کی لمبائی\
+		[canal] , 0)
+	~	Dmnl
+	~		|
+
+فعال رساو[Polygon,canal]=
+	GET XLS CONSTANTS( '?test' , 'Seep active' , 'b2' )
+	~	Dmnl
+	~		|
+
+رساوتقسیم کار جز[Polygon,canal]=
+	چوکور جدول(رساو کھیت مقام[Polygon,canal])
+	~	Dmnl
+	~		|
+
+سی پی=
+	0.2
+	~	Dmnl
+	~		|
+
+چوکور جدول(
+	[(0,0)-(1,1)],(0,0),(0.0015,0.45),(0.329,0.45),(0.33,0.35),(0.659,0.35),(0.66,0.2),(\
+		0.999,0.2),(1,0.2))
+	~	Dmnl
+	~		|
+
+عددی چوکورپر نہر[canal]=
+	14,19,19,3,15,23,5,6,6,7,10,3,3,7,3,18,5,9,5,3,3
+	~	Dmnl
+	~		|
+
+چوکور آر ڈی[Polygon]=
+	GET XLS CONSTANTS('?test', 'RD' , 'b2*' )
+	~	m
+	~		|
+
+رساو برابر تقسیم[canal]=
+	کل نہری رساو[canal]/(عددی چوکورپر نہر[canal])
+	~	m*m*m/season
+	~		|
+
+نہری تقسیم[canal,position]=
+	GET XLS CONSTANTS( '?test' , 'Position' , 'b2' )
+	~	Dmnl
+	~		|
+
+position:
+	Head,Middle,Tail
+	~	Dmnl
+	~		|
+
+برابر تقسیم[canal]=
+	فراھی بعد نقصان[canal]/(عددی چوکورفی نہر[canal])
+	~	m*m*m/season
+	~		|
+
+تقسیمی جز[Polygon,canal]=
+	تقسیمی جدول(کھیت کا مقام[Polygon,canal])
+	~	Dmnl
+	~		|
+
+فعال[Polygon,canal]=
+	GET XLS CONSTANTS( '?test' , 'Active' , 'b2' )
+	~	Dmnl
+	~		|
+
+کھیت کا مقام[Polygon,canal]=
+	IF THEN ELSE ( فعال[Polygon,canal]=1 , آر ڈی[Polygon]/نہر کی لمبائی\
+		[canal] , 0)
+	~	Dmnl
+	~		|
+
+طول=
+	5
+	~	m
+	~		|
+
+موسمی بخارات:=
+	GET XLS DATA( '?test' , 'SEvapo', 'a', 'b2' )
+	~	m/season
+	~		|
+
+ایس ایف=
+	0.005
+	~	m/season
+	~		|
+
+سطحی بخارات 1[Polygon]=
+	MIN(طول*طول*موسمی بخارات,پانی تالابی جمع[Polygon]/وقت کا قدم\
+		)
+	~	m*m*m/season
+	~		|
+
+رساو1[Polygon]=
+	MIN(ایس ایف*(طول*طول+(4*پانی تالابی جمع[Polygon]/طول)),پانی تالابی جمع\
+		[Polygon]/وقت کا قدم)
+	~	m*m*m/season
+	~		|
+
+Kccrop:
+	kc1,kc2,kc3,kc4
+	~	Dmnl
+	~		|
+
+رقبہ=
+	4.41e+006
+	~	m*m
+	~		|
+
+علاقائی حصہ فصل ب[Polygon]:INTERPOLATE::=
+	GET XLS DATA('?test', 'AF' , 'A' , 'HI2' )
+	~	Dmnl
+	~	Area fraction is the fraction (0-1) of the polygon covered by a specific \
+		crop. The area fraction is read from an excel file, where C1 (wheat) and \
+		C2 (grass) represent first-season crops and C3 (cotton) and C4 (rice) \
+		represent second-season crops.
+	|
+
+canal:
+	GET XLS SUBSCRIPT( '?test' , 'Subscript', 'b1', 'b21' , 'Ca' )
+	~	
+	~		|
+
+نہری بخارات[canal]=
+	MIN(سر پر نہر کی فراہمی[canal]*ای پی,سر پر نہر کی فراہمی\
+		[canal])
+	~	m*m*m/season
+	~	Shold include average evapotrapiration distribution in different month and \
+		the surface area.or we need to find out the amount of percentage of water \
+		evaporate from the canal deliveries (from literature)
+	|
+
+سر پر نہر کی فراہمی[canal]:INTERPOLATE::=
+	GET XLS DATA('?test', 'Canals supply' , 'b' , 'c4' )
+	~	m*m*m/season
+	~		|
+
+نہر کی لمبائی[canal]=
+	GET XLS CONSTANTS('?test', 'CL' , 'b2*' )
+	~	m
+	~		|
+
+crops:
+	c1,c2,c3,c4
+	~	
+	~		|
+
+تقسیمی جدول(
+	[(0,0)-(1,1)],(0,0),(0.0015,0.45),(0.329,0.45),(0.33,0.35),(0.659,0.35),(0.66,0.2),(\
+		0.999,0.2),(1,0.2))
+	~	Dmnl
+	~		|
+
+تقسیم کار تبدیل[canal]=
+	1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+	~	Dmnl [0,1]
+	~		|
+
+ای پی=
+	0.08
+	~	Dmnl
+	~		|
+
+عددی چوکورفی نہر[canal]=
+	14,19,19,3,15,23,5,6,6,7,10,3,3,7,3,18,5,9,5,3,3
+	~	Dmnl
+	~		|
+
+فیصد نہری پانی نقصان=
+	0
+	~	Dmnl
+	~		|
+
+فیصد نقصان کچا=
+	0.44
+	~	Dmnl
+	~		~	:SUPPLEMENTARY 
+	|
+
+Polygon:
+	GET XLS SUBSCRIPT( '?test' , 'Subscript', 'a1', 'a215' , 'N' )
+	~	
+	~		|
+
+بارش[Polygon]:INTERPOLATE::=
+	GET XLS DATA( '?test' , 'Rainfall', 'b', 'C2' )
+	~	m/season
+	~		|
+
+آر ڈی[Polygon]=
+	GET XLS CONSTANTS('?test', 'RD' , 'b2*' )
+	~	m
+	~		|
+
+فراھی بعد نقصان[canal]=
+	سر پر نہر کی فراہمی[canal]-کل نہری رساو[canal]-نہری بخارات\
+		[canal]
+	~	m*m*m/season
+	~		|
+
+********************************************************
+	.Control
+********************************************************~
+		Simulation Control Parameters
+	|
+
+FINAL TIME  = 24
+	~	season
+	~	The final time for the simulation.
+	|
+
+INITIAL TIME  = 0
+	~	season
+	~	The initial time for the simulation.
+	|
+
+SAVEPER  = 
+        TIME STEP
+	~	season [0,?]
+	~	The frequency with which output is stored.
+	|
+
+وقت کا قدم  = 1
+	~	season [0,?]
+	~	The time step for the simulation.
+	|
+
+\\\---/// Sketch information - do not modify anything except names
+V300  Do not put anything below this section - it will be ignored
+*View 1
+$192-192-192,0,Times New Roman|12||0-0-0|0-0-0|0-0-255|-1--1--1|-1--1--1|96,96,75,0
+10,1,دستیاب پانی,-44,1996,70,36,3,131,0,0,0,0,0,0
+12,2,48,-294,1986,10,8,0,3,0,0,-1,0,0,0
+1,3,5,1,4,0,0,22,0,0,0,-1--1--1,,1|(-150,1987)|
+1,4,5,2,100,0,0,22,0,0,0,-1--1--1,,1|(-241,1987)|
+11,5,48,-192,1987,6,8,34,3,0,0,1,0,0,0
+10,6,فراہمی,-192,2006,19,11,40,3,0,0,-1,0,0,0
+10,7,نہری بہاو براے فصل ب,-162,1491,44,19,8,131,0,0,0,0,0,0
+10,8,Time,-165,1368,26,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,9,پانی تالابی جمع,-48,2293,66,47,3,131,0,0,0,0,0,0
+12,10,48,-308,2293,10,8,0,3,0,0,-1,0,0,0
+1,11,13,9,4,0,0,22,0,0,0,-1--1--1,,1|(-161,2293)|
+1,12,13,10,100,0,0,22,0,0,0,-1--1--1,,1|(-259,2293)|
+11,13,48,-215,2293,6,8,34,3,0,0,1,0,0,0
+10,14,اندارج,-215,2312,18,11,40,3,0,0,-1,0,0,0
+10,15,بارش کا حصہ,-147,1869,40,11,8,3,0,0,0,0,0,0
+1,16,15,6,1,0,0,0,0,64,0,-1--1--1,,1|(-170,1925)|
+10,17,کل نہری فراہمی براۓ فصلات,-362,1538,61,19,8,131,0,0,0,0,0,0
+1,18,7,17,1,0,0,0,0,64,0,-1--1--1,,1|(-305,1505)|
+10,19,نہر کا حصہ,-243,1914,34,11,8,3,0,0,0,0,0,0
+10,20,پانی کی ضرورت,-423,1722,48,11,8,3,0,0,-1,0,0,0
+1,21,20,19,1,0,0,0,0,64,0,-1--1--1,,1|(-358,1811)|
+1,22,19,6,1,0,0,0,0,64,0,-1--1--1,,1|(-240,1946)|
+10,23,پانی بچاو نہری پانی کا حصہ,-453,2090,55,19,8,3,0,0,0,0,0,0
+1,24,19,23,1,0,0,0,0,64,0,-1--1--1,,1|(-379,1990)|
+10,25,نہری بخارات,-819,1574,37,11,8,3,0,4,0,0,0,0,-1--1--1,255-255-0,|12||0-0-0
+10,26,سر پر نہر کی فراہمی,-884,1434,58,11,8,3,0,0,0,0,0,0
+1,27,26,25,0,0,0,0,0,64,0,-1--1--1,,1|(-854,1497)|
+10,28,فراھی بعد نقصان,-928,1649,46,11,8,3,0,0,0,0,0,0
+1,29,26,28,0,0,0,0,0,64,0,-1--1--1,,1|(-904,1534)|
+1,30,25,28,0,0,0,0,0,64,0,-1--1--1,,1|(-867,1607)|
+10,31,تقسیمی فراھمی,-952,1778,41,11,8,3,0,0,0,0,0,0
+10,32,تقسیم کار تبدیل,-1196,1897,41,11,8,3,0,0,0,0,0,0
+1,33,32,31,1,0,0,0,0,64,0,-1--1--1,,1|(-1035,1868)|
+10,34,عددی چوکورفی نہر,-1147,1772,53,11,8,3,0,0,0,0,0,0
+10,35,برابر تقسیم,-1021,1708,31,11,8,3,0,0,0,0,0,0
+1,36,34,35,1,0,0,0,0,64,0,-1--1--1,,1|(-1082,1734)|
+1,37,35,31,0,0,0,0,0,64,0,-1--1--1,,1|(-991,1738)|
+10,38,فصل ب رقبہ,131,1679,36,11,8,131,0,0,-1,0,0,0
+1,39,38,7,1,0,0,0,0,64,0,-1--1--1,,1|(14,1560)|
+10,40,پانی کی موسمی ضرروت براے فصل الف,-296,1414,70,19,8,3,0,4,0,0,0,0,-1--1--1,0-255-255,|12||0-0-0
+1,41,40,7,1,0,0,0,0,64,0,-1--1--1,,1|(-239,1453)|
+1,42,23,13,1,0,0,0,0,64,0,-1--1--1,,1|(-387,2186)|
+1,43,9,23,1,0,0,0,0,64,0,-1--1--1,,1|(-435,2255)|
+10,44,رقبہ,172,1753,13,11,8,3,0,0,-1,0,0,0
+10,45,تقسیمی جز,-816,1720,30,11,8,131,0,0,0,0,0,0
+10,46,کھیت کا مقام,-659,1764,34,11,8,3,0,0,0,0,0,0
+10,47,نہر کی لمبائی,-503,1806,37,11,8,3,0,0,0,0,0,0
+10,48,آر ڈی,-513,1754,17,11,8,3,0,0,0,0,0,0
+1,49,48,46,0,0,0,0,0,64,0,-1--1--1,,1|(-570,1757)|
+1,50,47,46,0,0,0,0,0,64,0,-1--1--1,,1|(-575,1786)|
+10,51,تقسیمی جدول,-686,1664,36,11,8,3,0,0,0,0,0,0
+1,52,46,45,0,0,0,0,0,64,0,-1--1--1,,1|(-732,1743)|
+1,53,34,31,1,0,0,0,0,64,0,-1--1--1,,1|(-1062,1779)|
+10,54,نہری بہاو فی چوکور,-378,1876,56,11,8,3,0,0,0,0,0,0
+1,55,31,54,1,0,0,0,0,64,0,-1--1--1,,1|(-767,1890)|
+1,56,54,19,1,0,0,0,0,64,0,-1--1--1,,1|(-304,1894)|
+1,57,54,23,1,0,0,0,0,64,0,-1--1--1,,1|(-462,1950)|
+1,58,19,7,1,0,0,0,0,64,0,-1--1--1,,1|(-339,1669)|
+1,59,15,19,1,0,0,0,0,64,0,-1--1--1,,1|(-206,1879)|
+10,60,کل نہری رساو,-1042,1574,41,11,8,3,0,0,-1,0,0,0
+1,61,60,28,0,0,0,0,0,64,0,-1--1--1,,1|(-990,1607)|
+10,62,رقبہ,-209,1796,22,11,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,63,44,38,0,0,0,0,0,0,0,-1--1--1,,1|(154,1722)|
+10,64,علاقائی حصہ فصل ب,376,1493,38,19,8,131,0,0,-1,0,0,0
+10,65,کار آمد بارش,-26,1752,37,11,8,3,0,4,-1,0,0,0,128-128-128,0-255-255,|12||128-128-128
+1,66,65,15,0,0,0,0,0,64,0,-1--1--1,,1|(-80,1805)|
+10,67,فیصد نہری پانی نقصان,-1172,1490,44,19,8,3,0,0,-1,0,0,0
+10,68,فیصد نقصان کچا,-1109,1431,46,11,8,3,0,0,-1,0,0,0
+1,69,67,60,0,0,0,0,0,64,0,-1--1--1,,1|(-1106,1532)|
+10,70,ای پی,-751,1523,17,11,8,3,0,0,-1,0,0,0
+1,71,70,25,1,0,0,0,0,64,0,-1--1--1,,1|(-801,1529)|
+10,72,آبی بخارات حوالہ,-483,1386,47,11,8,3,0,0,0,0,0,0
+10,73,کے سی فصل ب,-430,1202,45,11,8,131,0,0,0,0,0,0
+10,74,فصل ب بخارات شرح,-505,1308,59,11,8,131,0,0,-1,0,0,0
+1,75,38,74,1,0,0,0,0,0,0,-1--1--1,,1|(-51,1330)|
+1,76,72,74,0,0,0,0,0,64,0,-1--1--1,,1|(-491,1353)|
+1,77,73,74,0,0,0,0,0,64,0,-1--1--1,,1|(-462,1249)|
+1,78,74,20,1,0,0,0,0,64,0,-1--1--1,,1|(-543,1559)|
+10,79,وقت کا قدم,277,2372,29,11,8,3,0,0,-1,0,0,0
+12,80,48,252,2266,10,8,0,3,0,0,-1,0,0,0
+1,81,83,80,4,0,0,22,0,0,0,-1--1--1,,1|(187,2266)|
+1,82,83,9,100,0,0,22,0,0,0,-1--1--1,,1|(69,2266)|
+11,83,48,127,2266,6,8,34,3,0,0,1,0,0,0
+10,84,سطحی بخارات 1,127,2285,47,11,40,3,0,0,-1,0,0,0
+12,85,48,257,2322,10,8,0,3,0,0,-1,0,0,0
+1,86,88,85,4,0,0,22,0,0,0,-1--1--1,,1|(192,2322)|
+1,87,88,9,100,0,0,22,0,0,0,-1--1--1,,1|(72,2322)|
+11,88,48,132,2322,6,8,34,3,0,0,1,0,0,0
+10,89,رساو1,132,2341,20,11,40,3,0,0,-1,0,0,0
+10,90,موسمی بخارات,150,2195,42,11,8,3,0,4,0,0,0,0,-1--1--1,0-255-255,|12||0-0-0
+10,91,ایس ایف,133,2425,24,11,8,3,0,0,0,0,0,0
+10,92,طول,214,2299,14,11,8,3,0,0,0,0,0,0
+1,93,92,84,1,0,0,0,0,64,0,-1--1--1,,1|(189,2279)|
+1,94,92,89,1,0,0,0,0,64,0,-1--1--1,,1|(177,2334)|
+1,95,90,83,1,0,0,0,0,64,0,-1--1--1,,1|(146,2231)|
+1,96,91,89,1,0,0,0,0,64,0,-1--1--1,,1|(130,2394)|
+1,97,79,84,1,0,0,0,0,64,0,-1--1--1,,1|(293,2294)|
+1,98,79,89,1,0,0,0,0,64,0,-1--1--1,,1|(177,2383)|
+1,99,9,84,1,0,0,0,0,64,0,-1--1--1,,1|(30,2230)|
+1,100,9,89,1,0,0,0,0,64,0,-1--1--1,,1|(35,2366)|
+10,101,فعال,-544,1855,13,11,8,3,0,0,0,0,0,0
+1,102,101,46,0,0,0,0,0,64,0,-1--1--1,,1|(-595,1814)|
+1,103,51,45,0,0,0,0,0,64,0,-1--1--1,,1|(-744,1689)|
+1,104,45,31,0,0,0,0,0,64,0,-1--1--1,,1|(-877,1746)|
+1,105,46,31,0,0,0,0,0,64,0,-1--1--1,,1|(-795,1770)|
+1,106,28,35,0,0,0,0,0,64,0,-1--1--1,,1|(-968,1674)|
+1,107,28,31,0,0,0,0,0,64,0,-1--1--1,,1|(-938,1706)|
+10,108,نہری تقسیم,-793,1804,31,11,8,3,0,0,0,0,0,0
+1,109,108,31,0,0,0,0,0,64,0,-1--1--1,,1|(-860,1792)|
+10,110,کل آب اندوخت بھرائی,-1253,2328,58,11,8,3,0,4,0,0,0,0,-1--1--1,64-160-98,|12||0-0-0
+10,111,عددی چوکورپر نہر,-1453,2086,53,11,8,3,0,0,0,0,0,0
+10,112,رساو برابر تقسیم,-1420,1998,47,11,8,3,0,0,0,0,0,0
+10,113,تقسیمی رساو,-1299,2042,36,11,8,3,0,0,0,0,0,0
+1,114,111,112,0,0,0,0,0,64,0,-1--1--1,,1|(-1438,2048)|
+1,115,32,113,1,0,0,0,0,64,0,-1--1--1,,1|(-1298,2029)|
+10,116,رساو کھیت مقام,-1024,2031,43,11,8,3,0,0,0,0,0,0
+10,117,چوکور آر ڈی,-842,1966,37,11,8,3,0,0,0,0,0,0
+10,118,نہر کی لمبائی,-812,2049,46,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,119,رساوتقسیم کار جز,-1129,1968,50,11,8,3,0,0,0,0,0,0
+10,120,چوکور جدول,-1012,1909,36,11,8,3,0,0,0,0,0,0
+1,121,119,113,0,0,0,0,0,64,0,-1--1--1,,1|(-1207,2002)|
+1,122,117,116,0,0,0,0,0,64,0,-1--1--1,,1|(-925,1996)|
+1,123,118,116,0,0,0,0,0,64,0,-1--1--1,,1|(-912,2040)|
+1,124,120,119,0,0,0,0,0,64,0,-1--1--1,,1|(-1063,1935)|
+1,125,116,119,0,0,0,0,0,64,0,-1--1--1,,1|(-1070,2003)|
+10,126,نہری رساو فی چوکور,-1294,2265,41,19,8,131,0,0,0,0,0,0
+1,127,113,126,1,0,0,0,0,64,0,-1--1--1,,1|(-1352,2147)|
+1,128,126,110,1,0,0,0,0,64,0,-1--1--1,,1|(-1271,2298)|
+10,129,سی پی,-1411,2332,29,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,130,60,112,1,0,0,0,0,64,0,-1--1--1,,1|(-1315,1791)|
+10,131,فعال رساو,-897,2104,29,11,8,3,0,0,0,0,0,0
+1,132,131,116,0,0,0,0,0,64,0,-1--1--1,,1|(-953,2071)|
+1,133,116,113,0,0,0,0,0,64,0,-1--1--1,,1|(-1158,2035)|
+10,134,نہری تقسیم,-1243,2150,40,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,135,134,113,0,0,0,0,0,64,0,-1--1--1,,1|(-1267,2102)|
+1,136,60,113,1,0,0,0,0,64,0,-1--1--1,,1|(-1226,1746)|
+1,137,112,113,1,0,0,0,0,64,0,-1--1--1,,1|(-1378,2057)|
+10,138,بارش حجمم,267,1791,32,11,8,131,0,0,0,0,0,0
+10,139,دستیاب بارش بہاو براۓ سطحی تالاب,-70,2540,67,19,8,3,0,0,0,0,0,0
+10,140,آب اندوخت بھرائی براے بارش,342,2134,50,19,8,131,0,4,0,0,0,0,-1--1--1,64-160-98,|12||0-0-0
+10,141,غیر کار آمد بارش,339,1925,49,11,8,3,0,0,0,0,0,0
+1,142,138,141,0,0,0,0,0,64,0,-1--1--1,,1|(299,1851)|
+10,143,گہرائی اخراج,348,2049,37,11,8,3,0,0,0,0,0,0
+10,144,سی پی بارش,446,2006,36,11,8,131,0,0,0,0,0,0
+1,145,141,143,1,0,0,0,0,64,0,-1--1--1,,1|(325,1994)|
+1,146,144,143,0,0,0,0,0,64,0,-1--1--1,,1|(403,2024)|
+10,147,بارش کا بہاو,563,2101,36,11,8,3,0,0,0,0,0,0
+1,148,141,147,1,0,0,0,0,64,0,-1--1--1,,1|(512,1967)|
+1,149,143,147,1,0,0,0,0,64,0,-1--1--1,,1|(451,2115)|
+1,150,143,140,1,0,0,0,0,64,0,-1--1--1,,1|(344,2099)|
+10,151,وقت کا قدم,-162,2640,38,11,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,152,بارش,396,1664,17,11,8,3,0,0,-1,0,0,0
+1,153,44,138,0,0,0,0,0,64,0,-1--1--1,,1|(205,1766)|
+1,154,15,141,1,0,0,0,0,64,0,-1--1--1,,1|(70,1807)|
+1,155,147,139,1,0,0,0,0,64,0,-1--1--1,,1|(365,2398)|
+1,156,9,139,1,0,0,0,0,64,0,-1--1--1,,1|(-41,2413)|
+1,157,139,14,1,0,0,0,0,64,0,-1--1--1,,1|(-188,2429)|
+10,158,آب اندوخت بھرائی براے بارش,-1160,2256,55,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,159,158,110,1,0,0,0,0,64,0,-1--1--1,,1|(-1221,2288)|
+10,160,نہر پختگی,-2357,1604,58,35,3,131,0,0,0,0,0,0
+12,161,48,-2664,1597,10,8,0,3,0,0,-1,0,0,0
+1,162,164,161,4,0,0,22,0,0,0,-1--1--1,,1|(-2579,1598)|
+1,163,164,160,100,0,0,22,0,0,0,-1--1--1,,1|(-2454,1598)|
+11,164,48,-2499,1598,6,8,34,3,0,0,1,0,0,0
+10,165,پختگی خرابی شرح,-2499,1617,52,11,40,3,0,0,-1,0,0,0
+12,166,48,-2072,1600,10,8,0,3,0,0,-1,0,0,0
+1,167,169,160,4,0,0,22,0,0,0,-1--1--1,,1|(-2242,1603)|
+1,168,169,166,100,0,0,22,0,0,0,-1--1--1,,1|(-2127,1603)|
+11,169,48,-2179,1603,6,8,34,3,0,0,1,0,0,0
+10,170,پختگی شرح,-2179,1622,34,11,40,3,0,0,-1,0,0,0
+10,171,اوسط نہر خرابی وقت,-2594,1670,58,11,8,3,0,0,0,0,0,0
+1,172,171,165,1,0,0,0,0,64,0,-1--1--1,,1|(-2583,1634)|
+10,173,دھیان نہری حالت,-2123,1704,47,11,8,3,0,0,0,0,0,0
+1,174,173,170,0,0,0,0,0,64,0,-1--1--1,,1|(-2146,1668)|
+1,175,160,173,1,0,0,0,0,64,0,-1--1--1,,1|(-2253,1678)|
+10,176,خیال جدول,-1928,1683,30,11,8,3,0,0,0,0,0,0
+1,177,176,173,0,0,0,0,0,64,0,-1--1--1,,1|(-2010,1691)|
+10,178,کل لمبائی,-2338,1731,26,11,8,3,0,0,0,0,0,0
+1,179,178,173,1,0,0,0,0,64,0,-1--1--1,,1|(-2241,1747)|
+1,180,178,170,1,0,0,0,0,64,0,-1--1--1,,1|(-2243,1691)|
+10,181,فیصد پختہ,-2484,1729,29,11,8,3,0,0,0,0,0,0
+1,182,160,181,1,0,0,0,0,64,0,-1--1--1,,1|(-2462,1652)|
+1,183,178,181,1,0,0,0,0,64,0,-1--1--1,,1|(-2403,1699)|
+10,184,حکمت عملی نہر پختگی,-2328,1520,45,19,8,3,0,0,0,0,0,0
+1,185,184,169,1,0,0,0,0,64,0,-1--1--1,,1|(-2262,1565)|
+10,186,پختگی لمبائی اضافہ,-2465,1382,53,11,8,3,0,0,0,0,0,0
+10,187,نہر پختگی جدول,-2417,1304,45,11,8,3,0,0,0,0,0,0
+1,188,187,186,1,0,0,0,0,64,0,-1--1--1,,1|(-2427,1334)|
+10,189,سال,-2544,1316,13,11,8,3,0,0,-1,0,0,0
+1,190,189,186,1,0,0,0,0,64,0,-1--1--1,,1|(-2486,1344)|
+10,191,اصل پختگی قیمت,-1926,1576,48,11,8,3,0,0,0,0,0,0
+1,192,170,191,1,0,0,0,0,64,0,-1--1--1,,1|(-2018,1638)|
+10,193,پختگی کی قیمت,-1912,1493,43,11,8,3,0,0,0,0,0,0
+10,194,سرمایہ کاری,-1673,1674,37,11,8,3,0,0,0,0,0,0
+1,195,193,191,1,0,0,0,0,64,0,-1--1--1,,1|(-1916,1540)|
+10,196,پختگی قیمت براۓ سال 2003,-1791,1432,50,19,8,3,0,0,0,0,0,0
+1,197,196,193,1,0,0,0,0,64,0,-1--1--1,,1|(-1847,1459)|
+1,198,191,194,1,0,0,0,0,64,0,-1--1--1,,1|(-1829,1648)|
+10,199,حکومتی حصہ,-1625,1719,39,11,8,3,0,0,0,0,0,0
+10,200,کسان حصہ,-1697,1628,32,11,8,3,0,0,0,0,0,0
+1,201,194,200,0,0,0,0,0,64,0,-1--1--1,,1|(-1681,1657)|
+1,202,194,199,0,0,0,0,0,64,0,-1--1--1,,1|(-1654,1691)|
+10,203,پختگی قیمت جز,-1930,1436,43,11,8,3,0,0,0,0,0,0
+1,204,203,193,0,0,0,0,0,64,0,-1--1--1,,1|(-1923,1457)|
+1,205,189,203,1,0,0,0,0,64,0,-1--1--1,,1|(-2107,1290)|
+10,206,گرافی جدول,-92,-1067,33,11,8,3,0,0,-1,0,0,0
+10,207,نہر پختگی حصہ,-1629,1571,45,11,8,3,0,0,0,0,0,0
+1,208,200,207,1,0,0,0,0,64,0,-1--1--1,,1|(-1652,1581)|
+1,209,160,170,1,0,0,0,0,64,0,-1--1--1,,1|(-2262,1628)|
+10,210,وقت کا قدم,-1992,1520,38,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,211,210,170,1,0,0,0,0,64,0,-1--1--1,,1|(-2028,1580)|
+10,212,چوکور جز,-1427,1519,30,11,8,3,0,0,0,0,0,0
+10,213,نہر پختگی حصہ فی چوکور,-1573,1494,55,19,8,3,0,0,0,0,0,0
+1,214,212,213,0,0,0,0,0,64,0,-1--1--1,,1|(-1480,1509)|
+10,215,نہر پختگی خرچہ,-1611,1428,46,11,8,3,0,0,0,0,0,0
+1,216,213,215,1,0,0,0,0,64,0,-1--1--1,,1|(-1561,1455)|
+1,217,207,213,0,0,0,0,0,64,0,-1--1--1,,1|(-1607,1542)|
+10,218,عددی چوکورفی نہر,-1746,1500,48,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,219,218,207,1,0,0,0,0,64,0,-1--1--1,,1|(-1657,1539)|
+10,220,فیصد پختہ,-1258,1573,38,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,221,220,60,0,0,0,0,0,64,0,-1--1--1,,1|(-1158,1573)|
+10,222,بنی ہوئی صلاحیت,-2293,2212,41,29,3,131,0,0,0,0,0,0
+10,223,ریت سے بھری صلا حیت,-2800,2199,46,28,3,131,0,0,0,0,0,0
+1,224,225,223,4,0,0,22,0,0,0,-1--1--1,,1|(-2710,2216)|
+11,225,3532,-2661,2216,6,8,34,3,0,0,1,0,0,0
+10,226,ریت کی شرح,-2661,2235,38,11,40,131,0,0,-1,0,0,0
+1,227,228,223,100,0,0,22,0,0,0,-1--1--1,,1|(-2700,2173)|
+11,228,3612,-2641,2173,6,8,34,131,0,0,3,0,0,0
+10,229,مرمتی شرح,-2641,2154,34,11,40,131,0,0,-1,0,0,0
+12,230,48,-2070,2210,10,8,0,3,0,0,-1,0,0,0
+1,231,233,222,4,0,0,22,0,0,0,-1--1--1,,1|(-2212,2210)|
+1,232,233,230,100,0,0,22,0,0,0,-1--1--1,,1|(-2120,2210)|
+11,233,48,-2166,2210,6,8,34,3,0,0,1,0,0,0
+10,234,بنانے کی شرح,-2166,2229,41,11,40,131,0,0,-1,0,0,0
+10,235,تالاب کی قیمت,-1912,2097,40,11,8,3,0,0,0,0,0,0
+10,236,سرمایہ کاری پانی بچاو,-1774,2154,50,19,8,131,0,0,0,0,0,0
+10,237,کسان پانی بچاو حصہ,-1594,2092,58,11,8,131,0,0,0,0,0,0
+10,238,مرمتی قیمت,-3035,2111,33,11,8,131,0,0,0,0,0,0
+10,239,کل پانی بچاو صلاحیت,-2204,2342,35,19,8,131,0,0,0,0,0,0
+1,240,239,234,1,0,0,0,0,64,0,-1--1--1,,1|(-2191,2289)|
+10,241,بنانے کی فیصد,-2285,2288,42,11,8,3,0,0,0,0,0,0
+1,242,222,241,1,0,0,0,0,64,0,-1--1--1,,1|(-2291,2252)|
+1,243,239,241,1,0,0,0,0,64,0,-1--1--1,,1|(-2237,2322)|
+1,244,223,229,1,0,0,0,0,64,0,-1--1--1,,1|(-2718,2161)|
+1,245,222,233,1,0,0,0,0,64,0,-1--1--1,,1|(-2226,2173)|
+10,246,کسان ریت بہاو دھیان,-2696,2103,57,11,8,3,0,0,0,0,0,0
+1,247,223,246,0,0,0,0,0,64,0,-1--1--1,,1|(-2743,2147)|
+1,248,222,246,1,0,0,0,0,64,0,-1--1--1,,1|(-2542,2068)|
+1,249,246,229,0,0,0,0,0,64,0,-1--1--1,,1|(-2673,2123)|
+10,250,اصل مرمت قیمت پانی بچاو,-3002,2185,47,19,8,3,0,0,0,0,0,0
+1,251,228,250,1,0,0,0,0,64,0,-1--1--1,,1|(-2909,2239)|
+1,252,238,250,0,0,0,0,0,64,0,-1--1--1,,1|(-3023,2137)|
+12,253,48,-2527,2212,10,8,0,3,0,0,-1,0,0,0
+1,254,225,253,100,0,0,22,0,0,0,-1--1--1,,1|(-2596,2216)|
+12,255,48,-2510,2178,10,8,0,3,0,0,-1,0,0,0
+1,256,228,255,4,0,0,22,0,0,0,-1--1--1,,1|(-2577,2173)|
+10,257,دستیاب صلاحیت,-2696,2455,46,11,8,3,0,0,0,0,0,0
+1,258,223,257,1,0,0,0,0,64,0,-1--1--1,,1|(-2802,2330)|
+1,259,222,257,1,0,0,0,0,64,0,-1--1--1,,1|(-2484,2395)|
+1,260,257,225,1,0,0,0,0,64,0,-1--1--1,,1|(-2711,2303)|
+10,261,تالاب فی چوکور,-2534,2360,45,11,8,3,0,0,0,0,0,0
+1,262,261,226,1,0,0,0,0,64,0,-1--1--1,,1|(-2581,2338)|
+1,263,261,239,1,0,0,0,0,64,0,-1--1--1,,1|(-2381,2384)|
+10,264,لمبائی,-2102,2289,17,11,8,3,0,0,0,0,0,0
+10,265,تالاب چوڑائی,-2072,2346,38,11,8,3,0,0,0,0,0,0
+10,266,اونچای,-2133,2405,20,11,8,3,0,0,0,0,0,0
+1,267,266,239,0,0,0,0,0,64,0,-1--1--1,,1|(-2158,2382)|
+1,268,265,239,0,0,0,0,0,64,0,-1--1--1,,1|(-2132,2344)|
+1,269,264,239,0,0,0,0,0,64,0,-1--1--1,,1|(-2137,2306)|
+10,270,ریت جمع ہونے کی شرح,-2511,2291,53,19,8,3,0,0,0,0,0,0
+1,271,270,226,1,0,0,0,0,64,0,-1--1--1,,1|(-2595,2251)|
+10,272,مرمتی قیمت براۓ سال 2003,-2927,2022,50,19,8,3,0,0,0,0,0,0
+10,273,دھیان ریت بہاو جدول,-2705,2033,58,11,8,3,0,0,0,0,0,0
+1,274,273,246,1,0,0,0,0,64,0,-1--1--1,,1|(-2701,2061)|
+10,275,اصل پانی بچاو قیمت,-1898,2202,55,11,8,3,0,0,0,0,0,0
+1,276,235,275,1,0,0,0,0,64,0,-1--1--1,,1|(-1896,2173)|
+1,277,234,275,1,0,0,0,0,64,0,-1--1--1,,1|(-2004,2240)|
+1,278,275,236,0,0,0,0,0,64,0,-1--1--1,,1|(-1853,2184)|
+1,279,236,237,1,0,0,0,0,64,0,-1--1--1,,1|(-1690,2152)|
+10,280,قدم صلاحیت بڑھوتی,-2229,2081,56,11,8,3,0,0,0,0,0,0
+1,281,222,280,0,0,0,0,0,64,0,-1--1--1,,1|(-2259,2143)|
+1,282,280,233,0,0,0,0,0,64,0,-1--1--1,,1|(-2199,2141)|
+10,283,حکمت عملی تالاب,-2153,2125,50,11,8,3,0,0,0,0,0,0
+1,284,283,233,0,0,0,0,0,64,0,-1--1--1,,1|(-2158,2163)|
+10,285,صلاحیت بڑھوتی,-2373,2027,47,11,8,3,0,4,0,0,0,0,-1--1--1,0-255-0,|12||0-0-0
+1,286,285,280,0,0,0,0,0,64,0,-1--1--1,,1|(-2307,2051)|
+10,287,سال,-2425,1904,22,11,8,2,0,0,-1,0,0,0
+1,288,287,285,0,0,0,0,0,64,0,-1--1--1,,1|(-2401,1959)|
+10,289,صلاحیت جدول,-2249,1981,42,11,8,3,0,0,0,0,0,0
+1,290,289,285,1,0,0,0,0,64,0,-1--1--1,,1|(-2334,1976)|
+1,291,239,285,1,0,0,0,0,64,0,-1--1--1,,1|(-2418,2254)|
+10,292,تالاب قیمت براے سال 2003,-1834,2034,47,19,8,3,0,0,0,0,0,0
+10,293,گرافی جدول,-1852,1955,42,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,294,تالاب قیمت جز,-1953,2003,41,11,8,3,0,0,0,0,0,0
+1,295,287,294,1,0,0,0,0,64,0,-1--1--1,,1|(-2237,1924)|
+1,296,293,294,1,0,0,0,0,64,0,-1--1--1,,1|(-1922,1971)|
+1,297,294,235,0,0,0,0,0,64,0,-1--1--1,,1|(-1935,2043)|
+1,298,292,235,0,0,0,0,0,64,0,-1--1--1,,1|(-1872,2065)|
+10,299,حکومت پانی بچاو حصہ,-1733,2078,49,19,8,3,0,0,0,0,0,0
+1,300,236,299,0,0,0,0,0,64,0,-1--1--1,,1|(-1756,2122)|
+10,301,وقت کا قدم,-2053,2130,38,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,302,301,233,1,0,0,0,0,64,0,-1--1--1,,1|(-2099,2170)|
+10,303,وقت کا قدم,-2533,2108,38,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,304,303,229,0,0,0,0,0,64,0,-1--1--1,,1|(-2580,2128)|
+10,305,مرمتی قیمت جز,-3073,2013,43,11,8,3,0,0,0,0,0,0
+1,306,305,238,0,0,0,0,0,64,0,-1--1--1,,1|(-3056,2055)|
+1,307,272,238,0,0,0,0,0,64,0,-1--1--1,,1|(-2980,2066)|
+10,308,گرافی جدول,-3168,1935,42,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,309,287,305,1,0,0,0,0,64,0,-1--1--1,,1|(-2737,1923)|
+1,310,308,305,0,0,0,0,0,64,0,-1--1--1,,1|(-3125,1969)|
+10,311,دستیاب صلاحیت,-443,2434,55,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,312,311,23,1,0,0,0,0,64,0,-1--1--1,,1|(-510,2267)|
+1,313,311,139,1,0,0,0,0,64,0,-1--1--1,,1|(-288,2517)|
+10,314,آبپاشی کارکردگی,-2735,2982,69,36,3,131,0,0,0,0,0,0
+12,315,48,-3020,2983,10,8,0,3,0,0,-1,0,0,0
+1,316,318,315,4,0,0,22,0,0,0,-1--1--1,,1|(-2958,2987)|
+1,317,318,314,100,0,0,22,0,0,0,-1--1--1,,1|(-2849,2987)|
+11,318,48,-2901,2987,6,8,34,3,0,0,1,0,0,0
+10,319,ڈھانچہ خرابی شرح,-2901,3014,52,11,40,3,0,0,-1,0,0,0
+10,320,ڈھانچے کی زندگی,-2973,3069,50,11,8,3,0,0,0,0,0,0
+1,321,320,319,0,0,0,0,0,64,0,-1--1--1,,1|(-2942,3045)|
+12,322,48,-2375,2987,10,8,0,3,0,0,-1,0,0,0
+1,323,325,314,4,0,0,22,0,0,0,-1--1--1,,1|(-2595,2987)|
+1,324,325,322,100,0,0,22,0,0,0,-1--1--1,,1|(-2449,2987)|
+11,325,48,-2519,2987,6,8,34,3,0,0,1,0,0,0
+10,326,بہتری شرح,-2519,3006,33,11,40,3,0,0,-1,0,0,0
+10,327,حکمت عملی براے آبپاشی کارکردگی,-2473,2906,50,19,8,3,0,0,0,0,0,0
+1,328,327,325,1,0,0,0,0,64,0,-1--1--1,,1|(-2494,2955)|
+10,329,آبپاشی کارکردگی بہتری,-2731,2818,47,19,8,3,0,20,0,0,0,0,-1--1--1,0-255-0,|10|B|0-0-0
+10,330,سال,-2667,2668,22,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,331,330,329,1,0,0,0,0,64,0,-1--1--1,,1|(-2747,2723)|
+1,332,326,319,1,0,0,0,0,64,0,-1--1--1,,1|(-2712,3064)|
+10,333,اصل بہتری قیمت,-2259,2931,47,11,8,3,0,0,0,0,0,0
+10,334,قیمت لگوائی,-2227,2847,34,11,8,3,0,0,0,0,0,0
+1,335,334,333,0,0,0,0,0,64,0,-1--1--1,,1|(-2240,2882)|
+10,336,سرمایہ کاری براۓ آبپاشی کارکردگی,-2035,2885,54,19,8,3,0,0,0,0,0,0
+1,337,333,336,1,0,0,0,0,64,0,-1--1--1,,1|(-2105,2860)|
+10,338,حکومت آبپاشی کی بہتری کا حصہ,-1958,2784,51,19,8,3,0,0,0,0,0,0
+10,339,کسان آبپاشی کی بہتری کا حصہ,-2057,2967,44,19,8,3,0,0,0,0,0,0
+1,340,336,339,0,0,0,0,0,64,0,-1--1--1,,1|(-2043,2919)|
+1,341,336,338,0,0,0,0,0,64,0,-1--1--1,,1|(-2000,2840)|
+10,342,دھیان براۓ آبپاشی کارکردگی,-2489,3088,52,19,8,3,0,0,0,0,0,0
+10,343,کارکردگی منزل,-2751,3121,43,11,8,3,0,0,0,0,0,0
+1,344,314,342,0,0,0,0,0,64,0,-1--1--1,,1|(-2605,3037)|
+1,345,342,326,0,0,0,0,0,64,0,-1--1--1,,1|(-2502,3049)|
+10,346,سوئچ,-3033,2927,16,11,8,3,0,0,0,0,0,0
+1,347,314,346,0,0,0,0,0,64,0,-1--1--1,,1|(-2903,2950)|
+1,348,346,319,0,0,0,0,0,64,0,-1--1--1,,1|(-2972,2966)|
+10,349,کم سے کم کارکردگی,-3131,2911,56,11,8,3,0,0,0,0,0,0
+1,350,349,346,0,0,0,0,0,64,0,-1--1--1,,1|(-3068,2920)|
+10,351,کارکردگی بہتری جدول,-2870,2716,46,19,8,3,0,0,0,0,0,0
+1,352,351,329,1,0,0,0,0,64,0,-1--1--1,,1|(-2855,2762)|
+10,353,قیمت لگوائی 2003,-2109,2778,52,11,8,3,0,0,0,0,0,0
+1,354,353,334,1,0,0,0,0,64,0,-1--1--1,,1|(-2180,2796)|
+10,355,جدول آبپاشی کارکردگی دھیان,-2443,3165,45,19,8,3,0,0,0,0,0,0
+1,356,355,342,0,0,0,0,0,64,0,-1--1--1,,1|(-2461,3132)|
+1,357,343,342,0,0,0,0,0,64,0,-1--1--1,,1|(-2631,3105)|
+10,358,وقت کا قدم,-2553,2864,38,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,359,358,325,1,0,0,0,0,64,0,-1--1--1,,1|(-2561,2920)|
+10,360,لگوائی قیمت جز,-2276,2771,44,11,8,3,0,0,0,0,0,0
+1,361,360,334,1,0,0,0,0,64,0,-1--1--1,,1|(-2249,2816)|
+10,362,گرافی جدول,-2209,2696,42,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,363,330,360,1,0,0,0,0,64,0,-1--1--1,,1|(-2452,2680)|
+1,364,362,360,0,0,0,0,0,64,0,-1--1--1,,1|(-2237,2728)|
+10,365,کارکردگی بہتری فی عدد,-2157,3087,46,19,8,3,0,0,0,0,0,0
+10,366,عدد فی یونٹ,-2247,3031,35,11,8,3,0,0,0,0,0,0
+1,367,365,366,1,0,0,0,0,64,0,-1--1--1,,1|(-2215,3043)|
+1,368,326,366,1,0,0,0,0,64,0,-1--1--1,,1|(-2356,3045)|
+1,369,366,333,1,0,0,0,0,64,0,-1--1--1,,1|(-2246,2966)|
+10,370,برقی موصل حد مقدار فصل الف,755,971,59,19,8,131,0,0,0,0,0,0
+10,371,بی فصل ب,552,764,31,11,8,3,0,0,0,0,0,0
+10,372,وقت کا قدم,-599,2148,38,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,373,372,23,1,0,0,0,0,64,0,-1--1--1,,1|(-566,2098)|
+1,374,376,1,4,0,0,22,0,0,0,-1--1--1,,1|(-48,2082)|
+1,375,376,9,100,0,0,22,0,0,0,-1--1--1,,1|(-48,2195)|
+11,376,1004,-48,2139,8,6,33,3,0,0,4,0,0,0
+10,377,سطحی تالاب بہاو,-7,2139,48,11,40,3,0,4,-1,0,0,0,-1--1--1,255-0-255,|12||0-0-0
+12,378,48,210,1998,10,8,0,3,0,0,-1,0,0,0
+1,379,381,378,4,0,0,22,0,0,0,-1--1--1,,1|(159,1998)|
+1,380,381,1,100,0,0,22,0,0,0,-1--1--1,,1|(66,1998)|
+11,381,48,113,1998,6,8,34,3,0,0,1,0,0,0
+10,382,استعمال,113,2017,22,11,40,3,0,0,-1,0,0,0
+12,383,48,-44,1835,10,8,0,3,0,0,-1,0,0,0
+1,384,386,383,4,0,0,22,0,0,0,-1--1--1,,1|(-44,1871)|
+1,385,386,1,100,0,0,22,0,0,0,-1--1--1,,1|(-44,1936)|
+11,386,48,-44,1906,8,6,33,3,0,0,4,0,0,0
+10,387,غیر استعمال شدہ,-11,1906,46,11,40,3,0,0,-1,0,0,0
+1,388,15,381,1,0,0,0,0,64,0,-1--1--1,,1|(-16,1856)|
+1,389,19,381,1,0,0,0,0,64,0,-1--1--1,,1|(-123,1800)|
+1,390,382,386,1,0,0,0,0,64,0,-1--1--1,,1|(3,1887)|
+1,391,377,382,1,0,0,0,0,64,0,-1--1--1,,1|(74,2092)|
+1,392,9,377,1,0,0,0,0,64,0,-1--1--1,,1|(-19,2201)|
+1,393,376,386,1,0,0,0,0,64,0,-1--1--1,,1|(-148,1973)|
+1,394,6,386,1,0,0,0,0,64,0,-1--1--1,,1|(-126,1908)|
+10,395,پانی کی ضرورت,130,2115,57,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,396,395,377,1,0,0,0,0,64,0,-1--1--1,,1|(53,2142)|
+1,397,395,382,1,0,0,0,0,64,0,-1--1--1,,1|(137,2064)|
+10,398,کل نہری فراہمی براۓ فصلات,-187,2161,49,19,8,130,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,399,398,376,1,0,0,0,0,64,0,-1--1--1,,1|(-96,2150)|
+10,400,وقت کا قدم,-130,2200,38,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,401,400,376,1,0,0,0,0,64,0,-1--1--1,,1|(-68,2169)|
+10,402,بارش کا حصہ,-218,2093,49,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,403,402,376,1,0,0,0,0,64,0,-1--1--1,,1|(-141,2125)|
+1,404,79,139,1,0,0,0,0,64,0,-1--1--1,,1|(123,2469)|
+10,405,کنواں کے شمار,-294,-576,66,30,3,131,0,0,0,0,0,0
+12,406,48,-483,-589,10,8,0,3,0,0,-1,0,0,0
+1,407,409,405,4,0,0,22,0,0,0,-1--1--1,,1|(-386,-589)|
+1,408,409,406,100,0,0,22,0,0,0,-1--1--1,,1|(-448,-589)|
+11,409,48,-418,-589,6,8,34,3,0,0,1,0,0,0
+10,410,کنواں کی بڑہوتی,-418,-570,46,11,40,3,0,0,-1,0,0,0
+10,411,اضافی کنواں خواہش کے مطابق لگوائی,-723,-556,68,19,8,3,0,0,0,0,0,0
+1,412,411,410,1,0,0,0,0,64,0,-1--1--1,,1|(-592,-545)|
+10,413,مطلوبہ بہاو,-245,-365,32,11,8,3,0,0,0,0,0,0
+1,414,405,409,1,0,0,0,0,64,0,-1--1--1,,1|(-379,-622)|
+10,415,ذیادہ سے ذیادہ حجم,-584,-259,53,11,8,3,0,0,0,0,0,0
+1,416,411,418,1,0,0,0,0,64,0,-1--1--1,,1|(-676,-667)|
+10,417,قیمت عددی برقی کنواں,-723,-780,46,19,8,3,0,0,0,0,0,0
+10,418,تمام کنواں لگانے کی قیمت,-548,-730,56,19,8,3,0,0,0,0,0,0
+1,419,417,418,0,0,0,0,0,64,0,-1--1--1,,1|(-647,-758)|
+1,420,418,409,1,0,0,0,0,64,0,-1--1--1,,1|(-478,-671)|
+10,421,کنواں کا بہاو,-346,-433,35,11,8,3,0,4,0,0,0,0,-1--1--1,64-160-98,|12||0-0-0
+1,422,413,421,1,0,0,0,0,64,0,-1--1--1,,1|(-273,-414)|
+1,423,405,415,1,0,0,0,0,64,0,-1--1--1,,1|(-508,-495)|
+10,424,چلانے کی موجودہ قیمت,-251,-820,51,19,8,3,0,0,0,0,0,0
+10,425,قیمت برائے مرمت,137,-719,50,11,8,3,0,0,0,0,0,0
+1,426,405,424,0,0,0,0,0,64,0,-1--1--1,,1|(-272,-696)|
+1,427,405,425,1,0,0,0,0,64,0,-1--1--1,,1|(-83,-680)|
+10,428,اصلی مرمت قیمت,150,-821,49,11,8,3,0,0,0,0,0,0
+1,429,428,425,1,0,0,0,0,64,0,-1--1--1,,1|(147,-783)|
+10,430,مرمت قیمت سال دوھزار تین کے مطابق,242,-911,67,19,8,3,0,0,0,0,0,0
+10,431,مرمت سال کے مطابق,69,-906,60,11,8,3,0,0,0,0,0,0
+1,432,431,428,0,0,0,0,0,64,0,-1--1--1,,1|(104,-868)|
+1,433,430,428,0,0,0,0,0,64,0,-1--1--1,,1|(197,-866)|
+10,434,Time,-50,-897,26,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,435,434,428,0,0,0,0,0,64,0,-1--1--1,,1|(41,-862)|
+10,436,چلانے کے موجودہ گھنٹے,-183,-894,53,19,8,3,0,0,0,0,0,0
+1,437,434,436,0,0,0,0,0,64,0,-1--1--1,,1|(-96,-896)|
+1,438,436,424,1,0,0,0,0,64,0,-1--1--1,,1|(-229,-867)|
+10,439,ڈیزل کی کھپت,-381,-867,40,11,8,3,0,0,0,0,0,0
+1,440,439,424,1,0,0,0,0,64,0,-1--1--1,,1|(-311,-858)|
+10,441,تیل کی قیمت,-308,-926,34,11,8,3,0,0,0,0,0,0
+10,442,تیل قیمت سال دوھزار تین کے مطابق,-372,-1006,59,19,8,3,0,0,0,0,0,0
+10,443,افراط زر کا جز,-256,-993,43,11,8,3,0,0,0,0,0,0
+1,444,441,424,1,0,0,0,0,64,0,-1--1--1,,1|(-275,-886)|
+1,445,443,441,0,0,0,0,0,64,0,-1--1--1,,1|(-277,-965)|
+1,446,442,441,0,0,0,0,0,64,0,-1--1--1,,1|(-340,-967)|
+10,447,چلانے کے موجودہ گھنٹے,-661,-392,58,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,448,447,415,1,0,0,0,0,64,0,-1--1--1,,1|(-638,-316)|
+10,449,ایک کنواں کا حجم,-462,-297,49,11,8,3,0,0,0,0,0,0
+1,450,449,415,1,0,0,0,0,64,0,-1--1--1,,1|(-503,-290)|
+10,451,مطلوبہ حجم,-554,-171,32,11,8,3,0,0,0,0,0,0
+1,452,415,451,1,0,0,0,0,64,0,-1--1--1,,1|(-587,-212)|
+1,453,413,451,1,0,0,0,0,64,0,-1--1--1,,1|(-415,-207)|
+1,454,451,411,1,0,0,0,0,64,0,-1--1--1,,1|(-746,-284)|
+10,455,کنواں لگائی پر موسم,-812,-624,56,11,8,3,0,0,0,0,0,0
+1,456,455,411,1,0,0,0,0,64,0,-1--1--1,,1|(-777,-587)|
+10,457,قیمت سال کے مطابق,-683,-919,57,11,8,3,0,0,0,0,0,0
+10,458,لگانے کی قیمت,-981,-853,42,11,8,3,0,0,0,0,0,0
+1,459,457,417,0,0,0,0,0,64,0,-1--1--1,,1|(-699,-860)|
+1,460,458,417,0,0,0,0,0,64,0,-1--1--1,,1|(-862,-819)|
+10,461,زیر زمين پانی کی سطح,-1304,-977,50,19,8,3,0,4,0,0,0,0,-1--1--1,0-255-255,|12||0-0-0
+10,462,قیمت باہم سطح دیکھنا,-823,-862,58,11,8,3,0,0,0,0,0,0
+1,463,462,458,0,0,0,0,0,64,0,-1--1--1,,1|(-903,-857)|
+10,464,سطح کا پیمانہ,-973,-933,38,11,8,3,0,0,0,0,0,0
+10,465,قیمت کا پیمانہ,-920,-763,38,11,8,3,0,0,0,0,0,0
+1,466,464,458,0,0,0,0,0,64,0,-1--1--1,,1|(-975,-899)|
+1,467,465,458,0,0,0,0,0,64,0,-1--1--1,,1|(-946,-802)|
+1,468,206,431,1,0,0,0,0,64,0,-1--1--1,,1|(7,-1003)|
+10,469,سطحی پانی,-88,-286,32,11,8,131,0,0,-1,0,0,0
+1,470,469,413,0,0,0,0,0,64,0,-1--1--1,,1|(-159,-322)|
+10,471,چلانے کی قیمت فی گھنٹہ,-461,-942,53,19,8,3,0,0,0,0,0,0
+1,472,439,471,1,0,0,0,0,64,0,-1--1--1,,1|(-424,-900)|
+1,473,441,471,1,0,0,0,0,64,0,-1--1--1,,1|(-373,-951)|
+10,474,چلانے کے اصلی گھنٹے,-145,-795,48,19,8,3,0,0,0,0,0,0
+1,475,471,474,1,0,0,0,0,64,0,-1--1--1,,1|(-356,-773)|
+1,476,405,474,0,0,0,0,0,64,0,-1--1--1,,1|(-219,-685)|
+10,477,چلانے کی اصلی قیمت,-3,-742,46,19,8,3,0,0,0,0,0,0
+1,478,474,477,1,0,0,0,0,64,0,-1--1--1,,1|(-52,-796)|
+1,479,405,477,1,0,0,0,0,64,0,-1--1--1,,1|(-164,-672)|
+10,480,چلانے کی قیمت فی گھنٹہ,9,-823,58,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,481,480,477,1,0,0,0,0,64,0,-1--1--1,,1|(23,-798)|
+12,482,48,84,-579,10,8,0,3,0,0,-1,0,0,0
+1,483,485,482,4,0,0,22,0,0,0,-1--1--1,,1|(-37,-581)|
+1,484,485,405,100,0,0,22,0,0,0,-1--1--1,,1|(-194,-581)|
+11,485,48,-154,-581,6,8,34,131,0,0,1,0,0,0
+10,486,کنواں کا انحتات,-154,-562,42,11,40,3,0,0,-1,0,0,0
+10,487,اوسط زندگی کنواں,-6,-499,50,11,8,3,0,0,0,0,0,0
+1,488,487,486,1,0,0,0,0,64,0,-1--1--1,,1|(-61,-541)|
+1,489,206,457,1,0,0,0,0,64,0,-1--1--1,,1|(-461,-1075)|
+10,490,سطحی تالاب بہاو,-222,-266,57,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,491,490,413,0,0,0,0,0,64,0,-1--1--1,,1|(-231,-308)|
+10,492,لیچیگ ضرورت فصل الف,804,465,46,19,8,131,0,0,0,0,0,0
+10,493,برقی موصل ای فصل الف,687,391,43,19,8,131,0,0,0,0,0,0
+10,494,برقی موصل نتیجہ,862,415,49,11,8,3,0,0,0,0,0,0
+1,495,494,492,1,0,0,0,0,64,0,-1--1--1,,1|(814,436)|
+10,496,پانی کی تمام ضرورت,613,532,52,31,3,131,0,0,0,0,0,0
+12,497,48,896,532,10,8,0,3,0,0,-1,0,0,0
+1,498,500,496,4,0,0,22,0,0,0,-1--1--1,,1|(723,527)|
+1,499,500,497,100,0,0,22,0,0,0,-1--1--1,,1|(840,527)|
+11,500,48,788,527,6,8,34,3,0,0,1,0,0,0
+10,501,لیچیگ حصہ,788,546,35,11,40,3,0,0,-1,0,0,0
+1,502,492,501,1,0,0,0,0,64,0,-1--1--1,,1|(798,502)|
+10,503,نہری پانی حجم,775,339,41,11,8,3,0,0,0,0,0,0
+10,504,برقی موصل نہری پانی,849,324,50,19,8,3,0,0,0,0,0,0
+10,505,زیرزمین پانی حجم,982,410,50,11,8,3,0,0,0,0,0,0
+1,506,503,494,1,0,0,0,0,64,0,-1--1--1,,1|(802,383)|
+1,507,504,494,1,0,0,0,0,64,0,-1--1--1,,1|(864,360)|
+1,508,505,494,1,0,0,0,0,64,0,-1--1--1,,1|(934,424)|
+10,509,فصل ب کےواے,220,754,46,11,8,131,0,0,0,0,0,0
+10,510,پانی کمی اثر فصل ب,367,868,57,11,8,131,0,4,0,0,0,0,-1--1--1,255-0-0,|12||0-0-0
+1,511,509,510,1,0,0,0,0,64,0,-1--1--1,,1|(281,780)|
+10,512,زمین نمکینی براے فصل الف,1122,690,52,19,8,3,0,4,0,0,0,0,-1--1--1,0-255-255,|12||0-0-0
+10,513,نمکینی دباو فصل الف,597,954,58,11,8,131,0,0,0,0,0,0
+1,514,370,513,0,0,0,0,0,64,0,-1--1--1,,1|(682,963)|
+10,515,پیداوار فصل الف,484,1050,46,11,8,131,0,0,0,0,0,0
+10,516,زیادہ سے زیادہ پیداوار فصل الف,615,1013,64,19,8,131,0,0,0,0,0,0
+1,517,513,515,1,0,0,0,0,64,0,-1--1--1,,1|(558,1003)|
+1,518,516,515,1,0,0,0,0,64,0,-1--1--1,,1|(539,1043)|
+10,519,کھیت آمدن,949,1170,61,33,3,131,0,0,0,0,0,0
+12,520,48,296,1165,10,8,0,3,0,0,-1,0,0,0
+1,521,523,519,4,0,0,22,0,0,0,-1--1--1,,1|(658,1166)|
+1,522,523,520,100,0,0,22,0,0,0,-1--1--1,,1|(361,1166)|
+11,523,48,422,1166,6,8,34,3,0,0,1,0,0,0
+10,524,آمدن,422,1185,13,11,40,3,0,0,-1,0,0,0
+10,525,بازاری قیمت فصل ب,209,983,58,11,8,131,0,0,0,0,0,0
+10,526,حکومتی قرضہ,380,1273,41,11,8,3,0,0,0,0,0,0
+1,527,526,524,1,0,0,0,0,64,0,-1--1--1,,1|(378,1228)|
+10,528,قرض,612,1331,50,26,3,131,0,0,0,0,0,0
+12,529,48,405,1329,10,8,0,3,0,0,-1,0,0,0
+1,530,532,528,4,0,0,22,0,0,0,-1--1--1,,1|(528,1330)|
+1,531,532,529,100,0,0,22,0,0,0,-1--1--1,,1|(449,1330)|
+11,532,48,489,1330,6,8,34,3,0,0,1,0,0,0
+10,533,قرضہ,489,1349,18,11,40,3,0,0,-1,0,0,0
+1,534,526,533,0,0,0,0,0,64,0,-1--1--1,,1|(428,1307)|
+12,535,48,813,1333,10,8,0,3,0,0,-1,0,0,0
+1,536,538,535,4,0,0,22,0,0,0,-1--1--1,,1|(770,1333)|
+1,537,538,528,100,0,0,22,0,0,0,-1--1--1,,1|(694,1333)|
+11,538,48,732,1333,6,8,34,3,0,0,1,0,0,0
+10,539,ادائیگی,732,1352,20,11,40,3,0,0,-1,0,0,0
+10,540,سود شرح,464,1424,28,11,8,3,0,0,0,0,0,0
+1,541,540,533,1,0,0,0,0,64,0,-1--1--1,,1|(490,1378)|
+1,542,524,539,1,0,0,0,0,64,0,-1--1--1,,1|(614,1237)|
+10,543,پیداوار آمدن,310,1125,32,11,8,3,0,0,0,0,0,0
+1,544,543,524,0,0,0,0,0,64,0,-1--1--1,,1|(363,1153)|
+1,545,528,533,1,0,0,0,0,64,0,-1--1--1,,1|(535,1295)|
+10,546,وقت کا قدم,1055,1103,38,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,547,Time,460,1269,26,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,548,547,533,1,0,0,0,0,64,0,-1--1--1,,1|(476,1306)|
+10,549,کل آمدن کا فیصد,677,1403,45,11,8,3,0,0,0,0,0,0
+1,550,549,539,1,0,0,0,0,64,0,-1--1--1,,1|(737,1364)|
+10,551,برقی موصل ڈی ڈبلو,-611,-584,55,11,8,3,0,0,0,0,0,0
+10,552,آمدن براے خرچ,938,1062,44,11,8,3,0,0,0,0,0,0
+1,553,519,552,0,0,0,0,0,64,0,-1--1--1,,1|(943,1111)|
+1,554,546,552,1,0,0,0,0,64,0,-1--1--1,,1|(983,1102)|
+10,555,آمدن براے خرچ,-329,-682,53,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,556,آمدن براے خرچ,-134,-727,53,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,557,555,409,1,0,0,0,0,64,0,-1--1--1,,1|(-391,-644)|
+1,558,556,474,0,0,0,0,0,64,0,-1--1--1,,1|(-136,-750)|
+10,559,برقی موصل روک,-607,-491,50,11,8,3,0,0,0,0,0,0
+1,560,559,410,0,0,0,0,0,64,0,-1--1--1,,1|(-518,-527)|
+10,561,زیادہ سے زیادہ اجازت کردہ کنواں,-404,-738,64,19,8,3,0,0,0,0,0,0
+1,562,561,409,0,0,0,0,0,64,0,-1--1--1,,1|(-410,-663)|
+10,563,ڈیزل کی قیمت کا جدول,-260,-1044,46,19,8,3,0,0,0,0,0,0
+1,564,563,443,1,0,0,0,0,64,0,-1--1--1,,1|(-244,-1016)|
+10,565,سال شروع,-2645,1284,31,11,8,3,0,0,0,0,0,0
+1,566,436,474,0,0,0,0,0,64,0,-1--1--1,,1|(-166,-851)|
+10,567,کنواں کا اصل حجم,-487,-402,50,11,8,3,0,0,0,0,0,0
+10,568,چلانے کے اصلی گھنٹے,-384,-485,53,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,569,405,567,1,0,0,0,0,64,0,-1--1--1,,1|(-443,-504)|
+1,570,449,567,0,0,0,0,0,64,0,-1--1--1,,1|(-472,-342)|
+1,571,568,567,1,0,0,0,0,64,0,-1--1--1,,1|(-442,-453)|
+1,572,567,421,1,0,0,0,0,64,0,-1--1--1,,1|(-421,-435)|
+10,573,اصلی مرمت فیصد,273,-785,50,11,8,3,0,0,0,0,0,0
+10,574,آمدن براے خرچ,377,-849,53,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,575,425,573,1,0,0,0,0,64,0,-1--1--1,,1|(188,-764)|
+1,576,574,573,1,0,0,0,0,64,0,-1--1--1,,1|(318,-846)|
+10,577,سال,-722,-1000,22,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,578,577,457,0,0,0,0,0,64,0,-1--1--1,,1|(-705,-965)|
+1,579,565,189,0,0,0,0,0,64,0,-1--1--1,,1|(-2592,1299)|
+10,580,سال,-95,-1015,22,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,581,580,443,0,0,0,0,0,64,0,-1--1--1,,1|(-158,-1006)|
+1,582,580,431,0,0,0,0,0,64,0,-1--1--1,,1|(-19,-964)|
+10,583,گرافی جدول,-1821,1347,42,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,584,583,203,1,0,0,0,0,64,0,-1--1--1,,1|(-1892,1368)|
+10,585,کنواں کا بہاو,35,1938,44,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,586,585,382,0,0,0,0,0,64,0,-1--1--1,,1|(68,1972)|
+1,587,585,6,1,0,0,0,0,64,0,-1--1--1,,1|(-101,1942)|
+1,588,585,386,0,0,0,0,0,64,0,-1--1--1,,1|(-7,1920)|
+10,589,نہری بہاو فی چوکور,721,275,41,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,590,589,503,0,0,0,0,0,64,0,-1--1--1,,1|(746,305)|
+10,591,کنواں کا بہاو,1094,358,44,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,592,591,505,1,0,0,0,0,64,0,-1--1--1,,1|(1044,389)|
+10,593,فصل ب بخارات شرح,323,480,49,19,8,130,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,594,593,500,1,0,0,0,0,64,0,-1--1--1,,1|(675,657)|
+10,595,پانی کی ضرورت,-185,-449,57,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,596,595,413,1,0,0,0,0,64,0,-1--1--1,,1|(-215,-405)|
+1,597,593,510,1,0,0,0,0,64,0,-1--1--1,,1|(295,545)|
+10,598,نہری بہاو براے فصل ب,-243,607,49,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,599,Time,170,-302,26,11,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,600,نہر کا حصہ,69,-263,43,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,601,بارش کا حصہ,69,-359,49,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,602,601,469,0,0,0,0,0,64,0,-1--1--1,,1|(-2,-325)|
+1,603,600,469,0,0,0,0,0,64,0,-1--1--1,,1|(-8,-273)|
+10,604,Time,1085,2262,26,11,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+12,605,48,1391,1168,10,8,0,3,0,0,-1,0,0,0
+1,606,608,605,4,0,0,22,0,0,0,-1--1--1,,1|(1328,1168)|
+1,607,608,519,100,0,0,22,0,0,0,-1--1--1,,1|(1137,1168)|
+11,608,48,1270,1168,6,8,34,3,0,0,1,0,0,0
+10,609,خرچہ,1270,1187,17,11,40,3,0,0,-1,0,0,0
+1,610,538,609,1,0,0,0,0,64,0,-1--1--1,,1|(888,1327)|
+10,611,نہر پختگی خرچہ,1213,1288,55,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,612,تمام کنواں لگانے کی قیمت,1350,1267,51,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,613,کسان آبپاشی کی بہتری کا حصہ,1471,1237,49,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,614,چلانے کی اصلی قیمت,1396,1079,51,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,615,کسان پانی بچاو حصہ,1262,1063,47,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,616,قیمت برائے مرمت,1182,1112,59,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,617,اصل مرمت قیمت پانی بچاو,1424,1118,52,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,618,611,609,0,0,0,0,0,64,0,-1--1--1,,1|(1237,1243)|
+1,619,612,609,0,0,0,0,0,64,0,-1--1--1,,1|(1310,1227)|
+1,620,613,609,0,0,0,0,0,64,0,-1--1--1,,1|(1361,1209)|
+1,621,617,609,0,0,0,0,0,64,0,-1--1--1,,1|(1340,1155)|
+1,622,614,609,0,0,0,0,0,64,0,-1--1--1,,1|(1333,1132)|
+1,623,615,609,0,0,0,0,0,64,0,-1--1--1,,1|(1265,1122)|
+1,624,616,609,0,0,0,0,0,64,0,-1--1--1,,1|(1220,1144)|
+10,625,کل بہاو براے فصل ب,48,549,60,11,8,3,0,0,0,0,0,0
+1,626,625,510,1,0,0,0,0,64,0,-1--1--1,,1|(134,788)|
+10,627,سطحی بہاو براے فصل ب,-161,552,48,19,8,3,0,0,0,0,0,0
+1,628,627,625,1,0,0,0,0,64,0,-1--1--1,,1|(-68,506)|
+1,629,598,627,0,0,0,0,0,64,0,-1--1--1,,1|(-207,583)|
+10,630,بارش کا سطحی بہاو فصل ب,-346,552,56,19,8,3,0,0,0,0,0,0
+1,631,630,627,1,0,0,0,0,64,0,-1--1--1,,1|(-239,549)|
+10,632,سطحی تالاب بہاو براے فصل ب,-232,708,48,19,8,3,0,0,0,0,0,0
+1,633,632,627,1,0,0,0,0,64,0,-1--1--1,,1|(-167,627)|
+10,634,کنواں بہاو براے فصل ب,-121,762,45,19,8,3,0,0,0,0,0,0
+1,635,634,625,1,0,0,0,0,64,0,-1--1--1,,1|(-53,644)|
+10,636,سطحی تالاب بہاو,-345,616,57,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,637,636,632,1,0,0,0,0,64,0,-1--1--1,,1|(-276,662)|
+10,638,بارش کا حصہ,-470,511,49,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,639,638,630,1,0,0,0,0,64,0,-1--1--1,,1|(-395,505)|
+10,640,فصل ب رقبہ,-509,715,45,11,8,130,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,641,رقبہ,-293,486,22,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,642,کنواں کا بہاو,-84,852,44,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,643,640,630,1,0,0,0,0,64,0,-1--1--1,,1|(-473,606)|
+1,644,641,630,1,0,0,0,0,64,0,-1--1--1,,1|(-322,526)|
+1,645,640,632,1,0,0,0,0,64,0,-1--1--1,,1|(-409,672)|
+1,646,640,634,1,0,0,0,0,64,0,-1--1--1,,1|(-431,873)|
+1,647,642,634,1,0,0,0,0,64,0,-1--1--1,,1|(-110,808)|
+1,648,486,455,1,0,0,0,0,64,0,-1--1--1,,1|(-578,-674)|
+10,649,جز,-856,-695,10,11,8,3,0,0,0,0,0,0
+1,650,649,455,1,0,0,0,0,64,0,-1--1--1,,1|(-808,-679)|
+10,651,ایل سی,-1252,2418,21,11,8,3,0,0,0,0,0,0
+10,652,رقبہ,-1162,2361,22,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,653,652,651,1,0,0,0,0,64,0,-1--1--1,,1|(-1203,2395)|
+1,654,110,651,1,0,0,0,0,64,0,-1--1--1,,1|(-1256,2385)|
+10,655,جی ڈبلو,-366,-365,22,11,8,3,0,0,0,0,0,0
+1,656,421,655,1,0,0,0,0,64,0,-1--1--1,,1|(-397,-386)|
+10,657,رقبہ,-374,-316,22,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,658,657,655,1,0,0,0,0,64,0,-1--1--1,,1|(-357,-341)|
+10,659,آبپاشی فصل ب,-190,492,41,11,8,131,0,0,0,0,0,0
+1,660,641,659,1,0,0,0,0,64,0,-1--1--1,,1|(-257,466)|
+1,661,627,659,1,0,0,0,0,64,0,-1--1--1,,1|(-171,508)|
+10,662,Farm income zero time stock,1491,208,108,20,8,131,0,0,0,0,0,0
+10,663,Debt zero time stock,1465,245,112,21,8,131,0,0,0,0,0,0
+10,664,AW zero time stock,1464,277,95,22,8,131,0,0,0,0,0,0
+10,665,Water in storage zero time stock,1501,312,115,20,8,131,0,0,0,0,0,0
+10,666,constructed capacity zero time stock,1514,346,124,20,8,131,0,0,0,0,0,0
+10,667,silted capacity zero time stock,1498,376,120,18,8,131,0,0,0,0,0,0
+10,668,نہر ی کارکردگی ابتدائی وقت پر,1526,409,124,21,8,131,0,0,0,0,0,0
+10,669,نہر پختگی ابتدائی وقت پر,1533,440,83,18,8,131,0,0,0,0,0,0
+1,670,662,519,0,0,0,0,0,64,1,-1--1--1,,1|(1226,676)|
+1,671,663,528,0,0,0,0,0,64,1,-1--1--1,,1|(1044,779)|
+1,672,664,1,0,0,0,0,0,64,1,-1--1--1,,1|(721,1124)|
+1,673,665,9,0,0,0,0,0,64,1,-1--1--1,,1|(741,1283)|
+1,674,666,222,0,0,0,0,0,64,1,-1--1--1,,1|(-382,1275)|
+1,675,667,223,0,0,0,0,0,64,1,-1--1--1,,1|(-642,1283)|
+1,676,668,314,0,0,0,0,0,64,1,-1--1--1,,1|(-585,1684)|
+1,677,669,160,0,0,0,0,0,64,1,-1--1--1,,1|(-406,1019)|
+1,678,83,377,1,0,0,0,0,64,0,-1--1--1,,1|(40,2172)|
+1,679,89,377,1,0,0,0,0,64,0,-1--1--1,,1|(50,2200)|
+12,680,0,750,2125,125,23,8,135,0,4,-1,0,0,0,-1--1--1,255-0-255,|12||0-0-0
+Parameter equation changed during the reality check
+12,681,0,1496,134,98,16,0,135,0,24,3,0,0,0,-1--1--1,255-255-255,|20|BI|0-0-0
+Initializing Stocks
+1,682,186,170,1,0,0,0,0,64,0,-1--1--1,,1|(-2241,1524)|
+1,683,178,186,1,0,0,0,0,64,0,-1--1--1,,1|(-2677,1650)|
+10,684,نہر پختگی ابتدائی وقت پر,-2579,1519,53,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,685,684,164,1,0,0,0,0,64,0,-1--1--1,,1|(-2502,1558)|
+10,686,خرابی شرح نہر پختگی,-2347,1689,44,19,8,131,0,0,0,0,0,0
+1,687,170,686,1,0,0,0,0,64,0,-1--1--1,,1|(-2316,1672)|
+1,688,686,165,1,0,0,0,0,64,0,-1--1--1,,1|(-2440,1650)|
+1,689,171,686,1,0,0,0,0,64,0,-1--1--1,,1|(-2507,1667)|
+10,690,Time,-2444,1526,26,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,691,690,165,0,0,0,0,0,64,0,-1--1--1,,1|(-2467,1565)|
+1,692,329,326,1,0,0,0,0,64,0,-1--1--1,,1|(-2630,2942)|
+1,693,343,326,1,0,0,0,0,64,0,-1--1--1,,1|(-2627,3075)|
+1,694,314,326,1,0,0,0,0,64,0,-1--1--1,,1|(-2630,3008)|
+10,695,پختگی قیمت فی موسم,-2196,1379,57,11,8,3,0,0,0,0,0,0
+1,696,186,695,1,0,0,0,0,64,0,-1--1--1,,1|(-2320,1363)|
+1,697,210,695,1,0,0,0,0,64,0,-1--1--1,,1|(-2066,1440)|
+1,698,193,695,1,0,0,0,0,64,0,-1--1--1,,1|(-2061,1403)|
+10,699,تالاب قیمت فی موسم,-2094,2075,55,11,8,131,0,0,0,0,0,0
+1,700,280,699,1,0,0,0,0,64,0,-1--1--1,,1|(-2168,2050)|
+1,701,235,699,1,0,0,0,0,64,0,-1--1--1,,1|(-2003,2069)|
+1,702,301,699,1,0,0,0,0,64,0,-1--1--1,,1|(-2066,2091)|
+10,703,آمدن براے خرچ,-2008,2173,53,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,704,703,233,1,0,0,0,0,64,0,-1--1--1,,1|(-2090,2190)|
+1,705,699,234,0,0,0,0,0,64,0,-1--1--1,,1|(-2126,2145)|
+10,706,عدد فی موسم,-2542,2817,35,11,8,3,0,0,0,0,0,0
+1,707,329,706,1,0,0,0,0,64,0,-1--1--1,,1|(-2598,2846)|
+10,708,کارکردگی بہتری فی عدد,-2637,2756,51,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,709,708,706,1,0,0,0,0,64,0,-1--1--1,,1|(-2554,2766)|
+10,710,قیمت لگوائی فی موسم,-2436,2783,58,11,8,3,0,0,0,0,0,0
+1,711,706,710,1,0,0,0,0,64,0,-1--1--1,,1|(-2503,2764)|
+1,712,358,710,1,0,0,0,0,64,0,-1--1--1,,1|(-2463,2841)|
+1,713,334,710,1,0,0,0,0,64,0,-1--1--1,,1|(-2320,2802)|
+1,714,710,325,1,0,0,0,0,64,0,-1--1--1,,1|(-2408,2896)|
+10,715,آمدن براے خرچ,-2362,2916,53,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,716,715,325,1,0,0,0,0,64,0,-1--1--1,,1|(-2421,2962)|
+10,717,ممکنہ سرمایہ کاری فی چوکور نہر پر,1069,1007,64,19,8,3,0,0,0,0,0,0
+1,718,552,717,1,0,0,0,0,64,0,-1--1--1,,1|(1016,1057)|
+10,719,چوکور جز,1158,937,39,11,8,130,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,720,719,717,1,0,0,0,0,64,0,-1--1--1,,1|(1119,973)|
+10,721,ممکنہ سرمایہ کاری فی نہر,1007,915,55,19,8,3,0,0,0,0,0,0
+1,722,717,721,1,0,0,0,0,64,0,-1--1--1,,1|(1034,972)|
+10,723,ممکنہ سرمایہ کاری فی نہر,-2207,1478,59,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,724,723,169,1,0,0,0,0,64,0,-1--1--1,,1|(-2186,1541)|
+1,725,695,169,1,0,0,0,0,64,0,-1--1--1,,1|(-2118,1529)|
+1,726,129,110,0,0,0,0,0,64,0,-1--1--1,,1|(-1353,2330)|
+10,727,Time,-142,-536,26,11,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,728,Time,-113,-515,26,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,729,Tubewell number at zero time,1494,172,141,23,8,131,0,0,0,0,0,0
+10,730,خرابی فیصد,-251,-509,34,11,8,3,0,0,0,0,0,0
+1,731,410,730,1,0,0,0,0,64,0,-1--1--1,,1|(-353,-525)|
+1,732,487,730,1,0,0,0,0,64,0,-1--1--1,,1|(-147,-477)|
+1,733,405,486,0,0,0,0,0,64,0,-1--1--1,,1|(-218,-568)|
+10,734,آبپاشی کارکردگی,-594,1609,56,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,735,734,20,0,0,0,0,0,64,0,-1--1--1,,1|(-514,1661)|
+10,736,رقبہ,-107,1814,22,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,737,736,15,0,0,0,0,0,64,0,-1--1--1,,1|(-122,1835)|
+10,738,نہری رساو فی میڑ,-1015,1492,51,11,8,131,0,0,0,0,0,0
+1,739,26,738,0,0,0,0,0,64,0,-1--1--1,,1|(-942,1460)|
+1,740,738,60,0,0,0,0,0,64,0,-1--1--1,,1|(-1025,1526)|
+10,741,کل لمبائی,-1240,1622,35,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,742,741,60,0,0,0,0,0,64,0,-1--1--1,,1|(-1150,1600)|
+10,743,زمین نمکینی ٹینامٹ براے فصل ب,860,712,54,19,8,131,0,0,0,0,0,0
+10,744,ٹینامیٹ زیر زمین پانی کی سطح,-1148,-892,61,19,8,3,0,0,0,0,0,0
+1,745,461,744,0,0,0,0,0,64,0,-1--1--1,,1|(-1232,-937)|
+1,746,744,458,0,0,0,0,0,64,0,-1--1--1,,1|(-1061,-871)|
+10,747,برقی موصل ڈی ڈبلوٹینامٹ,-538,-641,44,19,8,3,0,0,0,0,0,0
+1,748,551,747,1,0,0,0,0,64,0,-1--1--1,,1|(-563,-610)|
+1,749,747,410,1,0,0,0,0,64,0,-1--1--1,,1|(-454,-605)|
+10,750,برقی موصل ڈی ڈبلوٹینامٹ,962,339,49,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,751,750,494,0,0,0,0,0,64,0,-1--1--1,,1|(912,376)|
+10,752,علاقائی حصہ فصل ب ٹینامٹ,211,1557,54,19,8,131,0,0,0,0,0,0
+1,753,64,752,0,0,0,0,0,64,0,-1--1--1,,1|(305,1519)|
+1,754,752,38,0,0,0,0,0,64,0,-1--1--1,,1|(172,1616)|
+10,755,زمین نمکینی براے فصل ب,1098,622,52,19,8,3,0,0,0,0,0,0
+10,756,بی فصل الف,792,902,35,11,8,131,0,0,0,0,0,0
+1,757,756,513,0,0,0,0,0,64,0,-1--1--1,,1|(704,925)|
+10,758,Time,717,831,26,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,759,758,756,1,0,0,0,0,64,0,-1--1--1,,1|(792,853)|
+1,760,758,371,0,0,0,0,0,64,0,-1--1--1,,1|(641,800)|
+10,761,برقی موصل حد مقدار فصل ب,471,801,59,19,8,131,0,0,0,0,0,0
+1,762,758,370,1,0,0,0,0,64,0,-1--1--1,,1|(714,902)|
+1,763,758,761,1,0,0,0,0,64,0,-1--1--1,,1|(593,718)|
+10,764,زمین نمکینی ٹینامٹ براے فصل الف,921,771,54,19,8,131,0,0,0,0,0,0
+1,765,512,764,0,0,0,0,0,64,0,-1--1--1,,1|(1027,727)|
+1,766,755,743,0,0,0,0,0,64,0,-1--1--1,,1|(985,664)|
+10,767,نمکینی دباو فصل ب,572,865,54,11,8,131,0,0,0,0,0,0
+1,768,371,767,0,0,0,0,0,64,0,-1--1--1,,1|(560,807)|
+1,769,743,767,0,0,0,0,0,64,0,-1--1--1,,1|(714,789)|
+1,770,761,767,0,0,0,0,0,64,0,-1--1--1,,1|(521,833)|
+1,771,764,513,0,0,0,0,0,64,0,-1--1--1,,1|(758,863)|
+10,772,پیداوار فصل ب,472,991,42,11,8,131,0,0,0,0,0,0
+10,773,زیادہ سے زیادہ پیداوار فصل ب,484,889,44,19,8,131,0,0,0,0,0,0
+1,774,773,772,0,0,0,0,0,64,0,-1--1--1,,1|(478,937)|
+1,775,767,772,0,0,0,0,0,64,0,-1--1--1,,1|(526,922)|
+1,776,510,772,0,0,0,0,0,64,0,-1--1--1,,1|(414,924)|
+10,777,بازاری قیمت فصل الف,397,1072,51,19,8,131,0,0,0,0,0,0
+10,778,علاقائی حصہ فصل الف,493,1627,54,19,8,131,0,0,-1,0,0,0
+10,779,علاقائی حصہ فصل الف ٹینامٹ,326,1623,54,19,8,131,0,0,0,0,0,0
+1,780,778,779,0,0,0,0,0,64,0,-1--1--1,,1|(416,1625)|
+10,781,فصل الف رقبہ,249,1700,40,11,8,131,0,0,-1,0,0,0
+1,782,44,781,0,0,0,0,0,64,0,-1--1--1,,1|(203,1732)|
+1,783,779,781,0,0,0,0,0,64,0,-1--1--1,,1|(288,1660)|
+10,784,پانی کی موسمی ضرروت براے فصل ب,-29,1424,66,19,8,3,0,4,0,0,0,0,-1--1--1,0-255-255,|12||0-0-0
+1,785,8,784,1,0,0,0,0,64,0,-1--1--1,,1|(-103,1379)|
+10,786,نہری بہاو براے فصل الف,-136,1637,44,19,8,131,0,0,0,0,0,0
+1,787,19,786,1,0,0,0,0,64,0,-1--1--1,,1|(-280,1756)|
+1,788,38,786,1,0,0,0,0,64,0,-1--1--1,,1|(-1,1635)|
+1,789,40,786,0,0,0,0,0,64,0,-1--1--1,,1|(-220,1519)|
+1,790,781,786,1,0,0,0,0,64,0,-1--1--1,,1|(60,1714)|
+1,791,784,786,0,0,0,0,0,64,0,-1--1--1,,1|(-78,1524)|
+1,792,781,7,1,0,0,0,0,64,0,-1--1--1,,1|(80,1541)|
+1,793,784,7,0,0,0,0,0,64,0,-1--1--1,,1|(-88,1454)|
+1,794,786,17,0,0,0,0,0,64,0,-1--1--1,,1|(-242,1590)|
+1,795,8,40,0,0,0,0,0,64,0,-1--1--1,,1|(-209,1383)|
+10,796,پانی کی موسمی ضرروت براے فصل ب,-269,775,71,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,797,796,632,1,0,0,0,0,64,0,-1--1--1,,1|(-253,730)|
+1,798,796,634,1,0,0,0,0,64,0,-1--1--1,,1|(-179,772)|
+10,799,فصل الف رقبہ,-425,725,49,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,800,پانی کی موسمی ضرروت براے فصل الف,-297,835,75,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,801,800,632,1,0,0,0,0,64,0,-1--1--1,,1|(-360,747)|
+1,802,800,634,1,0,0,0,0,64,0,-1--1--1,,1|(-202,815)|
+1,803,799,632,1,0,0,0,0,64,0,-1--1--1,,1|(-391,699)|
+1,804,799,634,1,0,0,0,0,64,0,-1--1--1,,1|(-362,857)|
+10,805,کل بہاو براے فصل الف,115,-9,53,19,8,3,0,0,0,0,0,0
+10,806,سطحی بہاو براے فصل الف,-94,-6,48,19,8,3,0,0,0,0,0,0
+1,807,806,805,1,0,0,0,0,64,0,-1--1--1,,1|(-1,-52)|
+10,808,بارش کا سطحی بہاو فصل الف,-279,-6,56,19,8,3,0,0,0,0,0,0
+1,809,808,806,1,0,0,0,0,64,0,-1--1--1,,1|(-172,-9)|
+10,810,سطحی تالاب بہاو براے فصل الف,-165,150,48,19,8,3,0,0,0,0,0,0
+1,811,810,806,1,0,0,0,0,64,0,-1--1--1,,1|(-100,69)|
+10,812,کنواں بہاو براے فصل الف,-54,204,45,19,8,3,0,0,0,0,0,0
+1,813,812,805,1,0,0,0,0,64,0,-1--1--1,,1|(14,86)|
+10,814,سطحی تالاب بہاو,-278,58,57,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,815,814,810,1,0,0,0,0,64,0,-1--1--1,,1|(-209,104)|
+10,816,بارش کا حصہ,-403,-47,49,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,817,816,808,1,0,0,0,0,64,0,-1--1--1,,1|(-328,-53)|
+10,818,فصل ب رقبہ,-360,177,45,11,8,130,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,819,رقبہ,-226,-72,22,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,820,کنواں کا بہاو,-17,294,44,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,821,819,808,1,0,0,0,0,64,0,-1--1--1,,1|(-255,-32)|
+1,822,818,810,1,0,0,0,0,64,0,-1--1--1,,1|(-294,126)|
+1,823,818,812,1,0,0,0,0,64,0,-1--1--1,,1|(-309,302)|
+1,824,820,812,1,0,0,0,0,64,0,-1--1--1,,1|(-43,250)|
+10,825,آبپاشی فصل الف,-138,-63,45,11,8,131,0,0,0,0,0,0
+1,826,819,825,1,0,0,0,0,64,0,-1--1--1,,1|(-190,-92)|
+1,827,806,825,1,0,0,0,0,64,0,-1--1--1,,1|(-104,-50)|
+10,828,پانی کی موسمی ضرروت براے فصل ب,-202,217,71,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,829,828,810,1,0,0,0,0,64,0,-1--1--1,,1|(-186,172)|
+1,830,828,812,1,0,0,0,0,64,0,-1--1--1,,1|(-112,214)|
+10,831,فصل الف رقبہ,-451,158,49,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,832,پانی کی موسمی ضرروت براے فصل الف,-230,277,75,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,833,832,810,1,0,0,0,0,64,0,-1--1--1,,1|(-293,189)|
+1,834,832,812,1,0,0,0,0,64,0,-1--1--1,,1|(-135,257)|
+1,835,831,810,1,0,0,0,0,64,0,-1--1--1,,1|(-399,106)|
+1,836,831,812,1,0,0,0,0,64,0,-1--1--1,,1|(-275,390)|
+1,837,831,808,1,0,0,0,0,64,0,-1--1--1,,1|(-414,53)|
+10,838,نہری بہاو براے فصل الف,-172,60,49,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,839,838,806,0,0,0,0,0,64,0,-1--1--1,,1|(-138,31)|
+10,840,فصل الف کےواے,197,352,50,11,8,3,0,0,0,0,0,0
+10,841,Time,180,256,26,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,842,841,840,0,0,0,0,0,64,0,-1--1--1,,1|(186,297)|
+10,843,پانی کمی اثر فصل الف,303,279,50,19,8,131,0,4,0,0,0,0,-1--1--1,255-0-0,|12||0-0-0
+10,844,کے سی فصل الف,-209,1221,49,11,8,131,0,0,0,0,0,0
+10,845,فصل الف بخارات شرح,-370,1335,48,19,8,131,0,0,-1,0,0,0
+10,846,فصل الف رقبہ,-214,1309,49,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,847,72,845,0,0,0,0,0,64,0,-1--1--1,,1|(-441,1367)|
+1,848,846,845,0,0,0,0,0,64,0,-1--1--1,,1|(-285,1320)|
+1,849,844,845,0,0,0,0,0,64,0,-1--1--1,,1|(-277,1269)|
+1,850,845,20,1,0,0,0,0,64,0,-1--1--1,,1|(-412,1514)|
+10,851,Time,-318,1193,26,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,852,851,844,0,0,0,0,0,64,0,-1--1--1,,1|(-278,1202)|
+1,853,851,73,0,0,0,0,0,64,0,-1--1--1,,1|(-357,1195)|
+10,854,فصل الف بخارات شرح,493,330,53,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,855,854,501,1,0,0,0,0,64,0,-1--1--1,,1|(470,423)|
+1,856,854,843,1,0,0,0,0,64,0,-1--1--1,,1|(375,285)|
+1,857,805,843,0,0,0,0,0,64,0,-1--1--1,,1|(204,129)|
+1,858,840,843,0,0,0,0,0,64,0,-1--1--1,,1|(237,323)|
+10,859,پانی کمی اثر فصل الف,628,1071,55,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,860,859,515,1,0,0,0,0,64,0,-1--1--1,,1|(546,1069)|
+10,861,پیداوار آمدن فصل ب,229,1078,55,11,8,131,0,0,0,0,0,0
+10,862,پیداوار آمدن فصل الف,565,1139,59,11,8,131,0,0,0,0,0,0
+10,863,فصل ب رقبہ,72,994,45,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,864,772,861,0,0,0,0,0,64,0,-1--1--1,,1|(357,1032)|
+1,865,525,861,0,0,0,0,0,64,0,-1--1--1,,1|(217,1023)|
+1,866,863,861,0,0,0,0,0,64,0,-1--1--1,,1|(143,1032)|
+10,867,فصل الف رقبہ,732,1118,49,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,868,515,862,0,0,0,0,0,64,0,-1--1--1,,1|(519,1089)|
+1,869,777,862,0,0,0,0,0,64,0,-1--1--1,,1|(483,1106)|
+1,870,867,862,0,0,0,0,0,64,0,-1--1--1,,1|(660,1126)|
+1,871,861,543,0,0,0,0,0,64,0,-1--1--1,,1|(262,1098)|
+1,872,862,543,0,0,0,0,0,64,0,-1--1--1,,1|(430,1131)|
+10,873,برقی موصل ای فصل ب,926,462,43,19,8,131,0,0,0,0,0,0
+10,874,Time,630,325,26,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,875,874,493,0,0,0,0,0,64,0,-1--1--1,,1|(649,348)|
+1,876,873,492,1,0,0,0,0,64,0,-1--1--1,,1|(829,461)|
+10,877,لیچیگ ضرورت فصل ب,696,459,46,19,8,131,0,0,0,0,0,0
+1,878,493,877,0,0,0,0,0,64,0,-1--1--1,,1|(690,418)|
+1,879,494,877,1,0,0,0,0,64,0,-1--1--1,,1|(769,428)|
+10,880,Time,1016,463,26,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,881,880,873,0,0,0,0,0,64,0,-1--1--1,,1|(986,462)|
+1,882,877,501,0,0,0,0,0,64,0,-1--1--1,,1|(740,501)|
+10,883,ایف ڈبلو,295,-427,24,11,8,3,0,0,0,0,0,0
+10,884,ایف ایس اےکارکردگی بہتری فصل الف,-3136,2784,61,19,8,3,0,0,0,0,0,0
+10,885,ایف ایس بی کارکردگی بہتری فصل ب,-3029,2687,62,19,8,3,0,0,0,0,0,0
+10,886,ایف ایس یو کارکردگی بہتری فصل یو,-2784,2879,61,19,8,3,0,0,0,0,0,0
+1,887,314,886,0,0,0,0,0,64,0,-1--1--1,,1|(-2760,2928)|
+1,888,314,885,0,0,0,0,0,64,0,-1--1--1,,1|(-2885,2830)|
+1,889,314,884,0,0,0,0,0,64,0,-1--1--1,,1|(-2944,2878)|
+10,890,بارش ٹینامٹ,438,1706,35,11,8,3,0,0,0,0,0,0
+1,891,890,138,0,0,0,0,0,64,0,-1--1--1,,1|(358,1745)|
+10,892,کار آمد بارش جدول,704,1659,53,11,8,3,0,0,0,0,0,0
+10,893,کار آمد بارش ایف اے او,606,1733,49,19,8,3,0,0,0,0,0,0
+1,894,892,893,0,0,0,0,0,64,0,-1--1--1,,1|(666,1687)|
+1,895,893,65,1,0,0,0,0,0,0,-1--1--1,,1|(323,1823)|
+10,896,ممکنہ آبی بخارات براۓ فصل ب,-608,1259,49,19,8,3,0,0,0,0,0,0
+10,897,ممکنہ آبی بخارات براۓ فصل الف,-382,1289,49,19,8,3,0,0,0,0,0,0
+1,898,72,896,1,0,0,0,0,64,0,-1--1--1,,1|(-574,1319)|
+1,899,73,896,0,0,0,0,0,64,0,-1--1--1,,1|(-504,1225)|
+1,900,72,897,1,0,0,0,0,64,0,-1--1--1,,1|(-400,1292)|
+1,901,844,897,0,0,0,0,0,64,0,-1--1--1,,1|(-277,1248)|
+10,902,اصل کم سے کم درجہ حرارت,-617,1449,59,19,8,3,0,0,0,0,0,0
+10,903,اصل زیادہ سے زیادہ درجہ حرارت,-465,1434,59,19,8,3,0,0,0,0,0,0
+1,904,902,72,1,0,0,0,0,64,0,-1--1--1,,1|(-582,1418)|
+1,905,903,72,1,0,0,0,0,64,0,-1--1--1,,1|(-473,1415)|
+10,906,اوسط درجہ حرارت,-608,1525,53,11,8,3,0,0,0,0,0,0
+1,907,906,72,1,0,0,0,0,64,0,-1--1--1,,1|(-576,1454)|
+1,908,902,906,0,0,0,0,0,64,0,-1--1--1,,1|(-612,1484)|
+1,909,903,906,0,0,0,0,0,64,0,-1--1--1,,1|(-536,1479)|
+10,910,آر اے,-677,1357,18,11,8,3,0,0,0,0,0,0
+10,911,Time,-722,1324,26,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,912,911,910,0,0,0,0,0,64,0,-1--1--1,,1|(-705,1336)|
+1,913,910,72,1,0,0,0,0,64,0,-1--1--1,,1|(-594,1349)|
+10,914,پی او ایچ ٹینامٹ ربی,-224,-953,56,11,8,3,0,0,0,0,0,0
+10,915,پی او ایچ ٹینامٹ خریف,-97,-938,44,19,8,3,0,0,0,0,0,0
+1,916,914,436,0,0,0,0,0,64,0,-1--1--1,,1|(-210,-933)|
+1,917,915,436,0,0,0,0,0,64,0,-1--1--1,,1|(-133,-919)|
+1,918,152,138,1,0,0,0,0,64,0,-1--1--1,,1|(311,1718)|
+10,919,حتمی بارش,554,1665,32,11,8,3,0,0,0,0,0,0
+1,920,152,919,0,0,0,0,0,64,0,-1--1--1,,1|(460,1664)|
+1,921,890,919,0,0,0,0,0,64,0,-1--1--1,,1|(488,1687)|
+1,922,919,893,0,0,0,0,0,64,0,-1--1--1,,1|(572,1689)|
+10,923,کم سے کم درجہ حرارت ٹینامٹ,-721,1473,44,19,8,3,0,0,0,0,0,0
+10,924,کم سے کم درجہ حرارت,-740,1416,44,19,8,3,0,0,0,0,0,0
+10,925,زیادہ سے زیادہ درجہ حرارت,-505,1564,60,19,8,3,0,0,0,0,0,0
+10,926,زیادہ سے زیادہ درجہ حرارت ٹینامٹ,-380,1483,60,19,8,3,0,0,0,0,0,0
+1,927,926,903,0,0,0,0,0,64,0,-1--1--1,,1|(-415,1461)|
+1,928,925,903,0,0,0,0,0,64,0,-1--1--1,,1|(-487,1505)|
+1,929,924,902,0,0,0,0,0,64,0,-1--1--1,,1|(-692,1427)|
+1,930,923,902,0,0,0,0,0,64,0,-1--1--1,,1|(-681,1467)|
+\\\---/// Sketch information - do not modify anything except names
+V300  Do not put anything below this section - it will be ignored
+*Graphs
+$192-192-192,0,Times New Roman|12||0-0-0|0-0-0|0-0-255|-1--1--1|-1--1--1|96,96,100,0
+12,1,0,325,98,267,172,3,188,0,0,1,0,0,0
+Canal_water_distribution
+12,2,0,737,30,80,20,3,124,0,0,0,0,0,0
+تقسیم کار تبدیل,0,1,1
+12,3,0,942,360,342,232,3,188,0,0,1,0,0,0
+canal_lining
+\\\---/// Sketch information - do not modify anything except names
+V300  Do not put anything below this section - it will be ignored
+*Reality check
+$192-192-192,0,Times New Roman|12||0-0-0|0-0-0|0-0-255|-1--1--1|-1--1--1|96,96,75,0
+10,1,Check when RWH is zero,443,260,61,19,8,3,0,0,0,0,0,0
+10,2,بنی ہوئی صلاحیت,810,138,44,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,3,ریت سے بھری صلا حیت,813,209,55,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,4,2,1,0,0,0,0,0,64,0,-1--1--1,,1|(639,194)|
+1,5,3,1,0,0,0,0,0,64,0,-1--1--1,,1|(637,232)|
+1,6,8,1,0,0,0,0,0,64,0,-1--1--1,,1|(644,269)|
+10,7,Check when RWH is not zero,1220,259,61,19,8,3,0,0,0,0,0,0
+10,8,حکمت عملی تالاب,813,277,42,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,9,2,7,0,0,0,0,0,64,0,-1--1--1,,1|(999,193)|
+1,10,3,7,0,0,0,0,0,64,0,-1--1--1,,1|(1006,232)|
+1,11,8,7,0,0,0,0,0,64,0,-1--1--1,,1|(1000,268)|
+10,12,اصل پانی بچاو قیمت,817,70,47,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,13,12,1,0,0,0,0,0,64,0,-1--1--1,,1|(636,161)|
+1,14,12,7,0,0,0,0,0,64,0,-1--1--1,,1|(1011,161)|
+10,15,بنانے کی فیصد,823,331,46,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,16,15,1,0,0,0,0,0,64,0,-1--1--1,,1|(647,298)|
+1,17,15,7,0,0,0,0,0,64,0,-1--1--1,,1|(1007,297)|
+10,18,اصل مرمت قیمت پانی بچاو,826,391,57,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,19,18,1,0,0,0,0,0,64,0,-1--1--1,,1|(641,327)|
+1,20,18,7,0,0,0,0,0,64,0,-1--1--1,,1|(1015,327)|
+10,21,اندارج,826,461,29,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,22,21,1,0,0,0,0,0,64,0,-1--1--1,,1|(648,367)|
+1,23,21,7,0,0,0,0,0,64,0,-1--1--1,,1|(1008,367)|
+10,24,پانی تالابی جمع,823,512,59,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,25,24,1,0,0,0,0,0,64,0,-1--1--1,,1|(644,393)|
+1,26,24,7,0,0,0,0,0,64,0,-1--1--1,,1|(1009,393)|
+10,27,سطحی بخارات 1,815,4,52,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,28,27,1,0,0,0,0,0,64,0,-1--1--1,,1|(640,124)|
+1,29,27,7,0,0,0,0,0,64,0,-1--1--1,,1|(1004,123)|
+10,30,رساو1,808,-52,41,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,31,30,1,1,0,0,0,0,64,0,-1--1--1,,1|(607,44)|
+1,32,30,7,1,0,0,0,0,64,0,-1--1--1,,1|(1045,27)|
+10,33,سطحی تالاب بہاو,832,576,42,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,34,33,1,1,0,0,0,0,64,0,-1--1--1,,1|(560,431)|
+1,35,33,7,1,0,0,0,0,64,0,-1--1--1,,1|(1031,445)|
+10,36,ریت کی شرح,824,623,49,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,37,مرمتی شرح,827,663,44,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,38,بنانے کی شرح,828,712,46,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,39,36,7,1,0,0,0,0,64,0,-1--1--1,,1|(1114,472)|
+1,40,36,1,1,0,0,0,0,64,0,-1--1--1,,1|(546,489)|
+1,41,37,7,1,0,0,0,0,64,0,-1--1--1,,1|(1139,524)|
+1,42,37,1,1,0,0,0,0,64,0,-1--1--1,,1|(549,556)|
+1,43,38,7,1,0,0,0,0,64,0,-1--1--1,,1|(1177,528)|
+1,44,38,1,1,0,0,0,0,64,0,-1--1--1,,1|(512,573)|
+10,45,دستیاب صلاحیت,807,-96,35,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,46,45,1,1,0,0,0,0,64,0,-1--1--1,,1|(568,16)|
+1,47,45,7,1,0,0,0,0,64,0,-1--1--1,,1|(1093,10)|
+10,48,پانی بچاو نہری پانی کا حصہ,804,-159,78,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,49,دستیاب بارش بہاو براۓ سطحی تالاب,799,-224,62,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,50,48,1,1,0,0,0,0,64,0,-1--1--1,,1|(573,-66)|
+1,51,48,7,1,0,0,0,0,64,0,-1--1--1,,1|(1104,-55)|
+1,52,49,1,1,0,0,0,0,64,0,-1--1--1,,1|(541,-82)|
+1,53,49,7,1,0,0,0,0,64,0,-1--1--1,,1|(1127,-66)|
+\\\---/// Sketch information - do not modify anything except names
+V300  Do not put anything below this section - it will be ignored
+*View 4
+$192-192-192,0,Times New Roman|12||0-0-0|0-0-0|0-0-255|-1--1--1|-1--1--1|96,96,75,0
+12,1,0,395,113,28,11,8,7,0,0,-1,0,0,0
+Changes
+12,2,0,587,155,227,27,8,135,0,0,-1,0,0,0
+Tubewell stock at time zero has been included in initization list
+12,3,0,505,187,158,19,8,135,0,0,-1,0,0,0
+SS supply equation has been updated
+12,4,0,1413,138,37,11,8,7,0,0,-1,0,0,0
+Useful links
+12,5,0,1467,179,218,19,8,135,0,0,-1,0,0,0
+http://pdf.usaid.gov/pdf_docs/Pnaaq566.pdf
+12,6,0,1638,218,316,15,8,135,0,0,-1,0,0,0
+http://idup.gov.in/wps/UpidHm/UPWSRP/WSRP_StandardsAndGuidelines/Canal%20Lining.htm
+12,7,0,532,217,239,23,8,135,0,0,-1,0,0,0
+Canal lining model has been change considerably
+12,8,0,561,252,188,24,8,135,0,0,-1,0,0,0
+Irrigation efficiency model has been change considerably
+12,9,0,1805,179,193,17,8,135,0,0,-1,0,0,0
+See mendeley under title of Lining egystian canals
+\\\---/// Sketch information - do not modify anything except names
+V300  Do not put anything below this section - it will be ignored
+*RC Canal lining and Irrigation eff
+$192-192-192,0,Times New Roman|12||0-0-0|0-0-0|0-0-255|-1--1--1|-1--1--1|96,96,75,0
+10,1,Checking canal lining when policy is zero,302,312,58,40,8,131,0,0,0,0,0,0
+10,2,Checking canal lining when policy is not zero,884,313,58,43,8,131,0,0,0,0,0,0
+10,3,حکمت عملی نہر پختگی,588,322,67,16,8,130,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,4,پختگی شرح,584,261,43,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,5,نہر پختگی,580,382,46,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,6,پختگی خرابی شرح,591,436,77,21,8,130,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,7,فیصد پختہ,585,202,62,15,8,130,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,8,اصل پختگی قیمت,582,137,66,18,8,130,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,9,3,1,0,0,0,0,0,64,0,-1--1--1,,1|(447,317)|
+1,10,3,2,0,0,0,0,0,64,0,-1--1--1,,1|(733,317)|
+1,11,4,1,1,0,0,0,0,64,0,-1--1--1,,1|(406,273)|
+1,12,4,2,1,0,0,0,0,64,0,-1--1--1,,1|(736,273)|
+1,13,7,1,1,0,0,0,0,64,0,-1--1--1,,1|(424,218)|
+1,14,7,2,1,0,0,0,0,64,0,-1--1--1,,1|(770,222)|
+1,15,8,1,1,0,0,0,0,64,0,-1--1--1,,1|(405,170)|
+1,16,8,2,1,0,0,0,0,64,0,-1--1--1,,1|(770,165)|
+1,17,5,2,1,0,0,0,0,64,0,-1--1--1,,1|(733,371)|
+1,18,5,1,1,0,0,0,0,64,0,-1--1--1,,1|(421,367)|
+1,19,6,1,1,0,0,0,0,64,0,-1--1--1,,1|(412,412)|
+1,20,6,2,1,0,0,0,0,64,0,-1--1--1,,1|(753,421)|
+10,21,Farm income is zero,1069,427,73,25,8,131,0,0,0,0,0,0
+10,22,کنواں کا بہاو,1305,432,35,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,23,22,21,1,0,0,0,0,64,0,-1--1--1,,1|(1225,384)|
+10,24,کھیت آمدن,1320,508,51,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,25,24,21,1,0,0,0,0,64,0,-1--1--1,,1|(1164,500)|
+\\\---/// Sketch information - do not modify anything except names
+V300  Do not put anything below this section - it will be ignored
+*Reality check 1
+$192-192-192,0,Times New Roman|12||0-0-0|0-0-0|0-0-255|-1--1--1|-1--1--1|96,96,75,0
+10,1,Negative behavior test crop1,612,175,73,22,8,131,0,0,0,0,0,0
+10,2,سر پر نہر کی فراہمی,902,79,81,18,8,130,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,3,پانی کی ضرورت,885,173,79,20,8,130,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,4,حکمت عملی تالاب,877,266,42,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,5,2,1,0,0,0,0,0,64,0,-1--1--1,,1|(769,122)|
+1,6,3,1,0,0,0,0,0,64,0,-1--1--1,,1|(752,173)|
+1,7,4,1,0,0,0,0,0,64,0,-1--1--1,,1|(767,228)|
+10,8,کنواں کے شمار,358,31,54,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,9,فصل ب رقبہ,358,95,42,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,10,سطحی تالاب بہاو,344,154,42,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,11,پانی کمی اثر فصل ب,342,212,49,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,12,نمکینی دباو فصل الف,349,275,52,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,13,کھیت آمدن,344,335,51,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,14,8,1,0,0,0,0,0,64,0,-1--1--1,,1|(468,94)|
+1,15,9,1,0,0,0,0,0,64,0,-1--1--1,,1|(460,127)|
+1,16,10,1,0,0,0,0,0,64,0,-1--1--1,,1|(455,162)|
+1,17,11,1,0,0,0,0,0,64,0,-1--1--1,,1|(458,196)|
+1,18,12,1,0,0,0,0,0,64,0,-1--1--1,,1|(458,232)|
+1,19,13,1,0,0,0,0,0,64,0,-1--1--1,,1|(462,264)|
+10,20,Negative behavior test crop2,641,553,58,19,8,131,0,0,0,0,0,0
+10,21,سر پر نہر کی فراہمی,931,457,54,19,8,130,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,22,پانی کی ضرورت,914,551,39,19,8,130,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,23,حکمت عملی تالاب,906,644,42,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,24,21,20,0,0,0,0,0,64,0,-1--1--1,,1|(794,501)|
+1,25,22,20,0,0,0,0,0,64,0,-1--1--1,,1|(793,551)|
+1,26,23,20,0,0,0,0,0,64,0,-1--1--1,,1|(791,604)|
+10,27,کنواں کے شمار,387,409,54,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,28,فصل ب رقبہ,387,473,42,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,29,سطحی تالاب بہاو,373,532,42,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,30,پانی کمی اثر فصل ب,371,590,49,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,31,نمکینی دباو فصل الف,378,653,52,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,32,کھیت آمدن,373,713,51,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,33,27,20,0,0,0,0,0,64,0,-1--1--1,,1|(500,473)|
+1,34,28,20,0,0,0,0,0,64,0,-1--1--1,,1|(495,506)|
+1,35,29,20,0,0,0,0,0,64,0,-1--1--1,,1|(492,540)|
+1,36,30,20,0,0,0,0,0,64,0,-1--1--1,,1|(494,573)|
+1,37,31,20,0,0,0,0,0,64,0,-1--1--1,,1|(491,609)|
+1,38,32,20,0,0,0,0,0,64,0,-1--1--1,,1|(493,640)|
+10,39,Negative behavior test crop3,1322,143,58,19,8,131,0,0,0,0,0,0
+10,40,سر پر نہر کی فراہمی,1612,47,54,19,8,130,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,41,پانی کی ضرورت,1595,141,39,19,8,130,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,42,حکمت عملی تالاب,1587,234,42,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,43,40,39,0,0,0,0,0,64,0,-1--1--1,,1|(1475,91)|
+1,44,41,39,0,0,0,0,0,64,0,-1--1--1,,1|(1474,141)|
+1,45,42,39,0,0,0,0,0,64,0,-1--1--1,,1|(1472,194)|
+10,46,کنواں کے شمار,1068,-1,54,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,47,فصل ب رقبہ,1068,63,42,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,48,سطحی تالاب بہاو,1054,122,42,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,49,پانی کمی اثر فصل ب,1052,180,49,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,50,نمکینی دباو فصل الف,1059,243,52,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,51,کھیت آمدن,1054,303,51,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,52,46,39,0,0,0,0,0,64,0,-1--1--1,,1|(1181,63)|
+1,53,47,39,0,0,0,0,0,64,0,-1--1--1,,1|(1176,96)|
+1,54,48,39,0,0,0,0,0,64,0,-1--1--1,,1|(1173,130)|
+1,55,49,39,0,0,0,0,0,64,0,-1--1--1,,1|(1175,163)|
+1,56,50,39,0,0,0,0,0,64,0,-1--1--1,,1|(1172,199)|
+1,57,51,39,0,0,0,0,0,64,0,-1--1--1,,1|(1174,230)|
+10,58,Negative behavior test crop4,1351,521,58,19,8,131,0,0,0,0,0,0
+10,59,سر پر نہر کی فراہمی,1641,425,54,19,8,130,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,60,پانی کی ضرورت,1624,519,39,19,8,130,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,61,حکمت عملی تالاب,1616,612,42,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,62,59,58,0,0,0,0,0,64,0,-1--1--1,,1|(1504,469)|
+1,63,60,58,0,0,0,0,0,64,0,-1--1--1,,1|(1503,519)|
+1,64,61,58,0,0,0,0,0,64,0,-1--1--1,,1|(1501,572)|
+10,65,کنواں کے شمار,1097,377,54,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,66,فصل ب رقبہ,1097,441,42,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,67,سطحی تالاب بہاو,1083,500,42,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,68,پانی کمی اثر فصل ب,1081,558,49,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,69,نمکینی دباو فصل الف,1088,621,52,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,70,کھیت آمدن,1083,681,51,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,71,65,58,0,0,0,0,0,64,0,-1--1--1,,1|(1210,441)|
+1,72,66,58,0,0,0,0,0,64,0,-1--1--1,,1|(1205,474)|
+1,73,67,58,0,0,0,0,0,64,0,-1--1--1,,1|(1202,508)|
+1,74,68,58,0,0,0,0,0,64,0,-1--1--1,,1|(1204,541)|
+1,75,69,58,0,0,0,0,0,64,0,-1--1--1,,1|(1201,577)|
+1,76,70,58,0,0,0,0,0,64,0,-1--1--1,,1|(1203,608)|
+\\\---/// Sketch information - do not modify anything except names
+V300  Do not put anything below this section - it will be ignored
+*Reality check 2
+$192-192-192,0,Times New Roman|12||0-0-0|0-0-0|0-0-255|-1--1--1|-1--1--1|96,96,75,0
+10,1,Conservation of mass check,851,338,51,19,8,131,0,0,0,0,0,0
+10,2,سر پر نہر کی فراہمی,1150,342,54,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,3,نہری بہاو فی چوکور,584,264,52,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,4,نہری رساو فی چوکور,581,375,64,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,5,3,1,0,0,0,0,0,64,0,-1--1--1,,1|(711,298)|
+1,6,4,1,0,0,0,0,0,64,0,-1--1--1,,1|(715,356)|
+1,7,2,1,0,0,0,0,0,64,0,-1--1--1,,1|(1005,340)|
+10,8,نہری بخارات,772,182,43,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,9,8,1,0,0,0,0,0,64,0,-1--1--1,,1|(807,253)|
+\\\---/// Sketch information - do not modify anything except names
+V300  Do not put anything below this section - it will be ignored
+*Reality check 3
+$192-192-192,0,Times New Roman|12||0-0-0|0-0-0|0-0-255|-1--1--1|-1--1--1|96,96,75,0
+10,1,کھیت آمدن,785,341,51,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,2,نہر پختگی,248,212,46,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,3,کنواں کا بہاو,244,308,35,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,4,بنی ہوئی صلاحیت,229,392,44,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,5,آبپاشی کارکردگی,240,476,35,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,6,Constrained behavior limit test,505,337,56,19,8,3,0,0,0,0,0,0
+1,7,1,6,0,0,0,0,0,64,0,-1--1--1,,1|(654,339)|
+1,8,2,6,0,0,0,0,0,64,0,-1--1--1,,1|(361,267)|
+1,9,3,6,0,0,0,0,0,64,0,-1--1--1,,1|(357,319)|
+1,10,4,6,0,0,0,0,0,64,0,-1--1--1,,1|(353,367)|
+1,11,5,6,0,0,0,0,0,64,0,-1--1--1,,1|(365,410)|
+\\\---/// Sketch information - do not modify anything except names
+V300  Do not put anything below this section - it will be ignored
+*Reality check 4
+$192-192-192,0,Times New Roman|12||0-0-0|0-0-0|0-0-255|-1--1--1|-1--1--1|96,96,75,0
+\\\---/// Sketch information - do not modify anything except names
+V300  Do not put anything below this section - it will be ignored
+*Reality check 5
+$192-192-192,0,Times New Roman|12||0-0-0|0-0-0|0-0-255|-1--1--1|-1--1--1|96,96,75,0
+\\\---/// Sketch information - do not modify anything except names
+V300  Do not put anything below this section - it will be ignored
+*crop yield and income model
+$192-192-192,0,Times New Roman|12||0-0-0|0-0-0|0-0-255|-1--1--1|-1--1--1|96,96,80,0
+10,1,برقی موصل حد مقدار فصل الف,928,192,47,11,8,3,0,8,0,0,0,0,0-0-0,0-0-0,|14||0-0-0
+10,2,بی فصل ب,905,139,7,11,8,3,0,8,0,0,0,0,0-0-0,0-0-0,|14||0-0-0
+10,3,فصل ب کےواے,595,90,13,11,8,3,0,8,0,0,0,0,-1--1--1,0-0-0,|14||0-0-0
+10,4,پانی کمی اثر فصل ب,645,198,47,11,8,3,0,8,0,0,0,0,0-0-0,0-0-0,|14||0-0-0
+1,5,3,4,1,0,0,0,0,64,0,-1--1--1,,1|(607,139)|
+10,6,زمین نمکینی براے فصل الف,829,98,43,11,8,3,0,8,0,0,0,0,0-0-0,0-0-0,|14||0-0-0
+10,7,نمکینی دباو فصل الف,769,197,51,11,8,3,0,8,0,0,0,0,0-0-0,0-0-0,|14||0-0-0
+1,8,1,7,0,0,0,0,0,64,0,-1--1--1,,1|(857,193)|
+10,9,پیداوار فصل الف,751,303,15,11,8,3,0,8,0,0,0,0,0-0-0,0-0-0,|14||0-0-0
+10,10,زیادہ سے زیادہ پیداوار فصل الف,839,266,32,11,8,3,0,8,0,0,0,0,0-0-0,0-0-0,|14||0-0-0
+1,11,7,9,1,0,0,0,0,64,0,-1--1--1,,1|(741,248)|
+1,12,10,9,1,0,0,0,0,64,0,-1--1--1,,1|(779,314)|
+10,13,کھیت آمدن,1044,432,61,33,3,131,0,8,0,0,0,0,0-0-0,0-0-0,|14||0-0-0
+12,14,48,579,428,10,8,0,3,0,8,-1,0,0,0,0-0-0,0-0-0,|14||0-0-0
+1,15,17,13,4,0,0,22,0,0,0,-1--1--1,,1|(847,429)|
+1,16,17,14,100,0,0,22,0,0,0,-1--1--1,,1|(644,429)|
+11,17,48,705,429,6,8,34,3,0,0,1,0,0,0
+10,18,آمدن,705,448,29,11,40,3,0,8,-1,0,0,0,0-0-0,0-0-0,|14||0-0-0
+10,19,بازاری قیمت فصل ب,647,304,44,11,8,3,0,8,0,0,0,0,0-0-0,0-0-0,|14||0-0-0
+10,20,حکومتی قرضہ,607,536,40,11,8,3,0,8,0,0,0,0,0-0-0,0-0-0,|14||0-0-0
+1,21,20,18,1,0,0,0,0,64,0,-1--1--1,,1|(661,491)|
+10,22,قرض,839,594,50,26,3,131,0,8,0,0,0,0,0-0-0,0-0-0,|14||0-0-0
+12,23,48,632,592,10,8,0,3,0,8,-1,0,0,0,0-0-0,0-0-0,|14||0-0-0
+1,24,26,22,4,0,0,22,0,0,0,-1--1--1,,1|(755,593)|
+1,25,26,23,100,0,0,22,0,0,0,-1--1--1,,1|(676,593)|
+11,26,48,716,593,6,8,34,3,0,0,1,0,0,0
+10,27,قرضہ,716,612,21,11,40,3,0,8,-1,0,0,0,0-0-0,0-0-0,|14||0-0-0
+1,28,20,27,0,0,0,0,0,64,0,-1--1--1,,1|(655,570)|
+12,29,48,1040,596,10,8,0,3,0,8,-1,0,0,0,0-0-0,0-0-0,|14||0-0-0
+1,30,32,29,4,0,0,22,0,0,0,-1--1--1,,1|(997,596)|
+1,31,32,22,100,0,0,22,0,0,0,-1--1--1,,1|(921,596)|
+11,32,48,959,596,6,8,34,3,0,0,1,0,0,0
+10,33,ادائیگی,959,615,38,11,40,3,0,8,-1,0,0,0,0-0-0,0-0-0,|14||0-0-0
+10,34,سود شرح,691,687,45,11,8,3,0,8,0,0,0,0,0-0-0,0-0-0,|14||0-0-0
+1,35,34,27,1,0,0,0,0,64,0,-1--1--1,,1|(717,641)|
+1,36,18,33,1,0,0,0,0,64,0,-1--1--1,,1|(897,500)|
+10,37,پیداوار آمدن,627,375,57,11,8,3,0,8,0,0,0,0,0-0-0,0-0-0,|14||0-0-0
+1,38,37,18,0,0,0,0,0,64,0,-1--1--1,,1|(660,406)|
+1,39,22,27,1,0,0,0,0,64,0,-1--1--1,,1|(762,558)|
+10,40,وقت کا قدم,893,354,59,11,8,2,0,11,-1,0,0,0,128-128-128,0-0-0,|14||128-128-128
+10,41,Time,687,532,31,11,8,2,0,11,-1,0,0,0,128-128-128,0-0-0,|14||128-128-128
+1,42,41,27,1,0,0,0,0,64,0,-1--1--1,,1|(703,569)|
+10,43,کل آمدن کا فیصد,904,666,59,20,8,3,0,8,0,0,0,0,0-0-0,0-0-0,|14||0-0-0
+1,44,43,33,1,0,0,0,0,64,0,-1--1--1,,1|(964,627)|
+10,45,آمدن براے خرچ,1033,329,42,20,8,3,0,8,0,0,0,0,-1--1--1,0-0-0,|14||0-0-0
+1,46,13,45,0,0,0,0,0,64,0,-1--1--1,,1|(1038,380)|
+1,47,40,45,1,0,0,0,0,64,0,-1--1--1,,1|(930,316)|
+10,48,فصل ب بخارات شرح,712,93,47,11,8,2,0,11,-1,0,0,0,128-128-128,0-0-0,|14||128-128-128
+1,49,48,4,1,0,0,0,0,64,0,-1--1--1,,1|(703,140)|
+10,50,نہری بہاو براے فصل ب,313,411,53,20,8,2,0,11,-1,0,0,0,128-128-128,0-0-0,|14||128-128-128
+12,51,48,1486,435,10,8,0,3,0,8,-1,0,0,0,0-0-0,0-0-0,|14||0-0-0
+1,52,54,51,4,0,0,22,0,0,0,-1--1--1,,1|(1423,435)|
+1,53,54,13,100,0,0,22,0,0,0,-1--1--1,,1|(1232,435)|
+11,54,48,1365,435,6,8,34,3,0,0,1,0,0,0
+10,55,خرچہ,1365,454,45,11,40,3,0,8,-1,0,0,0,0-0-0,0-0-0,|14||0-0-0
+1,56,32,55,1,0,0,0,0,64,0,-1--1--1,,1|(1040,529)|
+10,57,نہر پختگی خرچہ,1229,558,49,20,8,2,0,11,-1,0,0,0,128-128-128,0-0-0,|14||128-128-128
+10,58,تمام کنواں لگانے کی قیمت,1422,581,80,20,8,2,0,11,-1,0,0,0,128-128-128,0-0-0,|14||128-128-128
+10,59,کسان آبپاشی کی بہتری کا حصہ,1569,528,78,20,8,2,0,11,-1,0,0,0,128-128-128,0-0-0,|14||128-128-128
+10,60,چلانے کی اصلی قیمت,1489,296,58,20,8,2,0,11,-1,0,0,0,128-128-128,0-0-0,|14||128-128-128
+10,61,کسان پانی بچاو حصہ,1350,288,67,20,8,2,0,11,-1,0,0,0,128-128-128,0-0-0,|14||128-128-128
+10,62,قیمت برائے مرمت,1228,357,53,20,8,2,0,11,-1,0,0,0,128-128-128,0-0-0,|14||128-128-128
+10,63,اصل مرمت قیمت پانی بچاو,1586,395,69,20,8,2,0,11,-1,0,0,0,128-128-128,0-0-0,|14||128-128-128
+1,64,57,55,0,0,0,0,3,64,0,255-0-0,|12||0-0-0,1|(1296,505)|
+1,65,58,55,0,0,0,0,3,64,0,255-0-0,|12||0-0-0,1|(1394,519)|
+1,66,59,55,0,0,0,0,3,64,0,255-0-0,|12||0-0-0,1|(1461,488)|
+1,67,63,55,0,0,0,0,3,64,0,255-0-0,|12||0-0-0,1|(1468,426)|
+1,68,60,55,0,0,0,0,3,64,0,255-0-0,|12||0-0-0,1|(1427,374)|
+1,69,61,55,0,0,0,0,3,64,0,255-0-0,|12||0-0-0,1|(1356,368)|
+1,70,62,55,0,0,0,0,3,64,0,255-0-0,|12||0-0-0,1|(1296,405)|
+10,71,کل بہاو براے فصل ب,477,209,48,20,8,3,0,8,0,0,0,0,0-0-0,0-0-0,|14||0-0-0
+1,72,71,4,0,0,0,0,0,64,0,-1--1--1,,1|(554,203)|
+10,73,سطحی بہاو براے فصل ب,418,332,57,20,8,3,0,8,0,0,0,0,0-0-0,0-0-0,|14||0-0-0
+1,74,73,71,1,0,0,0,0,64,0,-1--1--1,,1|(460,265)|
+1,75,50,73,0,0,0,0,3,64,0,255-0-0,|12||0-0-0,1|(359,375)|
+10,76,بارش کا سطحی بہاو فصل ب,233,332,55,20,8,3,0,8,0,0,0,0,0-0-0,0-0-0,|14||0-0-0
+1,77,76,73,1,0,0,0,0,64,0,-1--1--1,,1|(340,329)|
+10,78,سطحی تالاب بہاو براے فصل ب,347,488,53,20,8,3,0,8,0,0,0,0,0-0-0,0-0-0,|14||0-0-0
+1,79,78,73,1,0,0,0,0,64,0,-1--1--1,,1|(412,407)|
+10,80,کنواں بہاو براے فصل ب,458,542,58,20,8,3,0,8,0,0,0,0,0-0-0,0-0-0,|14||0-0-0
+1,81,80,71,1,0,0,0,0,64,0,-1--1--1,,1|(525,444)|
+10,82,سطحی تالاب بہاو,461,422,48,11,8,2,0,11,-1,0,0,0,128-128-128,0-0-0,|14||128-128-128
+1,83,82,78,1,0,0,0,3,64,0,255-0-0,|12||0-0-0,1|(400,465)|
+10,84,بارش کا حصہ,109,291,55,20,8,2,0,11,-1,0,0,0,128-128-128,0-0-0,|14||128-128-128
+1,85,84,76,1,0,0,0,3,64,0,255-0-0,|12||0-0-0,1|(184,285)|
+10,86,فصل ب رقبہ,126,433,48,11,8,2,0,11,-1,0,0,0,128-128-128,0-0-0,|14||128-128-128
+10,87,رقبہ,286,266,29,11,8,2,0,11,-1,0,0,0,128-128-128,0-0-0,|14||128-128-128
+10,88,Time,106,613,31,11,8,2,0,11,-1,0,0,0,128-128-128,0-0-0,|14||128-128-128
+10,89,کنواں کا بہاو,495,632,41,20,8,2,0,11,-1,0,0,0,128-128-128,0-0-0,|14||128-128-128
+10,90,پانی کی موسمی ضرروت براے فصل الف,276,566,74,20,8,2,0,11,-1,0,0,0,128-128-128,0-0-0,|14||128-128-128
+1,91,86,76,1,0,0,0,3,64,0,255-0-0,|12||0-0-0,1|(155,369)|
+1,92,87,76,1,0,0,0,0,64,0,-1--1--1,,1|(257,306)|
+1,93,86,78,1,0,0,0,3,64,0,255-0-0,|12||0-0-0,1|(215,436)|
+1,94,86,80,1,0,0,0,3,64,0,255-0-0,|12||0-0-0,1|(180,606)|
+1,95,89,80,1,0,0,0,3,64,0,255-0-0,|12||0-0-0,1|(469,588)|
+1,96,90,78,1,0,0,0,0,64,0,-1--1--1,,1|(299,527)|
+1,97,90,80,1,0,0,0,0,64,0,-1--1--1,,1|(367,592)|
+10,98,آبپاشی فصل ب,362,269,9,11,8,3,0,8,0,0,0,0,0-0-0,0-0-0,|14||0-0-0
+1,99,87,98,1,0,0,0,0,64,0,-1--1--1,,1|(322,246)|
+1,100,73,98,1,0,0,0,0,64,0,-1--1--1,,1|(408,288)|
+10,101,ممکنہ سرمایہ کاری فی چوکور نہر پر,1164,274,77,20,8,3,0,8,0,0,0,0,0-0-0,0-0-0,|14||0-0-0
+1,102,45,101,1,0,0,0,0,64,0,-1--1--1,,1|(1111,324)|
+10,103,چوکور جز,1253,204,43,20,8,130,0,11,-1,0,0,0,128-128-128,0-0-0,|14||128-128-128
+1,104,103,101,1,0,0,0,0,64,0,-1--1--1,,1|(1214,240)|
+10,105,ممکنہ سرمایہ کاری فی نہر,1102,182,77,20,8,3,0,8,0,0,0,0,-1--1--1,0-0-0,|14||0-0-0
+1,106,101,105,1,0,0,0,0,64,0,-1--1--1,,1|(1129,239)|
+10,107,Farm income zero time stock,988,505,74,20,8,2,0,11,-1,0,0,0,128-128-128,0-0-0,|14||128-128-128
+10,108,فصل ب رقبہ,781,363,48,11,8,2,0,11,-1,0,0,0,128-128-128,0-0-0,|14||128-128-128
+1,109,107,13,0,0,0,0,0,64,1,-1--1--1,,1|(1006,480)|
+10,110,Debt zero time stock,839,639,62,20,8,2,1,11,-1,0,0,0,128-128-128,0-0-0,|14||128-128-128
+1,111,110,22,0,1,0,0,0,64,1,-1--1--1,,1|(839,626)|
+10,112,Time,928,222,26,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,113,112,1,0,0,0,0,0,64,0,-1--1--1,,1|(928,214)|
+10,114,Time,905,169,26,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,115,114,2,0,0,0,0,0,64,0,-1--1--1,,1|(905,161)|
+10,116,بی فصل الف,769,227,37,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,117,116,7,0,0,0,0,0,64,0,-1--1--1,,1|(769,219)|
+10,118,زمین نمکینی ٹینامٹ براے فصل الف,769,227,53,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,119,118,7,0,0,0,0,0,64,0,-1--1--1,,1|(769,208)|
+10,120,پانی کمی اثر فصل الف,751,333,45,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,121,120,9,0,0,0,0,0,64,0,-1--1--1,,1|(751,314)|
+10,122,پیداوار آمدن فصل الف,627,405,55,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,123,122,37,0,0,0,0,0,64,0,-1--1--1,,1|(627,386)|
+10,124,پیداوار آمدن فصل ب,627,405,55,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,125,124,37,0,0,0,0,0,64,0,-1--1--1,,1|(627,386)|
+10,126,فصل الف رقبہ,347,527,38,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,127,126,78,0,0,0,0,0,64,0,-1--1--1,,1|(347,508)|
+10,128,پانی کی موسمی ضرروت براے فصل ب,347,527,69,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,129,128,78,0,0,0,0,0,64,0,-1--1--1,,1|(347,508)|
+10,130,فصل الف رقبہ,458,581,38,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,131,130,80,0,0,0,0,0,64,0,-1--1--1,,1|(458,562)|
+10,132,پانی کی موسمی ضرروت براے فصل ب,458,581,69,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,133,132,80,0,0,0,0,0,64,0,-1--1--1,,1|(458,562)|
+\\\---/// Sketch information - do not modify anything except names
+V300  Do not put anything below this section - it will be ignored
+*effective rainfall model
+$192-192-192,0,Times New Roman|12||0-0-0|0-0-0|0-0-255|-1--1--1|-1--1--1|96,96,80,0
+10,1,دستیاب پانی,775,112,70,36,3,131,0,0,0,0,0,0
+12,2,48,525,102,10,8,0,3,0,0,-1,0,0,0
+1,3,5,1,4,0,0,22,0,0,0,-1--1--1,,1|(669,103)|
+1,4,5,2,100,0,0,22,0,0,0,-1--1--1,,1|(578,103)|
+11,5,48,627,103,6,8,34,3,0,0,1,0,0,0
+10,6,فراہمی,627,122,23,11,40,3,0,0,-1,0,0,0
+10,7,پانی تالابی جمع,734,240,66,47,3,131,0,0,0,0,0,0
+10,8,بارش کا حصہ,515,213,41,19,8,3,0,0,0,0,0,0
+1,9,8,6,1,0,0,0,0,64,0,-1--1--1,,1|(555,151)|
+10,10,رقبہ,435,260,17,11,8,3,0,0,-1,0,0,0
+10,11,کار آمد بارش,456,129,59,11,8,2,0,3,-1,0,0,0,128-128-128,0-255-255,|12||128-128-128
+1,12,11,8,1,0,0,0,0,64,0,-1--1--1,,1|(495,169)|
+10,13,بارش حجمم,321,224,48,11,8,131,0,0,0,0,0,0
+10,14,دستیاب بارش بہاو براۓ سطحی تالاب,610,351,58,19,8,3,0,0,0,0,0,0
+10,15,آب اندوخت بھرائی براے بارش,386,540,54,26,8,131,0,0,0,0,0,0
+10,16,غیر کار آمد بارش,225,296,58,11,8,3,0,0,0,0,0,0
+1,17,13,16,0,0,0,0,0,64,0,-1--1--1,,1|(278,255)|
+10,18,گہرائی اخراج,296,474,53,11,8,3,0,0,0,0,0,0
+10,19,سی پی بارش,316,411,25,21,8,131,0,0,0,0,0,0
+1,20,16,18,1,0,0,0,0,64,0,-1--1--1,,1|(235,373)|
+1,21,19,18,0,0,0,0,0,64,0,-1--1--1,,1|(306,440)|
+10,22,بارش کا بہاو,551,434,22,11,8,3,0,0,0,0,0,0
+1,23,16,22,1,0,0,0,0,64,0,-1--1--1,,1|(403,402)|
+1,24,18,22,1,0,0,0,0,64,0,-1--1--1,,1|(412,477)|
+1,25,18,15,1,0,0,0,0,64,0,-1--1--1,,1|(334,491)|
+1,26,10,13,1,0,0,0,0,64,0,-1--1--1,,1|(369,262)|
+1,27,8,16,1,0,0,0,0,64,0,-1--1--1,,1|(415,308)|
+1,28,22,14,1,0,0,0,0,64,0,-1--1--1,,1|(589,402)|
+1,29,7,14,1,0,0,0,0,64,0,-1--1--1,,1|(677,304)|
+10,30,بارش,387,180,33,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,31,دستیاب صلاحیت,748,339,35,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,32,31,14,0,0,0,0,0,64,0,-1--1--1,,1|(697,343)|
+10,33,سطحی تالاب بہاو,447,973,42,11,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,34,33,7,0,1,0,0,0,64,0,-1--1--1,,1|(580,631)|
+10,35,اندارج,447,973,29,11,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,36,35,7,0,1,0,0,0,64,0,-1--1--1,,1|(580,631)|
+10,37,سطحی بخارات 1,447,973,52,11,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,38,37,7,0,1,0,0,0,64,0,-1--1--1,,1|(580,631)|
+10,39,رساو1,447,973,41,11,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,40,39,7,0,1,0,0,0,64,0,-1--1--1,,1|(580,631)|
+10,41,Water in storage zero time stock,447,973,58,19,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,42,41,7,0,1,0,0,0,64,1,-1--1--1,,1|(581,627)|
+10,43,کنواں کا بہاو,627,152,35,19,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,44,43,6,0,1,0,0,0,64,0,-1--1--1,,1|(627,133)|
+10,45,نہر کا حصہ,627,152,46,19,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,46,45,6,0,1,0,0,0,64,0,-1--1--1,,1|(627,133)|
+10,47,AW zero time stock,775,167,50,19,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,48,47,1,0,1,0,0,0,64,1,-1--1--1,,1|(775,148)|
+10,49,سطحی تالاب بہاو,775,167,42,11,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,50,49,1,0,1,0,0,0,64,0,-1--1--1,,1|(775,159)|
+10,51,استعمال,775,167,51,11,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,52,51,1,0,1,0,0,0,64,0,-1--1--1,,1|(775,159)|
+10,53,غیر استعمال شدہ,775,167,34,11,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,54,53,1,0,1,0,0,0,64,0,-1--1--1,,1|(775,159)|
+1,55,10,8,1,0,0,0,0,64,0,-1--1--1,,1|(467,248)|
+10,56,وقت کا قدم,610,389,50,11,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,57,56,14,0,1,0,0,0,64,0,-1--1--1,,1|(610,381)|
+10,58,بارش ٹینامٹ,212,144,57,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,59,58,13,0,0,0,0,0,64,0,-1--1--1,,1|(260,179)|
+\\\---/// Sketch information - do not modify anything except names
+V300  Do not put anything below this section - it will be ignored
+*Surface water storage sub-model
+$192-192-192,0,Times New Roman|12||0-0-0|0-0-0|0-0-255|-1--1--1|-1--1--1|96,96,70,0
+10,1,بنی ہوئی صلاحیت,970,318,51,26,3,131,0,8,0,0,0,0,0-0-0,0-0-0,|14||0-0-0
+10,2,ریت سے بھری صلا حیت,448,309,41,29,3,131,0,8,0,0,0,0,0-0-0,0-0-0,|14||0-0-0
+1,3,4,2,4,0,0,22,0,0,0,-1--1--1,,1|(537,325)|
+11,4,3532,592,325,6,8,34,3,0,0,1,0,0,0
+10,5,ریت کی شرح,592,344,47,11,40,131,0,8,-1,0,0,0,0-0-0,0-0-0,|14||0-0-0
+1,6,7,2,100,0,0,22,0,0,0,-1--1--1,,1|(547,282)|
+11,7,3612,612,282,6,8,34,131,0,0,3,0,0,0
+10,8,مرمتی شرح,612,254,48,20,40,131,0,8,-1,0,0,0,0-0-0,0-0-0,|14||0-0-0
+12,9,48,1206,321,10,8,0,3,0,8,-1,0,0,0,0-0-0,0-0-0,|14||0-0-0
+1,10,12,1,4,0,0,22,0,0,0,-1--1--1,,1|(1051,319)|
+1,11,12,9,100,0,0,22,0,0,0,-1--1--1,,1|(1144,319)|
+11,12,48,1087,319,6,8,34,3,0,0,1,0,0,0
+10,13,بنانے کی شرح,1087,347,49,20,40,131,0,8,-1,0,0,0,0-0-0,0-0-0,|14||0-0-0
+10,14,تالاب کی قیمت,1341,206,49,11,8,3,0,8,0,0,0,0,0-0-0,0-0-0,|14||0-0-0
+10,15,سرمایہ کاری پانی بچاو,1479,263,57,11,8,131,0,8,0,0,0,0,0-0-0,0-0-0,|14||0-0-0
+10,16,کسان پانی بچاو حصہ,1659,201,61,20,8,131,0,8,0,0,0,0,0-0-0,0-0-0,|14||0-0-0
+10,17,مرمتی قیمت,218,220,48,20,8,131,0,8,0,0,0,0,0-0-0,0-0-0,|14||0-0-0
+10,18,کل پانی بچاو صلاحیت,1049,477,72,20,8,131,0,8,0,0,0,0,0-0-0,0-0-0,|14||0-0-0
+1,19,18,13,1,0,0,0,0,64,0,-1--1--1,,1|(1059,411)|
+10,20,بنانے کی فیصد,968,397,49,20,8,3,0,8,0,0,0,0,0-0-0,0-0-0,|14||0-0-0
+1,21,1,20,1,0,0,0,0,64,0,-1--1--1,,1|(962,361)|
+1,22,18,20,1,0,0,0,0,64,0,-1--1--1,,1|(1015,447)|
+1,23,2,8,1,0,0,0,0,64,0,-1--1--1,,1|(535,270)|
+1,24,1,12,1,0,0,0,0,64,0,-1--1--1,,1|(1027,282)|
+10,25,کسان ریت بہاو دھیان,532,173,73,20,8,3,0,8,0,0,0,0,0-0-0,0-0-0,|14||0-0-0
+1,26,2,25,0,0,0,0,0,64,0,-1--1--1,,1|(488,242)|
+1,27,1,25,1,0,0,0,0,64,0,-1--1--1,,1|(703,140)|
+1,28,25,8,0,0,0,0,0,64,0,-1--1--1,,1|(566,208)|
+10,29,اصل مرمت قیمت پانی بچاو,251,294,64,20,8,3,0,8,0,0,0,0,0-0-0,0-0-0,|14||0-0-0
+1,30,7,29,1,0,0,0,0,64,0,-1--1--1,,1|(344,348)|
+1,31,17,29,0,0,0,0,0,64,0,-1--1--1,,1|(231,250)|
+12,32,48,728,327,10,8,0,3,0,8,-1,0,0,0,0-0-0,0-0-0,|14||0-0-0
+1,33,4,32,100,0,0,22,0,0,0,-1--1--1,,1|(658,325)|
+12,34,48,743,287,10,8,0,3,0,8,-1,0,0,0,0-0-0,0-0-0,|14||0-0-0
+1,35,7,34,4,0,0,22,0,0,0,-1--1--1,,1|(675,282)|
+10,36,دستیاب صلاحیت,550,513,35,20,8,3,0,8,0,0,0,0,0-0-0,0-0-0,|14||0-0-0
+1,37,2,36,1,0,0,0,0,64,0,-1--1--1,,1|(463,412)|
+1,38,1,36,1,0,0,0,0,64,0,-1--1--1,,1|(758,475)|
+1,39,36,4,1,0,0,0,0,64,0,-1--1--1,,1|(553,393)|
+10,40,تالاب فی چوکور,637,436,50,11,8,3,0,8,0,0,0,0,0-0-0,0-0-0,|14||0-0-0
+1,41,40,5,1,0,0,0,0,64,0,-1--1--1,,1|(619,413)|
+1,42,40,18,1,0,0,0,0,64,0,-1--1--1,,1|(821,505)|
+10,43,لمبائی,1151,398,27,11,8,3,0,8,0,0,0,0,0-0-0,0-0-0,|14||0-0-0
+10,44,تالاب چوڑائی,1224,445,44,11,8,3,0,8,0,0,0,0,0-0-0,0-0-0,|14||0-0-0
+10,45,اونچای,1043,566,26,11,8,3,0,8,0,0,0,0,0-0-0,0-0-0,|14||0-0-0
+1,46,45,18,0,0,0,0,0,64,0,-1--1--1,,1|(1044,532)|
+1,47,44,18,0,0,0,0,0,64,0,-1--1--1,,1|(1157,456)|
+1,48,43,18,0,0,0,0,0,64,0,-1--1--1,,1|(1111,428)|
+10,49,ریت جمع ہونے کی شرح,754,379,56,20,8,3,0,8,0,0,0,0,0-0-0,0-0-0,|14||0-0-0
+1,50,49,5,1,0,0,0,0,64,0,-1--1--1,,1|(662,351)|
+10,51,مرمتی قیمت براۓ سال 2003,326,131,58,20,8,3,0,8,0,0,0,0,0-0-0,0-0-0,|14||0-0-0
+10,52,دھیان ریت بہاو جدول,524,95,68,20,8,3,0,8,0,0,0,0,0-0-0,0-0-0,|14||0-0-0
+1,53,52,25,1,0,0,0,0,64,0,-1--1--1,,1|(528,126)|
+10,54,اصل پانی بچاو قیمت,1355,311,49,20,8,3,0,8,0,0,0,0,0-0-0,0-0-0,|14||0-0-0
+1,55,14,54,1,0,0,0,0,64,0,-1--1--1,,1|(1357,282)|
+1,56,13,54,1,0,0,0,0,64,0,-1--1--1,,1|(1249,349)|
+1,57,54,15,0,0,0,0,0,64,0,-1--1--1,,1|(1420,286)|
+1,58,15,16,1,0,0,0,0,64,0,-1--1--1,,1|(1563,261)|
+10,59,قدم صلاحیت بڑھوتی,1004,178,45,20,8,3,0,8,0,0,0,0,0-0-0,0-0-0,|14||0-0-0
+1,60,1,59,0,0,0,0,0,64,0,-1--1--1,,1|(985,251)|
+1,61,59,12,0,0,0,0,0,64,0,-1--1--1,,1|(1045,249)|
+10,62,حکمت عملی تالاب,1085,218,40,11,8,3,0,8,0,0,0,0,0-0-0,0-0-0,|14||0-0-0
+1,63,62,12,0,0,0,0,0,64,0,-1--1--1,,1|(1085,264)|
+10,64,صلاحیت بڑھوتی,880,136,34,20,8,3,0,8,0,0,0,0,0-0-0,0-0-0,|14||0-0-0
+1,65,64,59,0,0,0,0,0,64,0,-1--1--1,,1|(929,152)|
+10,66,سال,828,13,30,11,8,2,0,8,-1,0,0,0,0-0-0,0-0-0,|14||0-0-0
+1,67,66,64,0,0,0,0,0,64,0,-1--1--1,,1|(848,63)|
+10,68,صلاحیت جدول,1004,90,38,20,8,3,0,8,0,0,0,0,0-0-0,0-0-0,|14||0-0-0
+1,69,68,64,1,0,0,0,0,64,0,-1--1--1,,1|(919,85)|
+1,70,18,64,1,0,0,0,0,64,0,-1--1--1,,1|(815,380)|
+10,71,تالاب قیمت براے سال 2003,1419,143,57,20,8,3,0,8,0,0,0,0,0-0-0,0-0-0,|14||0-0-0
+10,72,گرافی جدول,1401,64,37,20,8,2,0,11,-1,0,0,0,128-128-128,0-0-0,|14||128-128-128
+10,73,تالاب قیمت جز,1300,112,39,20,8,3,0,8,0,0,0,0,0-0-0,0-0-0,|14||0-0-0
+1,74,66,73,1,0,0,0,0,64,0,-1--1--1,,1|(1016,33)|
+1,75,72,73,1,0,0,0,0,64,0,-1--1--1,,1|(1331,80)|
+1,76,73,14,0,0,0,0,0,64,0,-1--1--1,,1|(1319,157)|
+1,77,71,14,0,0,0,0,0,64,0,-1--1--1,,1|(1380,174)|
+10,78,حکومت پانی بچاو حصہ,1520,187,61,20,8,3,0,8,0,0,0,0,0-0-0,0-0-0,|14||0-0-0
+1,79,15,78,0,0,0,0,0,64,0,-1--1--1,,1|(1493,235)|
+10,80,وقت کا قدم,1212,236,59,11,8,2,0,11,-1,0,0,0,128-128-128,0-0-0,|14||128-128-128
+1,81,80,12,1,0,0,0,0,64,0,-1--1--1,,1|(1161,278)|
+10,82,وقت کا قدم,720,217,59,11,8,2,0,11,-1,0,0,0,128-128-128,0-0-0,|14||128-128-128
+1,83,82,8,0,0,0,0,0,64,0,-1--1--1,,1|(680,230)|
+10,84,مرمتی قیمت جز,180,122,49,20,8,3,0,8,0,0,0,0,0-0-0,0-0-0,|14||0-0-0
+1,85,84,17,0,0,0,0,0,64,0,-1--1--1,,1|(195,164)|
+1,86,51,17,0,0,0,0,0,64,0,-1--1--1,,1|(277,171)|
+10,87,گرافی جدول,85,44,37,20,8,2,0,11,-1,0,0,0,128-128-128,0-0-0,|14||128-128-128
+1,88,66,84,1,0,0,0,0,64,0,-1--1--1,,1|(516,32)|
+1,89,87,84,0,0,0,0,0,64,0,-1--1--1,,1|(126,78)|
+10,90,تالاب قیمت فی موسم,1156,164,55,20,8,131,0,8,0,0,0,0,0-0-0,0-0-0,|14||0-0-0
+1,91,59,90,1,0,0,0,0,64,0,-1--1--1,,1|(1070,136)|
+1,92,14,90,1,0,0,0,0,64,0,-1--1--1,,1|(1250,167)|
+1,93,80,90,1,0,0,0,0,64,0,-1--1--1,,1|(1198,181)|
+10,94,آمدن براے خرچ,1239,289,47,20,8,2,0,11,-1,0,0,0,128-128-128,0-0-0,|14||128-128-128
+1,95,94,12,1,0,0,0,3,64,0,255-0-0,|12||0-0-0,1|(1160,303)|
+1,96,90,13,0,0,0,0,0,64,0,-1--1--1,,1|(1124,248)|
+10,97,silted capacity zero time stock,448,357,64,20,8,2,1,11,-1,0,0,0,128-128-128,0-0-0,|14||128-128-128
+1,98,97,2,0,1,0,0,0,64,1,-1--1--1,,1|(448,344)|
+10,99,constructed capacity zero time stock,960,369,83,20,8,2,1,11,-1,0,0,0,128-128-128,0-0-0,|14||128-128-128
+1,100,99,1,0,1,0,0,0,64,1,-1--1--1,,1|(962,353)|
+10,101,دستیاب پانی,1342,396,70,36,3,131,0,8,0,0,0,0,0-0-0,0-0-0,|14||0-0-0
+10,102,پانی تالابی جمع,1338,693,66,47,3,131,0,8,0,0,0,0,0-0-0,0-0-0,|14||0-0-0
+12,103,48,1078,693,10,8,0,3,0,8,-1,0,0,0,0-0-0,0-0-0,|14||0-0-0
+1,104,106,102,4,0,0,22,0,0,0,-1--1--1,,1|(1224,693)|
+1,105,106,103,100,0,0,22,0,0,0,-1--1--1,,1|(1126,693)|
+11,106,48,1171,693,6,8,34,3,0,0,1,0,0,0
+10,107,اندارج,1171,712,25,11,40,3,0,8,-1,0,0,0,0-0-0,0-0-0,|14||0-0-0
+10,108,پانی بچاو نہری پانی کا حصہ,705,606,72,30,8,3,0,8,0,0,0,0,0-0-0,0-0-0,|14||0-0-0
+1,109,108,106,1,0,0,0,0,64,0,-1--1--1,,1|(899,689)|
+1,110,102,108,1,0,0,0,0,64,0,-1--1--1,,1|(1015,618)|
+10,111,نہری بہاو فی چوکور,774,521,57,20,8,3,0,8,0,0,0,0,0-0-0,0-0-0,|14||0-0-0
+1,112,111,108,1,0,0,0,3,64,0,255-0-0,|12||0-0-0,1|(711,558)|
+12,113,48,1638,666,10,8,0,3,0,8,-1,0,0,0,0-0-0,0-0-0,|14||0-0-0
+1,114,116,113,4,0,0,22,0,0,0,-1--1--1,,1|(1573,666)|
+1,115,116,102,100,0,0,22,0,0,0,-1--1--1,,1|(1455,666)|
+11,116,48,1513,666,6,8,34,3,0,0,1,0,0,0
+10,117,سطحی بخارات 1,1513,685,50,11,40,3,0,8,-1,0,0,0,0-0-0,0-0-0,|14||0-0-0
+12,118,48,1643,722,10,8,0,3,0,8,-1,0,0,0,0-0-0,0-0-0,|14||0-0-0
+1,119,121,118,4,0,0,22,0,0,0,-1--1--1,,1|(1578,722)|
+1,120,121,102,100,0,0,22,0,0,0,-1--1--1,,1|(1458,722)|
+11,121,48,1518,722,6,8,34,3,0,0,1,0,0,0
+10,122,رساو1,1518,741,36,11,40,3,0,8,-1,0,0,0,0-0-0,0-0-0,|14||0-0-0
+10,123,موسمی بخارات,1536,595,45,20,8,3,0,8,0,0,0,0,0-0-0,0-0-0,|14||0-0-0
+10,124,ایس ایف,1625,747,12,11,8,3,0,8,0,0,0,0,0-0-0,0-0-0,|14||0-0-0
+10,125,طول,1600,699,24,11,8,3,0,8,0,0,0,0,0-0-0,0-0-0,|14||0-0-0
+1,126,125,117,1,0,0,0,0,64,0,-1--1--1,,1|(1575,679)|
+1,127,125,122,1,0,0,0,0,64,0,-1--1--1,,1|(1563,734)|
+1,128,123,116,1,0,0,0,0,64,0,-1--1--1,,1|(1532,631)|
+1,129,124,122,1,0,0,0,0,64,0,-1--1--1,,1|(1576,763)|
+1,130,102,117,1,0,0,0,0,64,0,-1--1--1,,1|(1413,644)|
+1,131,102,122,1,0,0,0,0,64,0,-1--1--1,,1|(1418,755)|
+10,132,دستیاب بارش بہاو براۓ سطحی تالاب,374,608,69,20,8,3,0,8,0,0,0,0,0-0-0,0-0-0,|14||0-0-0
+10,133,بارش کا بہاو,316,523,28,11,8,3,0,8,0,0,0,0,0-0-0,0-0-0,|14||0-0-0
+1,134,133,132,1,0,0,0,3,64,0,255-0-0,|12||0-0-0,1|(348,564)|
+1,135,102,132,1,0,0,0,0,64,0,-1--1--1,,1|(1038,777)|
+1,136,132,107,1,0,0,0,0,64,0,-1--1--1,,1|(640,717)|
+1,137,36,108,1,0,0,0,0,64,0,-1--1--1,,1|(629,557)|
+1,138,36,132,1,0,0,0,0,64,0,-1--1--1,,1|(447,555)|
+1,139,141,101,4,0,0,22,0,0,0,-1--1--1,,1|(1338,482)|
+1,140,141,102,100,0,0,22,0,0,0,-1--1--1,,1|(1338,595)|
+11,141,4860,1338,539,8,6,33,3,0,0,4,0,0,0
+10,142,سطحی تالاب بہاو,1384,539,38,11,40,3,0,8,-1,0,0,0,0-0-0,0-0-0,|14||0-0-0
+1,143,102,142,1,0,0,0,0,64,0,-1--1--1,,1|(1367,601)|
+10,144,پانی کی ضرورت,1554,524,47,20,8,2,0,11,-1,0,0,0,128-128-128,0-0-0,|14||128-128-128
+1,145,144,142,1,0,0,0,3,64,0,255-0-0,|12||0-0-0,1|(1458,538)|
+10,146,کل نہری فراہمی براۓ فصلات,1464,437,48,20,8,2,0,11,-1,0,0,0,128-128-128,0-0-0,|14||128-128-128
+1,147,146,141,1,0,0,0,3,64,0,255-0-0,|12||0-0-0,1|(1388,504)|
+10,148,بارش کا حصہ,1560,467,55,20,8,2,0,11,-1,0,0,0,128-128-128,0-0-0,|14||128-128-128
+1,149,148,141,1,0,0,0,3,64,0,255-0-0,|12||0-0-0,1|(1450,507)|
+1,150,116,142,1,0,0,0,0,64,0,-1--1--1,,1|(1426,572)|
+1,151,122,142,1,0,0,0,0,64,0,-1--1--1,,1|(1436,600)|
+10,152,Water in storage zero time stock,1338,759,68,20,8,2,1,11,-1,0,0,0,128-128-128,0-0-0,|14||128-128-128
+1,153,152,102,0,1,0,0,0,64,1,-1--1--1,,1|(1338,746)|
+10,154,AW zero time stock,1342,451,59,20,8,2,1,11,-1,0,0,0,128-128-128,0-0-0,|14||128-128-128
+1,155,154,101,0,1,0,0,0,64,1,-1--1--1,,1|(1342,438)|
+10,156,استعمال,1342,451,40,21,8,2,1,11,-1,0,0,0,128-128-128,0-0-0,|14||128-128-128
+1,157,156,101,0,1,0,0,0,64,0,-1--1--1,,1|(1342,438)|
+10,158,غیر استعمال شدہ,1342,451,40,11,8,2,1,11,-1,0,0,0,128-128-128,0-0-0,|14||128-128-128
+1,159,158,101,0,1,0,0,0,64,0,-1--1--1,,1|(1342,443)|
+10,160,فراہمی,1342,451,37,11,8,2,1,11,-1,0,0,0,128-128-128,0-0-0,|14||128-128-128
+1,161,160,101,0,1,0,0,0,64,0,-1--1--1,,1|(1342,443)|
+10,162,تقسیمی فراھمی,1477,411,47,20,8,2,1,11,-1,0,0,0,128-128-128,0-0-0,|14||128-128-128
+1,163,162,111,0,1,0,0,0,64,0,-1--1--1,,1|(1137,463)|
+10,164,گہرائی اخراج,2142,1168,39,19,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,165,164,133,0,1,0,0,0,64,0,-1--1--1,,1|(1230,845)|
+10,166,غیر کار آمد بارش,2142,1168,41,19,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,167,166,133,0,1,0,0,0,64,0,-1--1--1,,1|(1229,845)|
+10,168,نہر کا حصہ,693,648,55,20,8,2,1,11,-1,0,0,0,128-128-128,0-0-0,|14||128-128-128
+1,169,168,108,0,1,0,0,0,64,0,-1--1--1,,1|(695,638)|
+10,170,وقت کا قدم,693,648,59,11,8,2,1,11,-1,0,0,0,128-128-128,0-0-0,|14||128-128-128
+1,171,170,108,0,1,0,0,0,64,0,-1--1--1,,1|(696,643)|
+10,172,وقت کا قدم,1513,715,59,11,8,2,1,11,-1,0,0,0,128-128-128,0-0-0,|14||128-128-128
+1,173,172,117,0,1,0,0,0,64,0,-1--1--1,,1|(1513,707)|
+10,174,وقت کا قدم,1518,771,59,11,8,2,1,11,-1,0,0,0,128-128-128,0-0-0,|14||128-128-128
+1,175,174,122,0,1,0,0,0,64,0,-1--1--1,,1|(1518,763)|
+10,176,وقت کا قدم,390,646,59,11,8,2,1,11,-1,0,0,0,128-128-128,0-0-0,|14||128-128-128
+1,177,176,132,0,1,0,0,0,64,0,-1--1--1,,1|(387,637)|
+10,178,وقت کا قدم,1379,569,59,11,8,2,1,11,-1,0,0,0,128-128-128,0-0-0,|14||128-128-128
+1,179,178,142,0,1,0,0,0,64,0,-1--1--1,,1|(1379,560)|
+\\\---/// Sketch information - do not modify anything except names
+V300  Do not put anything below this section - it will be ignored
+*Irrigation distribution and application
+$192-192-192,0,Times New Roman|12||0-0-0|0-0-0|0-0-255|-1--1--1|-1--1--1|96,96,5,0
+10,1,نہری بہاو براے فصل ب,943,275,52,19,8,131,0,0,0,0,0,0
+10,2,Time,1007,196,26,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,3,2,1,0,0,0,0,0,64,0,-1--1--1,,1|(982,226)|
+10,4,پانی تالابی جمع,818,595,66,47,3,131,0,0,0,0,0,0
+10,5,بارش کا حصہ,993,387,41,19,8,3,0,0,0,0,0,0
+10,6,کل نہری فراہمی براۓ فصلات,1098,351,35,19,8,3,0,0,0,0,0,0
+1,7,1,6,1,0,0,0,0,64,0,-1--1--1,,1|(1011,315)|
+10,8,نہر کا حصہ,897,432,41,19,8,3,0,0,0,0,0,0
+10,9,پانی کی ضرورت,773,309,55,11,8,3,0,0,-1,0,0,0
+1,10,9,8,1,0,0,0,3,64,0,255-0-0,|12||0-0-0,1|(825,374)|
+10,11,پانی بچاو نہری پانی کا حصہ,652,520,73,19,8,3,0,0,0,0,0,0
+1,12,8,11,1,0,0,0,0,64,0,-1--1--1,,1|(751,456)|
+10,13,نہری بخارات,359,131,55,11,8,3,0,0,0,0,0,0
+10,14,سر پر نہر کی فراہمی,270,51,49,19,8,3,0,0,0,0,0,0
+1,15,14,13,0,0,0,0,0,64,0,-1--1--1,,1|(313,90)|
+10,16,فراھی بعد نقصان,250,206,59,11,8,3,0,0,0,0,0,0
+1,17,14,16,0,0,0,0,0,64,0,-1--1--1,,1|(260,125)|
+1,18,13,16,0,0,0,0,0,64,0,-1--1--1,,1|(310,164)|
+10,19,تقسیمی فراھمی,226,335,57,11,8,3,0,0,0,0,0,0
+10,20,تقسیم کار تبدیل,228,435,58,11,8,3,0,0,0,0,0,0
+1,21,20,19,1,0,0,0,0,64,0,-1--1--1,,1|(211,391)|
+10,22,عددی چوکورفی نہر,31,329,46,19,8,3,0,0,0,0,0,0
+10,23,برابر تقسیم,157,265,58,11,8,3,0,0,0,0,0,0
+1,24,22,23,1,0,0,0,0,64,0,-1--1--1,,1|(52,287)|
+1,25,23,19,0,0,0,0,0,64,0,-1--1--1,,1|(186,295)|
+10,26,فصل ب رقبہ,1103,235,33,11,8,3,0,0,-1,0,0,0
+1,27,26,1,0,0,0,0,0,64,0,-1--1--1,,1|(1039,250)|
+10,28,پانی کی موسمی ضرروت براے فصل الف,874,188,64,19,8,3,0,0,0,0,0,0
+1,29,28,1,0,0,0,0,0,64,0,-1--1--1,,1|(903,225)|
+1,30,4,11,1,0,0,0,3,64,0,255-0-0,|12||0-0-0,1|(684,539)|
+10,31,تقسیمی جز,362,277,56,11,8,131,0,0,0,0,0,0
+10,32,کھیت کا مقام,482,327,43,11,8,3,0,0,0,0,0,0
+10,33,نہر کی لمبائی,634,329,46,11,8,3,0,0,0,0,0,0
+10,34,آر ڈی,601,270,13,11,8,3,0,0,0,0,0,0
+1,35,34,32,0,0,0,0,0,64,0,-1--1--1,,1|(552,292)|
+1,36,33,32,0,0,0,0,0,64,0,-1--1--1,,1|(563,328)|
+10,37,تقسیمی جدول,492,221,60,11,8,3,0,0,0,0,0,0
+1,38,32,31,0,0,0,0,0,64,0,-1--1--1,,1|(428,304)|
+1,39,22,19,1,0,0,0,0,64,0,-1--1--1,,1|(110,371)|
+10,40,نہری بہاو فی چوکور,683,395,47,19,8,3,0,0,0,0,0,0
+1,41,19,40,1,0,0,0,0,64,0,-1--1--1,,1|(385,428)|
+1,42,40,8,1,0,0,0,0,64,0,-1--1--1,,1|(800,409)|
+1,43,40,11,1,0,0,0,0,64,0,-1--1--1,,1|(652,445)|
+1,44,8,1,1,0,0,0,0,64,0,-1--1--1,,1|(859,346)|
+1,45,5,8,1,0,0,0,3,64,0,255-0-0,|12||0-0-0,1|(934,397)|
+10,46,کل نہری رساو,136,131,44,11,8,3,0,0,-1,0,0,0
+1,47,46,16,0,0,0,0,3,64,0,255-0-0,|12||0-0-0,1|(186,164)|
+1,48,14,46,0,0,0,0,0,0,0,-1--1--1,,1|(202,91)|
+10,49,علاقائی حصہ فصل ب,1163,166,42,11,8,3,0,0,-1,0,0,0
+1,50,49,26,0,0,0,0,3,0,0,255-0-0,|12||0-0-0,1|(1137,194)|
+10,51,ای پی,427,80,11,11,8,3,0,0,-1,0,0,0
+1,52,51,13,1,0,0,0,0,64,0,-1--1--1,,1|(389,99)|
+10,53,فعال,591,372,22,11,8,3,0,0,0,0,0,0
+1,54,53,32,0,0,0,0,0,64,0,-1--1--1,,1|(544,353)|
+1,55,37,31,0,0,0,0,0,64,0,-1--1--1,,1|(433,246)|
+1,56,31,19,0,0,0,0,0,64,0,-1--1--1,,1|(300,303)|
+1,57,32,19,0,0,0,0,0,64,0,-1--1--1,,1|(367,330)|
+1,58,16,23,0,0,0,0,0,64,0,-1--1--1,,1|(209,231)|
+1,59,16,19,0,0,0,0,0,64,0,-1--1--1,,1|(239,263)|
+10,60,نہری تقسیم,391,376,44,11,8,3,0,0,0,0,0,0
+1,61,60,19,0,0,0,0,0,64,0,-1--1--1,,1|(315,357)|
+10,62,دستیاب صلاحیت,632,604,35,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,63,62,11,1,0,0,0,3,64,0,255-0-0,|12||0-0-0,1|(638,562)|
+10,64,وقت کا قدم,523,577,50,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,65,64,11,1,0,0,0,0,64,0,-1--1--1,,1|(566,550)|
+10,66,آبپاشی کارکردگی,778,247,35,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,67,66,9,0,0,0,0,3,64,0,255-0-0,|12||0-0-0,1|(775,275)|
+10,68,رقبہ,1183,302,26,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,69,68,26,0,0,0,0,0,64,0,-1--1--1,,1|(1148,272)|
+10,70,فیصد پختہ,136,161,40,19,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,71,70,46,0,1,0,0,0,64,0,-1--1--1,,1|(136,142)|
+10,72,فیصد نہری پانی نقصان,136,161,41,19,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,73,72,46,0,1,0,0,0,64,0,-1--1--1,,1|(136,142)|
+10,74,فیصد نقصان کچا,136,161,61,19,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,75,74,46,0,1,0,0,0,64,0,-1--1--1,,1|(136,142)|
+10,76,Water in storage zero time stock,831,683,58,19,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,77,76,4,0,1,0,0,0,64,1,-1--1--1,,1|(828,659)|
+10,78,سطحی تالاب بہاو,831,683,42,11,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,79,78,4,0,1,0,0,0,64,0,-1--1--1,,1|(828,663)|
+10,80,رساو1,831,683,41,11,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,81,80,4,0,1,0,0,0,64,0,-1--1--1,,1|(828,663)|
+10,82,اندارج,831,683,29,11,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,83,82,4,0,1,0,0,0,64,0,-1--1--1,,1|(828,663)|
+10,84,سطحی بخارات 1,831,683,52,11,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,85,84,4,0,1,0,0,0,64,0,-1--1--1,,1|(828,663)|
+10,86,دستیاب پانی,1200,558,70,36,3,131,0,0,0,0,0,0
+12,87,48,950,548,10,8,0,3,0,0,-1,0,0,0
+1,88,90,86,4,0,0,22,0,0,0,-1--1--1,,1|(1094,549)|
+1,89,90,87,100,0,0,22,0,0,0,-1--1--1,,1|(1003,549)|
+11,90,48,1052,549,6,8,34,3,0,0,1,0,0,0
+10,91,فراہمی,1052,568,23,11,40,3,0,0,-1,0,0,0
+1,92,5,91,1,0,0,0,3,64,0,255-0-0,|12||0-0-0,1|(1061,511)|
+1,93,8,91,1,0,0,0,0,64,0,-1--1--1,,1|(999,473)|
+10,94,سطحی تالاب بہاو,1200,613,42,11,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,95,94,86,0,1,0,0,0,64,0,-1--1--1,,1|(1200,605)|
+10,96,غیر استعمال شدہ,1200,613,34,11,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,97,96,86,0,1,0,0,0,64,0,-1--1--1,,1|(1200,605)|
+10,98,استعمال,1200,613,51,11,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,99,98,86,0,1,0,0,0,64,0,-1--1--1,,1|(1200,605)|
+10,100,AW zero time stock,1200,613,50,19,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,101,100,86,0,1,0,0,0,64,1,-1--1--1,,1|(1200,594)|
+10,102,کنواں کا بہاو,1052,598,35,19,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,103,102,91,0,1,0,0,0,64,0,-1--1--1,,1|(1052,579)|
+10,104,فصل ب بخارات شرح,741,248,40,11,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,105,104,9,0,1,0,0,0,64,0,-1--1--1,,1|(753,272)|
+10,106,کار آمد بارش,993,425,59,11,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,107,106,5,0,1,0,0,0,64,0,-1--1--1,,1|(993,417)|
+10,108,رقبہ,993,425,26,11,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,109,108,5,0,1,0,0,0,64,0,-1--1--1,,1|(993,417)|
+\\\---/// Sketch information - do not modify anything except names
+V300  Do not put anything below this section - it will be ignored
+*Canal lining and seepage submodel
+$192-192-192,0,Times New Roman|12||0-0-0|0-0-0|0-0-255|-1--1--1|-1--1--1|96,96,75,0
+10,1,سر پر نہر کی فراہمی,732,367,49,19,8,3,0,0,0,0,0,0
+10,2,تقسیم کار تبدیل,825,479,58,11,8,3,0,0,0,0,0,0
+10,3,کل نہری رساو,507,500,54,23,8,131,0,0,-1,0,0,0
+10,4,فیصد نہری پانی نقصان,439,389,56,19,8,3,0,0,-1,0,0,0
+1,5,4,3,0,0,0,0,0,64,0,-1--1--1,,1|(467,436)|
+10,6,کل آب اندوخت بھرائی,1335,558,39,19,8,3,0,0,0,0,0,0
+10,7,عددی چوکورپر نہر,564,612,47,19,8,3,0,0,0,0,0,0
+10,8,رساو برابر تقسیم,721,588,64,19,8,3,0,0,0,0,0,0
+10,9,تقسیمی رساو,842,632,35,19,8,3,0,0,0,0,0,0
+1,10,7,8,0,0,0,0,0,64,0,-1--1--1,,1|(627,602)|
+1,11,2,9,1,0,0,0,0,64,0,-1--1--1,,1|(827,545)|
+10,12,رساو کھیت مقام,1009,442,43,19,8,3,0,0,0,0,0,0
+10,13,چوکور آر ڈی,1191,377,39,11,8,3,0,0,0,0,0,0
+10,14,نہر کی لمبائی,1221,460,55,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,15,رساوتقسیم کار جز,904,379,56,19,8,3,0,0,0,0,0,0
+10,16,چوکور جدول,1021,320,50,11,8,3,0,0,0,0,0,0
+1,17,15,9,1,0,0,0,0,64,0,-1--1--1,,1|(911,505)|
+1,18,13,12,0,0,0,0,0,64,0,-1--1--1,,1|(1113,404)|
+1,19,14,12,0,0,0,0,0,64,0,-1--1--1,,1|(1115,451)|
+1,20,16,15,0,0,0,0,0,64,0,-1--1--1,,1|(976,342)|
+1,21,12,15,0,0,0,0,0,64,0,-1--1--1,,1|(962,414)|
+10,22,نہری رساو فی چوکور,1178,572,59,19,8,131,0,0,0,0,0,0
+1,23,9,22,1,0,0,0,0,64,0,-1--1--1,,1|(1010,591)|
+1,24,22,6,1,0,0,0,0,64,0,-1--1--1,,1|(1259,564)|
+10,25,سی پی,1266,492,21,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,26,3,8,1,0,0,0,0,64,0,-1--1--1,,1|(692,524)|
+10,27,فعال رساو,1136,515,36,11,8,3,0,0,0,0,0,0
+1,28,27,12,0,0,0,0,0,64,0,-1--1--1,,1|(1085,485)|
+1,29,12,9,1,0,0,0,0,64,0,-1--1--1,,1|(962,532)|
+10,30,نہری تقسیم,964,632,53,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,31,30,9,0,0,0,0,0,64,0,-1--1--1,,1|(901,632)|
+1,32,3,9,1,0,0,0,0,64,0,-1--1--1,,1|(717,469)|
+1,33,8,9,1,0,0,0,0,64,0,-1--1--1,,1|(763,647)|
+10,34,نہر پختگی,496,142,58,35,3,131,0,0,0,0,0,0
+12,35,48,189,135,10,8,0,3,0,0,-1,0,0,0
+1,36,38,35,4,0,0,22,0,0,0,-1--1--1,,1|(273,136)|
+1,37,38,34,100,0,0,22,0,0,0,-1--1--1,,1|(399,136)|
+11,38,48,354,136,6,8,34,3,0,0,1,0,0,0
+10,39,پختگی خرابی شرح,354,155,51,11,40,3,0,0,-1,0,0,0
+12,40,48,781,138,10,8,0,3,0,0,-1,0,0,0
+1,41,43,34,4,0,0,22,0,0,0,-1--1--1,,1|(611,141)|
+1,42,43,40,100,0,0,22,0,0,0,-1--1--1,,1|(725,141)|
+11,43,48,674,141,6,8,34,3,0,0,1,0,0,0
+10,44,پختگی شرح,674,160,34,11,40,3,0,0,-1,0,0,0
+10,45,اوسط نہر خرابی وقت,259,208,46,19,8,3,0,0,0,0,0,0
+1,46,45,39,1,0,0,0,0,64,0,-1--1--1,,1|(270,172)|
+10,47,دھیان نہری حالت,730,242,63,19,8,3,0,0,0,0,0,0
+1,48,47,44,0,0,0,0,0,64,0,-1--1--1,,1|(703,202)|
+1,49,34,47,1,0,0,0,0,64,0,-1--1--1,,1|(600,216)|
+10,50,خیال جدول,836,308,58,11,8,3,0,0,0,0,0,0
+1,51,50,47,1,0,0,0,0,64,0,-1--1--1,,1|(829,240)|
+10,52,کل لمبائی,515,269,37,11,8,3,0,0,0,0,0,0
+1,53,52,47,1,0,0,0,0,64,0,-1--1--1,,1|(612,285)|
+1,54,52,44,1,0,0,0,0,64,0,-1--1--1,,1|(610,229)|
+10,55,فیصد پختہ,369,267,57,11,8,3,0,0,0,0,0,0
+1,56,34,55,1,0,0,0,0,64,0,-1--1--1,,1|(391,190)|
+1,57,52,55,1,0,0,0,0,64,0,-1--1--1,,1|(450,237)|
+10,58,حکمت عملی نہر پختگی,525,58,57,11,8,3,0,0,0,0,0,0
+1,59,58,43,1,0,0,0,0,64,0,-1--1--1,,1|(591,103)|
+10,60,پختگی لمبائی اضافہ,388,-80,52,19,8,3,0,0,0,0,0,0
+10,61,نہر پختگی جدول,436,-158,57,11,8,3,0,0,0,0,0,0
+1,62,61,60,1,0,0,0,0,64,0,-1--1--1,,1|(426,-128)|
+10,63,سال,309,-146,17,11,8,3,0,0,-1,0,0,0
+1,64,63,60,1,0,0,0,0,64,0,-1--1--1,,1|(367,-118)|
+10,65,اصل پختگی قیمت,927,114,53,11,8,3,0,0,0,0,0,0
+1,66,44,65,1,0,0,0,0,64,0,-1--1--1,,1|(835,176)|
+10,67,پختگی کی قیمت,941,31,40,11,8,3,0,0,0,0,0,0
+10,68,سرمایہ کاری,1180,212,35,11,8,3,0,0,0,0,0,0
+1,69,67,65,1,0,0,0,0,64,0,-1--1--1,,1|(937,78)|
+10,70,پختگی قیمت براۓ سال 2003,1062,-30,50,19,8,3,0,0,0,0,0,0
+1,71,70,67,1,0,0,0,0,64,0,-1--1--1,,1|(1006,-3)|
+1,72,65,68,1,0,0,0,0,64,0,-1--1--1,,1|(1024,186)|
+10,73,حکومتی حصہ,1228,257,37,11,8,3,0,0,0,0,0,0
+10,74,کسان حصہ,1156,166,42,11,8,3,0,0,0,0,0,0
+1,75,68,74,0,0,0,0,0,64,0,-1--1--1,,1|(1171,195)|
+1,76,68,73,0,0,0,0,0,64,0,-1--1--1,,1|(1198,229)|
+10,77,پختگی قیمت جز,923,-26,54,11,8,3,0,0,0,0,0,0
+1,78,77,67,0,0,0,0,0,64,0,-1--1--1,,1|(929,-3)|
+1,79,63,77,1,0,0,0,0,64,0,-1--1--1,,1|(746,-172)|
+10,80,نہر پختگی حصہ,1224,109,30,11,8,3,0,0,0,0,0,0
+1,81,74,80,1,0,0,0,0,64,0,-1--1--1,,1|(1201,119)|
+1,82,34,44,1,0,0,0,0,64,0,-1--1--1,,1|(591,166)|
+10,83,وقت کا قدم,861,58,50,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,84,83,44,1,0,0,0,0,64,0,-1--1--1,,1|(825,118)|
+10,85,چوکور جز,1426,57,51,11,8,3,0,0,0,0,0,0
+10,86,نہر پختگی حصہ فی چوکور,1280,32,52,19,8,3,0,0,0,0,0,0
+1,87,85,86,0,0,0,0,0,64,0,-1--1--1,,1|(1360,46)|
+10,88,نہر پختگی خرچہ,1242,-34,57,11,8,3,0,0,0,0,0,0
+1,89,86,88,1,0,0,0,0,64,0,-1--1--1,,1|(1292,-7)|
+1,90,80,86,0,0,0,0,0,64,0,-1--1--1,,1|(1244,80)|
+10,91,عددی چوکورفی نہر,1107,38,50,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,92,91,80,1,0,0,0,0,64,0,-1--1--1,,1|(1196,77)|
+1,93,55,3,1,0,0,0,0,64,0,-1--1--1,,1|(368,393)|
+10,94,سال شروع,194,-134,40,11,8,3,0,0,0,0,0,0
+1,95,94,63,0,0,0,0,0,64,0,-1--1--1,,1|(256,-140)|
+10,96,گرافی جدول,1032,-115,31,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,97,96,77,1,0,0,0,3,64,0,255-0-0,|12||0-0-0,1|(961,-94)|
+10,98,ایل سی,1359,611,10,11,8,3,0,0,0,0,0,0
+1,99,6,98,1,0,0,0,0,64,0,-1--1--1,,1|(1349,592)|
+1,100,60,44,1,0,0,0,0,64,0,-1--1--1,,1|(612,62)|
+1,101,52,60,1,0,0,0,0,64,0,-1--1--1,,1|(176,188)|
+10,102,نہر پختگی ابتدائی وقت پر,274,57,57,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,103,102,38,1,0,0,0,0,64,0,-1--1--1,,1|(351,96)|
+10,104,خرابی شرح نہر پختگی,506,227,41,20,8,131,0,0,0,0,0,0
+1,105,44,104,1,0,0,0,0,64,0,-1--1--1,,1|(537,210)|
+1,106,104,39,1,0,0,0,0,64,0,-1--1--1,,1|(413,188)|
+1,107,45,104,1,0,0,0,0,64,0,-1--1--1,,1|(346,205)|
+10,108,Time,409,64,26,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,109,108,39,0,0,0,0,0,64,0,-1--1--1,,1|(385,103)|
+10,110,پختگی قیمت فی موسم,667,-47,44,19,8,3,0,0,0,0,0,0
+1,111,60,110,1,0,0,0,0,64,0,-1--1--1,,1|(541,-80)|
+1,112,83,110,1,0,0,0,0,64,0,-1--1--1,,1|(787,-3)|
+1,113,67,110,1,0,0,0,0,64,0,-1--1--1,,1|(794,-35)|
+10,114,ممکنہ سرمایہ کاری فی نہر,663,35,68,18,8,130,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,115,114,43,1,0,0,0,0,64,0,-1--1--1,,1|(673,91)|
+1,116,110,43,1,0,0,0,0,64,0,-1--1--1,,1|(739,81)|
+1,117,25,6,1,0,0,0,0,64,0,-1--1--1,,1|(1307,521)|
+10,118,آب اندوخت بھرائی براے بارش,1408,475,49,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,119,118,6,0,0,0,0,3,64,0,255-0-0,|12||0-0-0,1|(1376,511)|
+1,120,102,34,0,0,0,0,0,64,1,-1--1--1,,1|(373,95)|
+10,121,رقبہ,1325,791,26,11,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,122,121,98,0,1,0,0,0,64,0,-1--1--1,,1|(1340,707)|
+10,123,نہری رساو فی میڑ,599,401,46,11,8,3,0,0,-1,0,0,0
+1,124,123,3,0,0,0,0,0,64,0,-1--1--1,,1|(563,439)|
+1,125,52,3,0,0,0,0,0,64,0,-1--1--1,,1|(511,371)|
+1,126,1,123,0,0,0,0,3,0,0,255-0-0,|12||0-0-0,1|(669,382)|
+\\\---/// Sketch information - do not modify anything except names
+V300  Do not put anything below this section - it will be ignored
+*Groundwater abstraction model
+$192-192-192,0,Times New Roman|12||0-0-0|0-0-0|0-0-255|-1--1--1|-1--1--1|96,96,75,0
+10,1,گرافی جدول,1081,-339,52,11,8,3,0,0,-1,0,0,0
+10,2,کنواں کے شمار,1016,185,66,30,3,131,0,0,0,0,0,0
+12,3,48,827,178,10,8,0,3,0,0,-1,0,0,0
+1,4,6,2,4,0,0,22,0,0,0,-1--1--1,,1|(924,178)|
+1,5,6,3,100,0,0,22,0,0,0,-1--1--1,,1|(861,178)|
+11,6,48,892,178,6,8,34,3,0,0,1,0,0,0
+10,7,کنواں کی بڑہوتی,892,197,53,11,40,3,0,0,-1,0,0,0
+10,8,اضافی کنواں خواہش کے مطابق لگوائی,669,187,60,19,8,3,0,0,0,0,0,0
+1,9,8,7,1,0,0,0,0,64,0,-1--1--1,,1|(764,198)|
+10,10,مطلوبہ بہاو,1065,396,58,11,8,3,0,0,0,0,0,0
+1,11,2,6,1,0,0,0,0,64,0,-1--1--1,,1|(931,139)|
+10,12,ذیادہ سے ذیادہ حجم,726,502,46,19,8,3,0,0,0,0,0,0
+1,13,8,15,1,0,0,0,0,64,0,-1--1--1,,1|(690,104)|
+10,14,قیمت عددی برقی کنواں,587,-19,55,11,8,3,0,0,0,0,0,0
+10,15,تمام کنواں لگانے کی قیمت,762,31,61,19,8,3,0,0,0,0,0,0
+1,16,14,15,0,0,0,0,0,64,0,-1--1--1,,1|(656,0)|
+1,17,15,6,1,0,0,0,0,64,0,-1--1--1,,1|(832,90)|
+10,18,کنواں کا بہاو,964,328,37,19,8,3,0,0,0,0,0,0
+1,19,10,18,1,0,0,0,0,64,0,-1--1--1,,1|(1037,347)|
+1,20,2,12,1,0,0,0,0,64,0,-1--1--1,,1|(809,283)|
+10,21,چلانے کی موجودہ قیمت,1059,-59,51,19,8,3,0,0,0,0,0,0
+10,22,قیمت برائے مرمت,1447,42,54,11,8,3,0,0,0,0,0,0
+1,23,2,21,0,0,0,0,0,64,0,-1--1--1,,1|(1036,64)|
+1,24,2,22,1,0,0,0,0,64,0,-1--1--1,,1|(1227,81)|
+10,25,اصلی مرمت قیمت,1460,-60,54,19,8,3,0,0,0,0,0,0
+1,26,25,22,1,0,0,0,0,64,0,-1--1--1,,1|(1457,-22)|
+10,27,مرمت قیمت سال دوھزار تین کے مطابق,1552,-150,47,19,8,3,0,0,0,0,0,0
+10,28,مرمت سال کے مطابق,1379,-145,53,11,8,3,0,0,0,0,0,0
+1,29,28,25,0,0,0,0,0,64,0,-1--1--1,,1|(1410,-111)|
+1,30,27,25,0,0,0,0,0,64,0,-1--1--1,,1|(1511,-109)|
+10,31,Time,1260,-136,26,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,32,31,25,0,0,0,0,0,64,0,-1--1--1,,1|(1341,-105)|
+10,33,چلانے کے موجودہ گھنٹے,1127,-133,59,19,8,3,0,0,0,0,0,0
+1,34,31,33,0,0,0,0,0,64,0,-1--1--1,,1|(1216,-135)|
+1,35,33,21,1,0,0,0,0,64,0,-1--1--1,,1|(1081,-106)|
+10,36,ڈیزل کی کھپت,929,-106,41,19,8,3,0,0,0,0,0,0
+1,37,36,21,1,0,0,0,0,64,0,-1--1--1,,1|(999,-97)|
+10,38,تیل کی قیمت,1002,-165,30,11,8,3,0,0,0,0,0,0
+10,39,تیل قیمت سال دوھزار تین کے مطابق,938,-245,55,19,8,3,0,0,0,0,0,0
+10,40,افراط زر کا جز,1054,-232,46,11,8,3,0,0,0,0,0,0
+1,41,38,21,1,0,0,0,0,64,0,-1--1--1,,1|(1035,-125)|
+1,42,40,38,0,0,0,0,0,64,0,-1--1--1,,1|(1032,-203)|
+1,43,39,38,0,0,0,0,0,64,0,-1--1--1,,1|(968,-206)|
+10,44,چلانے کے موجودہ گھنٹے,660,400,54,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,45,44,12,1,0,0,0,0,64,0,-1--1--1,,1|(684,457)|
+10,46,ایک کنواں کا حجم,828,440,42,19,8,3,0,0,0,0,0,0
+1,47,46,12,1,0,0,0,0,64,0,-1--1--1,,1|(792,456)|
+10,48,مطلوبہ حجم,756,590,57,11,8,3,0,0,0,0,0,0
+1,49,12,48,1,0,0,0,0,64,0,-1--1--1,,1|(723,549)|
+1,50,10,48,1,0,0,0,0,64,0,-1--1--1,,1|(895,554)|
+1,51,48,8,1,0,0,0,0,64,0,-1--1--1,,1|(596,443)|
+10,52,کنواں لگائی پر موسم,498,137,57,19,8,3,0,0,0,0,0,0
+1,53,52,8,1,0,0,0,0,64,0,-1--1--1,,1|(569,178)|
+10,54,قیمت سال کے مطابق,627,-158,36,11,8,3,0,0,0,0,0,0
+10,55,لگانے کی قیمت,329,-92,49,11,8,3,0,0,0,0,0,0
+1,56,54,14,0,0,0,0,0,64,0,-1--1--1,,1|(608,-95)|
+1,57,55,14,0,0,0,0,0,64,0,-1--1--1,,1|(450,-57)|
+10,58,زیر زمين پانی کی سطح,230,-146,53,11,8,3,0,0,0,0,0,0
+10,59,قیمت باہم سطح دیکھنا,455,-147,45,19,8,3,0,0,0,0,0,0
+1,60,59,55,0,0,0,0,0,64,0,-1--1--1,,1|(389,-118)|
+10,61,سطح کا پیمانہ,337,-172,49,11,8,3,0,0,0,0,0,0
+10,62,قیمت کا پیمانہ,390,-2,44,11,8,3,0,0,0,0,0,0
+1,63,61,55,0,0,0,0,0,64,0,-1--1--1,,1|(333,-138)|
+1,64,62,55,0,0,0,0,0,64,0,-1--1--1,,1|(363,-42)|
+1,65,1,28,1,0,0,0,3,64,0,255-0-0,|12||0-0-0,1|(1256,-281)|
+10,66,سطحی پانی,1189,415,33,22,8,131,0,0,-1,0,0,0
+1,67,66,10,0,0,0,0,3,64,0,255-0-0,|12||0-0-0,1|(1146,408)|
+10,68,چلانے کی قیمت فی گھنٹہ,849,-181,47,19,8,3,0,0,0,0,0,0
+1,69,36,68,1,0,0,0,0,64,0,-1--1--1,,1|(886,-139)|
+1,70,38,68,1,0,0,0,0,64,0,-1--1--1,,1|(937,-190)|
+10,71,چلانے کے اصلی گھنٹے,1165,-34,53,19,8,3,0,0,0,0,0,0
+1,72,68,71,1,0,0,0,0,64,0,-1--1--1,,1|(954,-12)|
+1,73,2,71,0,0,0,0,0,64,0,-1--1--1,,1|(1090,75)|
+10,74,چلانے کی اصلی قیمت,1307,19,53,19,8,3,0,0,0,0,0,0
+1,75,71,74,1,0,0,0,0,64,0,-1--1--1,,1|(1258,-35)|
+1,76,2,74,1,0,0,0,0,64,0,-1--1--1,,1|(1146,89)|
+10,77,چلانے کی قیمت فی گھنٹہ,1319,-62,52,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,78,77,74,1,0,0,0,0,64,0,-1--1--1,,1|(1333,-37)|
+12,79,48,1394,182,10,8,0,3,0,0,-1,0,0,0
+1,80,82,79,4,0,0,22,0,0,0,-1--1--1,,1|(1273,180)|
+1,81,82,2,100,0,0,22,0,0,0,-1--1--1,,1|(1116,180)|
+11,82,48,1156,180,6,8,34,131,0,0,1,0,0,0
+10,83,کنواں کا انحتات,1156,199,50,11,40,3,0,0,-1,0,0,0
+10,84,اوسط زندگی کنواں,1268,257,52,11,8,3,0,0,0,0,0,0
+1,85,84,83,1,0,0,0,0,64,0,-1--1--1,,1|(1226,223)|
+1,86,1,54,1,0,0,0,3,64,0,255-0-0,|12||0-0-0,1|(793,-290)|
+10,87,سطحی تالاب بہاو,1088,495,42,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,88,87,10,0,0,0,0,3,64,0,255-0-0,|12||0-0-0,1|(1078,452)|
+10,89,برقی موصل ڈی ڈبلو,770,127,28,11,8,3,0,0,0,0,0,0
+1,90,89,7,1,0,0,0,0,64,0,-1--1--1,,1|(838,140)|
+10,91,آمدن براے خرچ,981,79,45,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,92,آمدن براے خرچ,1176,34,45,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,93,91,6,1,0,0,0,3,64,0,255-0-0,|12||0-0-0,1|(919,117)|
+1,94,92,71,0,0,0,0,3,64,0,255-0-0,|12||0-0-0,1|(1171,6)|
+10,95,برقی موصل روک,703,270,61,19,8,3,0,0,0,0,0,0
+1,96,95,7,0,0,0,0,0,64,0,-1--1--1,,1|(800,232)|
+10,97,زیادہ سے زیادہ اجازت کردہ کنواں,906,23,64,19,8,3,0,0,0,0,0,0
+1,98,97,6,0,0,0,0,0,64,0,-1--1--1,,1|(899,100)|
+1,99,58,55,1,0,0,0,3,64,0,255-0-0,|12||0-0-0,1|(268,-109)|
+10,100,ڈیزل کی قیمت کا جدول,1050,-283,57,11,8,3,0,0,0,0,0,0
+1,101,100,40,1,0,0,0,0,64,0,-1--1--1,,1|(1066,-255)|
+1,102,33,71,0,0,0,0,0,64,0,-1--1--1,,1|(1143,-90)|
+10,103,کنواں کا اصل حجم,823,359,49,19,8,3,0,0,0,0,0,0
+10,104,چلانے کے اصلی گھنٹے,926,276,57,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,105,2,103,1,0,0,0,0,64,0,-1--1--1,,1|(867,257)|
+1,106,46,103,0,0,0,0,0,64,0,-1--1--1,,1|(825,406)|
+1,107,104,103,1,0,0,0,0,64,0,-1--1--1,,1|(868,308)|
+1,108,103,18,1,0,0,0,0,64,0,-1--1--1,,1|(889,326)|
+10,109,اصلی مرمت فیصد,1583,-24,54,19,8,3,0,0,0,0,0,0
+10,110,آمدن براے خرچ,1687,-88,45,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,111,22,109,1,0,0,0,0,64,0,-1--1--1,,1|(1498,-3)|
+1,112,110,109,1,0,0,0,3,64,0,255-0-0,|12||0-0-0,1|(1628,-85)|
+10,113,سال,688,-100,26,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,114,113,54,0,0,0,0,0,64,0,-1--1--1,,1|(662,-124)|
+10,115,سال,1215,-213,26,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,116,115,40,0,0,0,0,0,64,0,-1--1--1,,1|(1151,-220)|
+1,117,115,28,0,0,0,0,0,64,0,-1--1--1,,1|(1290,-182)|
+10,118,پانی کی ضرورت,1125,312,39,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,119,118,10,1,0,0,0,3,64,0,255-0-0,|12||0-0-0,1|(1095,356)|
+10,120,Time,1480,459,26,11,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,121,نہر کا حصہ,1300,433,49,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,122,بارش کا حصہ,1300,337,46,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,123,122,66,0,0,0,0,3,64,0,255-0-0,|12||0-0-0,1|(1252,370)|
+1,124,121,66,0,0,0,0,3,64,0,255-0-0,|12||0-0-0,1|(1243,424)|
+1,125,83,52,1,0,0,0,0,64,0,-1--1--1,,1|(732,87)|
+10,126,جز,454,66,22,11,8,3,0,0,0,0,0,0
+1,127,126,52,1,0,0,0,0,64,0,-1--1--1,,1|(502,82)|
+10,128,جی ڈبلو,944,396,13,11,8,3,0,0,0,0,0,0
+1,129,18,128,1,0,0,0,0,64,0,-1--1--1,,1|(913,375)|
+10,130,رقبہ,936,445,26,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,131,130,128,1,0,0,0,0,64,0,-1--1--1,,1|(953,420)|
+10,132,Time,1168,225,26,11,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,133,خرابی فیصد,1059,252,55,11,8,3,0,0,0,0,0,0
+1,134,7,133,1,0,0,0,0,64,0,-1--1--1,,1|(957,236)|
+1,135,84,133,1,0,0,0,0,64,0,-1--1--1,,1|(1148,274)|
+1,136,2,83,1,0,0,0,0,64,0,-1--1--1,,1|(1114,224)|
+\\\---/// Sketch information - do not modify anything except names
+V300  Do not put anything below this section - it will be ignored
+*Irrigation efficienccy submodel
+$192-192-192,0,Times New Roman|12||0-0-0|0-0-0|0-0-255|-1--1--1|-1--1--1|96,96,80,0
+10,1,آبپاشی کارکردگی,525,393,69,36,3,131,0,0,0,0,0,0
+12,2,48,240,394,10,8,0,3,0,0,-1,0,0,0
+1,3,5,2,4,0,0,22,0,0,0,-1--1--1,,1|(301,398)|
+1,4,5,1,100,0,0,22,0,0,0,-1--1--1,,1|(410,398)|
+11,5,48,359,398,6,8,34,3,0,0,1,0,0,0
+10,6,ڈھانچہ خرابی شرح,359,425,50,19,40,3,0,0,-1,0,0,0
+10,7,ڈھانچے کی زندگی,284,475,40,11,8,3,0,0,0,0,0,0
+1,8,7,6,0,0,0,0,0,64,0,-1--1--1,,1|(309,457)|
+12,9,48,885,398,10,8,0,3,0,0,-1,0,0,0
+1,10,12,1,4,0,0,22,0,0,0,-1--1--1,,1|(664,398)|
+1,11,12,9,100,0,0,22,0,0,0,-1--1--1,,1|(811,398)|
+11,12,48,741,398,6,8,34,3,0,0,1,0,0,0
+10,13,بہتری شرح,741,417,56,11,40,3,0,0,-1,0,0,0
+10,14,حکمت عملی براے آبپاشی کارکردگی,787,317,50,19,8,3,0,0,0,0,0,0
+1,15,14,12,1,0,0,0,0,64,0,-1--1--1,,1|(766,366)|
+10,16,آبپاشی کارکردگی بہتری,529,229,70,19,8,3,0,16,0,0,0,0,-1--1--1,0-255-0,|10|B|0-0-0
+10,17,سال,593,79,26,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,18,17,16,1,0,0,0,0,64,0,-1--1--1,,1|(513,134)|
+1,19,13,6,1,0,0,0,0,64,0,-1--1--1,,1|(548,475)|
+10,20,اصل بہتری قیمت,1001,342,57,19,8,3,0,0,0,0,0,0
+10,21,قیمت لگوائی,1033,258,58,11,8,3,0,0,0,0,0,0
+1,22,21,20,0,0,0,0,0,64,0,-1--1--1,,1|(1021,289)|
+10,23,سرمایہ کاری براۓ آبپاشی کارکردگی,1225,296,72,19,8,3,0,0,0,0,0,0
+1,24,20,23,1,0,0,0,0,64,0,-1--1--1,,1|(1155,271)|
+10,25,حکومت آبپاشی کی بہتری کا حصہ,1302,195,72,19,8,3,0,0,0,0,0,0
+10,26,کسان آبپاشی کی بہتری کا حصہ,1203,378,60,19,8,3,0,0,0,0,0,0
+1,27,23,26,0,0,0,0,0,64,0,-1--1--1,,1|(1215,330)|
+1,28,23,25,0,0,0,0,0,64,0,-1--1--1,,1|(1258,251)|
+10,29,دھیان براۓ آبپاشی کارکردگی,771,499,71,19,8,3,0,0,0,0,0,0
+10,30,کارکردگی منزل,509,532,46,11,8,3,0,0,0,0,0,0
+1,31,1,29,0,0,0,0,0,64,0,-1--1--1,,1|(653,448)|
+1,32,29,13,0,0,0,0,0,64,0,-1--1--1,,1|(757,460)|
+10,33,سوئچ,324,318,21,11,8,3,0,0,0,0,0,0
+1,34,1,33,0,0,0,0,0,64,0,-1--1--1,,1|(407,349)|
+1,35,33,6,0,0,0,0,0,64,0,-1--1--1,,1|(337,360)|
+10,36,کم سے کم کارکردگی,471,295,30,19,8,3,0,0,0,0,0,0
+1,37,36,33,0,0,0,0,0,64,0,-1--1--1,,1|(399,305)|
+10,38,کارکردگی بہتری جدول,397,155,66,19,8,3,0,0,0,0,0,0
+1,39,38,16,1,0,0,0,3,64,0,255-0-0,|12||0-0-0,1|(442,186)|
+10,40,قیمت لگوائی 2003,1151,189,49,19,8,3,0,0,0,0,0,0
+1,41,40,21,1,0,0,0,0,64,0,-1--1--1,,1|(1080,207)|
+10,42,جدول آبپاشی کارکردگی دھیان,817,576,60,19,8,3,0,0,0,0,0,0
+1,43,42,29,0,0,0,0,0,64,0,-1--1--1,,1|(797,543)|
+1,44,30,29,0,0,0,0,0,64,0,-1--1--1,,1|(620,517)|
+10,45,وقت کا قدم,677,302,50,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,46,45,12,1,0,0,0,0,64,0,-1--1--1,,1|(688,351)|
+10,47,لگوائی قیمت جز,984,182,49,19,8,3,0,0,0,0,0,0
+1,48,47,21,1,0,0,0,0,64,0,-1--1--1,,1|(1011,227)|
+10,49,گرافی جدول,1051,107,31,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,50,17,47,1,0,0,0,0,64,0,-1--1--1,,1|(808,91)|
+1,51,49,47,0,0,0,0,3,64,0,255-0-0,|12||0-0-0,1|(1022,139)|
+10,52,کارکردگی بہتری فی عدد,1103,498,55,19,8,3,0,0,0,0,0,0
+10,53,عدد فی یونٹ,1013,442,36,11,8,3,0,0,0,0,0,0
+1,54,52,53,1,0,0,0,0,64,0,-1--1--1,,1|(1045,454)|
+1,55,13,53,1,0,0,0,0,64,0,-1--1--1,,1|(904,456)|
+1,56,53,20,1,0,0,0,0,64,0,-1--1--1,,1|(1014,377)|
+1,57,16,13,1,0,0,0,0,64,0,-1--1--1,,1|(630,353)|
+1,58,30,13,1,0,0,0,0,64,0,-1--1--1,,1|(633,486)|
+1,59,1,13,1,0,0,0,0,64,0,-1--1--1,,1|(630,419)|
+10,60,عدد فی موسم,718,228,50,11,8,3,0,0,0,0,0,0
+1,61,16,60,1,0,0,0,0,64,0,-1--1--1,,1|(662,257)|
+10,62,کارکردگی بہتری فی عدد,604,172,60,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,63,62,60,1,0,0,0,0,64,0,-1--1--1,,1|(678,203)|
+10,64,قیمت لگوائی فی موسم,824,194,57,19,8,3,0,0,0,0,0,0
+1,65,60,64,1,0,0,0,0,64,0,-1--1--1,,1|(757,175)|
+1,66,45,64,1,0,0,0,0,64,0,-1--1--1,,1|(764,266)|
+1,67,21,64,1,0,0,0,0,64,0,-1--1--1,,1|(940,213)|
+1,68,64,12,1,0,0,0,0,64,0,-1--1--1,,1|(852,307)|
+10,69,آمدن براے خرچ,898,327,39,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,70,69,12,1,0,0,0,3,64,0,255-0-0,|12||0-0-0,1|(841,369)|
+10,71,نہر ی کارکردگی ابتدائی وقت پر,525,448,65,19,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,72,71,1,0,1,0,0,0,64,1,-1--1--1,,1|(525,429)|
+\\\---/// Sketch information - do not modify anything except names
+V300  Do not put anything below this section - it will be ignored
+*Water availability
+$192-192-192,0,Times New Roman|12||0-0-0|0-0-0|0-0-255|-1--1--1|-1--1--1|96,96,75,0
+10,1,دستیاب پانی,836,352,70,36,3,131,0,0,0,0,0,0
+12,2,48,545,348,10,8,0,3,0,0,-1,0,0,0
+1,3,5,1,4,0,0,22,0,0,0,-1--1--1,,1|(709,349)|
+1,4,5,2,100,0,0,22,0,0,0,-1--1--1,,1|(598,349)|
+11,5,48,647,349,6,8,34,3,0,0,1,0,0,0
+10,6,فراہمی,647,368,23,11,40,3,0,0,-1,0,0,0
+10,7,پانی تالابی جمع,832,649,66,47,3,131,0,0,0,0,0,0
+10,8,بارش کا حصہ,723,195,41,19,8,3,0,0,0,0,0,0
+1,9,8,6,1,0,0,0,0,64,0,-1--1--1,,1|(683,253)|
+10,10,نہر کا حصہ,621,274,41,19,8,3,0,0,0,0,0,0
+1,11,10,6,1,0,0,0,0,64,0,-1--1--1,,1|(625,316)|
+1,12,8,10,1,0,0,0,0,64,0,-1--1--1,,1|(653,219)|
+10,13,رقبہ,671,152,26,11,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,14,16,1,4,0,0,22,0,0,0,-1--1--1,,1|(832,438)|
+1,15,16,7,100,0,0,22,0,0,0,-1--1--1,,1|(832,551)|
+11,16,508,832,495,8,6,33,3,0,0,4,0,0,0
+10,17,سطحی تالاب بہاو,873,495,33,11,40,3,0,0,-1,0,0,0
+12,18,48,1192,353,10,8,0,3,0,0,-1,0,0,0
+1,19,21,18,4,0,0,22,0,0,0,-1--1--1,,1|(1116,352)|
+1,20,21,1,100,0,0,22,0,0,0,-1--1--1,,1|(972,352)|
+11,21,48,1045,352,6,8,34,3,0,0,1,0,0,0
+10,22,استعمال,1045,371,42,11,40,3,0,0,-1,0,0,0
+12,23,48,836,121,10,8,0,3,0,0,-1,0,0,0
+1,24,26,23,4,0,0,22,0,0,0,-1--1--1,,1|(832,168)|
+1,25,26,1,100,0,0,22,0,0,0,-1--1--1,,1|(832,268)|
+11,26,48,832,214,8,6,33,3,0,0,4,0,0,0
+10,27,غیر استعمال شدہ,865,214,25,11,40,3,0,0,-1,0,0,0
+1,28,8,21,1,0,0,0,0,64,0,-1--1--1,,1|(865,99)|
+1,29,10,21,1,0,0,0,0,64,0,-1--1--1,,1|(782,27)|
+1,30,22,26,1,0,0,0,0,64,0,-1--1--1,,1|(936,196)|
+1,31,17,22,1,0,0,0,0,64,0,-1--1--1,,1|(977,436)|
+1,32,7,17,1,0,0,0,3,64,0,255-0-0,|12||0-0-0,1|(880,569)|
+1,33,16,26,1,0,0,0,0,64,0,-1--1--1,,1|(740,332)|
+1,34,6,26,1,0,0,0,0,64,0,-1--1--1,,1|(718,272)|
+10,35,پانی کی ضرورت,1010,471,39,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,36,35,17,1,0,0,0,3,64,0,255-0-0,|12||0-0-0,1|(933,498)|
+1,37,35,22,1,0,0,0,3,64,0,255-0-0,|12||0-0-0,1|(1052,436)|
+10,38,کل نہری فراہمی براۓ فصلات,686,467,40,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,39,38,16,1,0,0,0,3,64,0,255-0-0,|12||0-0-0,1|(782,491)|
+10,40,وقت کا قدم,716,545,50,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,41,40,16,1,0,0,0,0,64,0,-1--1--1,,1|(801,529)|
+1,42,8,16,1,0,0,0,0,64,0,-1--1--1,,1|(704,395)|
+10,43,کنواں کا بہاو,927,280,42,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,44,43,22,0,0,0,0,3,64,0,255-0-0,|12||0-0-0,1|(984,325)|
+1,45,43,6,1,0,0,0,3,64,0,255-0-0,|12||0-0-0,1|(765,285)|
+1,46,43,26,1,0,0,0,3,64,0,255-0-0,|12||0-0-0,1|(867,246)|
+10,47,رقبہ,688,139,26,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,48,47,8,0,0,0,0,0,64,0,-1--1--1,,1|(698,157)|
+10,49,کار آمد بارش,805,73,59,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,50,49,8,1,0,0,0,3,64,0,255-0-0,|12||0-0-0,1|(743,114)|
+10,51,نہری بہاو فی چوکور,487,300,52,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,52,51,10,0,0,0,0,3,64,0,255-0-0,|12||0-0-0,1|(552,287)|
+10,53,پانی کی ضرورت,491,242,39,19,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,54,53,10,0,0,0,0,3,64,0,255-0-0,|12||0-0-0,1|(548,255)|
+10,55,سطحی بخارات 1,983,576,52,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,56,55,17,0,0,0,0,3,64,0,255-0-0,|12||0-0-0,1|(933,539)|
+10,57,رساو1,1074,550,41,11,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,58,57,17,0,0,0,0,3,64,0,255-0-0,|12||0-0-0,1|(976,523)|
+10,59,AW zero time stock,836,407,50,19,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,60,59,1,0,1,0,0,0,64,1,-1--1--1,,1|(836,388)|
+10,61,سطحی بخارات 1,832,715,52,11,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,62,61,7,0,1,0,0,0,64,0,-1--1--1,,1|(832,707)|
+10,63,اندارج,832,715,29,11,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,64,63,7,0,1,0,0,0,64,0,-1--1--1,,1|(832,707)|
+10,65,رساو1,832,715,41,11,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,66,65,7,0,1,0,0,0,64,0,-1--1--1,,1|(832,707)|
+10,67,Water in storage zero time stock,832,715,58,19,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,68,67,7,0,1,0,0,0,64,1,-1--1--1,,1|(832,703)|
+///---\\\
+:GRAPH Canal_water_distribution
+:TITLE Water distribution pattren
+:X-AXIS Time
+:X-LABEL Seasons
+:SCALE
+:VAR Distributed supply[Polygon,canal]
+
+:GRAPH Farmer_income
+:TITLE Farmer income
+:X-AXIS Time
+:X-LABEL Seasons
+:SCALE
+:VAR Farm income
+
+:GRAPH Tubewell_growth
+:TITLE Tubewell Nos Vs Time
+:X-AXIS Time
+:X-LABEL Seasons
+:SCALE
+:VAR Tubewell Nos
+
+:GRAPH Well_discharge
+:TITLE Tubewell discharge
+:X-AXIS Time
+:X-LABEL Seasons
+:SCALE
+:VAR Tubewell discharge
+:L<%^E!@
+9:run10
+22:$,Dollar,Dollars,$s
+22:Hour,Hours
+22:Month,Months
+22:Person,People,Persons
+22:Unit,Units
+22:Week,Weeks
+22:Year,Years
+22:Day,Days
+30:?test=test.xlsx
+30:?test.xlsx=test.xlsx
+30:?test.xlsx - Excel=test.xlsx
+30:?test.xls=test.xls
+11:canal distribution and seepage model_1.voc
+12:new.vpd
+18:canal distribution and seepage model_1.vsc
+20:canal distribution_seepage_rainfall_lining_WH_IrrEff_stress_TW model_1.lst
+15:0,0,0,0,0,0
+19:75,0
+27:2,
+34:0,
+4:Time
+5:کھیت آمدن[Polygon]
+35:Date
+36:YYYY-MM-DD
+37:1990
+38:1
+39:1
+40:2
+41:0
+42:1
+24:0
+25:1
+26:1
+6:c1
+6:c2
+6:c3
+6:c4
+6:Ca1
+6:Head
+6:kc1
+6:kc2
+6:kc3
+6:kc4
+6:Middle
+6:N1
+6:N110
+6:N8
+6:Tail
